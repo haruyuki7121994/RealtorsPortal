@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ADMIN\\Documents\\c#\\source\\RealtorsPortal\\src\\src\\src.csproj": {}
+    "D:\\FPTaptech\\eProject3\\RealtorsPortal\\src\\src\\src.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ADMIN\\Documents\\c#\\source\\RealtorsPortal\\src\\src\\src.csproj": {
+    "D:\\FPTaptech\\eProject3\\RealtorsPortal\\src\\src\\src.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ADMIN\\Documents\\c#\\source\\RealtorsPortal\\src\\src\\src.csproj",
+        "projectUniqueName": "D:\\FPTaptech\\eProject3\\RealtorsPortal\\src\\src\\src.csproj",
         "projectName": "src",
-        "projectPath": "C:\\Users\\ADMIN\\Documents\\c#\\source\\RealtorsPortal\\src\\src\\src.csproj",
-        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ADMIN\\Documents\\c#\\source\\RealtorsPortal\\src\\src\\obj\\",
+        "projectPath": "D:\\FPTaptech\\eProject3\\RealtorsPortal\\src\\src\\src.csproj",
+        "packagesPath": "C:\\Users\\datqu\\.nuget\\packages\\",
+        "outputPath": "D:\\FPTaptech\\eProject3\\RealtorsPortal\\src\\src\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\datqu\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -39,6 +39,12 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.8, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -57,7 +63,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
         }
       }
     }

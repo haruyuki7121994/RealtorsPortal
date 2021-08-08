@@ -1,0 +1,8 @@
+D:\FPTaptech\eProject3\RealtorsPortal\src\src\obj\Debug\net5.0\src.csproj.AssemblyReference.cache
+D:\FPTaptech\eProject3\RealtorsPortal\src\src\obj\Debug\net5.0\src.GeneratedMSBuildEditorConfig.editorconfig
+D:\FPTaptech\eProject3\RealtorsPortal\src\src\obj\Debug\net5.0\src.AssemblyInfoInputs.cache
+D:\FPTaptech\eProject3\RealtorsPortal\src\src\obj\Debug\net5.0\src.AssemblyInfo.cs
+D:\FPTaptech\eProject3\RealtorsPortal\src\src\obj\Debug\net5.0\src.csproj.CoreCompileInputs.cache
+D:\FPTaptech\eProject3\RealtorsPortal\src\src\obj\Debug\net5.0\src.MvcApplicationPartsAssemblyInfo.cache
+D:\FPTaptech\eProject3\RealtorsPortal\src\src\obj\Debug\net5.0\src.RazorAssemblyInfo.cache
+D:\FPTaptech\eProject3\RealtorsPortal\src\src\obj\Debug\net5.0\src.RazorAssemblyInfo.cs
