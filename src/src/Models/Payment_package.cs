@@ -14,7 +14,7 @@ namespace src.Models
         public int Id { get; set; }
         public int Status { get; set; }
         public string Transaction_id { get; set; }
-        public float Payment_price { get; set; }
+        public double Payment_price { get; set; }
         public int Limit_ads { get; set; }
         public int Limit_featured_ads { get; set; }
         public int Used_ads { get; set; }

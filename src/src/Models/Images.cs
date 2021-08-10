@@ -12,7 +12,9 @@ namespace src.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Url]
         public string Url { get; set; }
+        [Url]
         public string Thumbnail_url { get; set; }
         public int Property_id { get; set; }
     }

@@ -12,10 +12,12 @@ namespace src.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Required]
         public string Type { get; set; }
         public int Status { get; set; }
         public string Transaction_id { get; set; }
-        public float Payment_price { get; set; }
+        [Range(0, 100000000000000)]
+        public double Payment_price { get; set; }
         public DateTime Create_at
         {
             get

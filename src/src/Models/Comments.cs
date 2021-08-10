@@ -12,8 +12,11 @@ namespace src.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Required]
         public string Title { get; set; }
+        [Required]
         public string Description { get; set; }
+        [EmailAddress]
         public string Email { get; set; }
         public int Property_id { get; set; }
     }
