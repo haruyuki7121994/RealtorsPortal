@@ -7,32 +7,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace src.Models
 {
-    public class Payment_subscription
+    [Table("Payment_package")]
+    public class PaymentPackage
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [Required]
-        public string Type { get; set; }
         public int Status { get; set; }
         public string Transaction_id { get; set; }
-        [Range(0, 100000000000000)]
-        public double Payment_price { get; set; }
-        public DateTime Create_at
-        {
-            get
-            {
-                return DateTime.Now;
-            }
-        }
-        public DateTime Update_at
-        {
-            get
-            {
-                return DateTime.Now;
-            }
-        }
-        
+        public float Payment_price { get; set; }
+        public int Limit_ads { get; set; }
+        public int Limit_featured_ads { get; set; }
+        public int Used_ads { get; set; }
+        public int Used_featured_ads { get; set; }
+        public DateTime Created_at {get; set;}
+        public DateTime Updated_at {get; set;}
+        public int Package_id { get; set; }
         public int Customer_id { get; set; }
 
     }

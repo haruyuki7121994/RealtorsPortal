@@ -21,8 +21,8 @@ namespace src.Repository
         public DbSet<Images> Images { get; set; }
         public DbSet<Notifications> Notifications { get; set; }
         public DbSet<Packages> Packages { get; set; }
-        public DbSet<Payment_package> Payment_Packages { get; set; }
-        public DbSet<Payment_subscription> Payment_Subscriptions { get; set; }
+        public DbSet<PaymentPackage> PaymentPackage { get; set; }
+        public DbSet<PaymentSubscription> PaymentSubscription { get; set; }
         public DbSet<Properties> Properties { get; set; }
         public DbSet<Regions> Regions { get; set; }
         

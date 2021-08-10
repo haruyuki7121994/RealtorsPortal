@@ -9,6 +9,8 @@ namespace src.Models
 {
     public class Configurations
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Obj { get; set; }
         public string Val { get; set; }
 
