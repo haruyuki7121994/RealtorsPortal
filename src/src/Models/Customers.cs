@@ -30,8 +30,6 @@ namespace src.Models
         public string Type { get; set; }
 
         public ICollection<Properties> Properties { get; set; }
-        public ICollection<Payment_package> Payment_Package { get; set; }
-        public ICollection<Payment_subscription> Payment_Subscription{ get; set; }
         
     }
 }

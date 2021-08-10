@@ -19,6 +19,5 @@ namespace src.Models
         public int Limit_ads { get; set; }
         public int Limit_featured_ads { get; set; }
         public bool Is_active { get; set; }
-        public ICollection<Payment_package> Payment_Package { get; set; }
     }
 }
