@@ -10,8 +10,8 @@ namespace src.Controllers
 {
     public class AgentsController : Controller
     {
-        private readonly Services.ICustomersServices services;
-        public AgentsController(Services.ICustomersServices services)
+        private readonly Services.ICustomerService services;
+        public AgentsController(Services.ICustomerService services)
         {
             this.services = services;
         }
@@ -27,7 +27,7 @@ namespace src.Controllers
         }
         [HttpPost]
         [ActionName("Create")]
-        public IActionResult Create(Models.Customers customers, IFormFile file)
+        public IActionResult Create(Models.Customer customers, IFormFile file)
         {
             try
             {
@@ -56,17 +56,17 @@ namespace src.Controllers
         }
 
         [HttpGet]
-        public IActionResult edit(int id)
+        public IActionResult edit(string username)
         {
-            Models.Customers customers = services.fineOne(id);
+            Models.Customer customers = services.fineOne(username);
             return View(customers);
         }
         [HttpPost]
-        public IActionResult editagents(Models.Customers customers, IFormFile file)
+        public IActionResult editagents(Models.Customer customers, IFormFile file)
         {
             try
             {
-                Models.Customers cus = services.fineOne(customers.Id);
+                Models.Customer cus = services.fineOne(customers.Username);
                 if (ModelState.IsValid)
                 {
                     if (file.Length > 0)

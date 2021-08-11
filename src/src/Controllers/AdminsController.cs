@@ -8,8 +8,8 @@ namespace src.Controllers
 {
     public class AdminsController : Controller
     {
-        private readonly Services.IAdminsServices services;
-        public AdminsController(Services.IAdminsServices services)
+        private readonly Services.IAdminService services;
+        public AdminsController(Services.IAdminService services)
         {
             this.services = services;
         }
@@ -24,7 +24,7 @@ namespace src.Controllers
         }
         [HttpPost]
         [ActionName("Create")]
-        public IActionResult createadmin(Models.Admins admins)
+        public IActionResult createadmin(Models.Admin admins)
         {
             try
             {
@@ -42,14 +42,14 @@ namespace src.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult edit(int id)
+        public IActionResult edit(string username)
         {
 
-            Models.Admins admins = services.fineOne(id);
+            Models.Admin admins = services.fineOne(username);
             return View(admins);
         }
         [HttpPost]
-        public IActionResult edit(Models.Admins admins)
+        public IActionResult edit(Models.Admin admins)
         {
             try
             {

@@ -64,7 +64,7 @@ namespace src
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Subscriptions}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

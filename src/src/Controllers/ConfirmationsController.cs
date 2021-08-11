@@ -8,8 +8,8 @@ namespace src.Controllers
 {
     public class ConfirmationsController : Controller
     {
-        private readonly Services.ICustomersServices services;
-        public ConfirmationsController(Services.ICustomersServices services)
+        private readonly Services.ICustomerService services;
+        public ConfirmationsController(Services.ICustomerService services)
         {
             this.services = services;
         }

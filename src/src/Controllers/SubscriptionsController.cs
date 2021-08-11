@@ -8,8 +8,8 @@ namespace src.Controllers
 {
     public class SubscriptionsController : Controller
     {
-        private readonly Services.IPaymentPackageServices services;
-        public SubscriptionsController(Services.IPaymentPackageServices services)
+        private readonly Services.IPaymentPackageService services;
+        public SubscriptionsController(Services.IPaymentPackageService services)
         {
             this.services = services;
         }
