@@ -21,7 +21,7 @@ namespace src.Services
             if(country.Id == 0 )
             {
                 _context.Add(country);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
               
             }
             else
@@ -35,7 +35,7 @@ namespace src.Services
                 {
                     c.Name = country.Name;
                     c.Is_active = country.Is_active;
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
                 }
 
@@ -45,9 +45,17 @@ namespace src.Services
 
         }
 
-        public Task<bool> DeleteCountry(int id)
+        public async Task<bool> DeleteCountry(int id)
         {
-            throw new NotImplementedException();
+
+            var country = await GetCountryById(id);
+            if(country == null)
+            {
+                return false;
+            }
+            _context.Remove<Country>(country);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<List<Country>> GetAllCountry()
@@ -55,9 +63,14 @@ namespace src.Services
             return await _context.Countries.ToListAsync();
         }
 
-        public Task<Country> GetCountryByName(string name)
+        public async Task<Country> GetCountryById(int id)
         {
-            throw new NotImplementedException();
+            var country = await _context.Countries.FirstOrDefaultAsync(x => x.Id == id);
+            if(country == null)
+            {
+                return null;
+            }
+            return country;
         }
     }
 }

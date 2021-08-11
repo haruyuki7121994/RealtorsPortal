@@ -9,7 +9,7 @@ namespace src.Services
     public interface ICountryService
     {
         Task<List<Country>> GetAllCountry();
-        Task<Country> GetCountryByName(string name);
+        Task<Country> GetCountryById(int id);
         Task<Country> CreateEditCountry(Country country);
         Task<bool> DeleteCountry(int id);
     }

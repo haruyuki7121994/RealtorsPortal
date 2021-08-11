@@ -7,34 +7,32 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using src.Models;
 using src.Repository;
+using src.Services;
 
 namespace src.Controllers
 {
     public class CountriesController : Controller
     {
-        private readonly RealtorContext _context;
+        private readonly ICountryService _countryService;
 
-        public CountriesController(RealtorContext context)
+        public CountriesController(ICountryService countryService)
         {
-            _context = context;
+            _countryService = countryService;
         }
 
         // GET: Countries
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Countries.ToListAsync());
+           
+            return View(await _countryService.GetAllCountry());
         }
 
         // GET: Countries/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+          
+            var country = await _countryService.GetCountryById(id);
 
-            var country = await _context.Countries
-                .FirstOrDefaultAsync(m => m.Id == id);
             if (country == null)
             {
                 return NotFound();
@@ -43,37 +41,31 @@ namespace src.Controllers
             return View(country);
         }
 
-        // GET: Countries/Create
+        
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Countries/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Is_active")] Country country)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(country);
-                await _context.SaveChangesAsync();
+                var c = await _countryService.CreateEditCountry(country);
                 return RedirectToAction(nameof(Index));
             }
             return View(country);
         }
 
         // GET: Countries/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            
 
-            var country = await _context.Countries.FindAsync(id);
+            var country = await _countryService.GetCountryById(id);
             if (country == null)
             {
                 return NotFound();
@@ -95,21 +87,10 @@ namespace src.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var c = await _countryService.CreateEditCountry(country);
+                if(c == null)
                 {
-                    _context.Update(country);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CountryExists(country.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -117,37 +98,18 @@ namespace src.Controllers
         }
 
         // GET: Countries/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
+            
+
+            var deleteSuccess = await _countryService.DeleteCountry(id);
+            if (!deleteSuccess)
             {
                 return NotFound();
             }
 
-            var country = await _context.Countries
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (country == null)
-            {
-                return NotFound();
-            }
-
-            return View(country);
-        }
-
-        // POST: Countries/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var country = await _context.Countries.FindAsync(id);
-            _context.Countries.Remove(country);
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CountryExists(int id)
-        {
-            return _context.Countries.Any(e => e.Id == id);
-        }
     }
 }
