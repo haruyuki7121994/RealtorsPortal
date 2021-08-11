@@ -23,7 +23,27 @@ namespace src.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Properties()
+        {
+            return View();
+        }
+
+        public IActionResult Property()
+        {
+            return View();
+        }
+
+        public IActionResult Blogs()
+        {
+            return View();
+        }
+
+        public IActionResult Blog()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
         {
             return View();
         }
