@@ -31,8 +31,8 @@ namespace src
             services.AddControllersWithViews();
             string uri = "server=.;database=ProjectDB;uid=sa;pwd=123";
             services.AddScoped<IPaymentPackageService, PaymentPackageService>();
-            services.AddScoped<ICustomersServices, CustomerService>();
-            services.AddScoped<IAdminsServices, AdminService>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IAdminService, AdminService>();
             services.AddDbContext<RealtorContext>(options => options.UseSqlServer(uri));
 
             services.AddDbContext<RealtorContext>(options => {
