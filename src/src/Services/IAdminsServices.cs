@@ -10,7 +10,7 @@ namespace src.Services
     {
         Admins checkLogin(string uname, string pass);
         List<Admins> findAll();
-        Admins fineOne(string uname);
+        Admins fineOne(int id);
         void addAdmin(Admins admin);
         void updateAdmin(Admins admin);
         void deleteAdmin(int id);

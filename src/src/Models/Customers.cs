@@ -12,7 +12,7 @@ namespace src.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [RegularExpression(@"^[A-Z]+[a-zA-Z0-9\s]*$"), Required, StringLength(30, MinimumLength = 3)]
+        //[RegularExpression(@"^[A-Z]+[a-zA-Z0-9\s]*$"), Required, StringLength(30, MinimumLength = 3)]
         public string Name { get; set; }
         [Phone]
         public string Contact { get; set; }
@@ -21,9 +21,9 @@ namespace src.Models
         [EmailAddress]
         public string Email { get; set; }
         public string Image { get; set; }
-        [RegularExpression(@"^[A-Z]+[a-zA-Z0-9\S]*$"), Required, StringLength(255, MinimumLength = 3)]
+       // [RegularExpression(@"^[A-Z]+[a-zA-Z0-9\S]*$"), Required, StringLength(255, MinimumLength = 3)]
         public string Username { get; set; }
-        [RegularExpression(@"^[a-zA-Z0-9\S]{15}*$"), Required, StringLength(255, MinimumLength = 3)]
+      // [RegularExpression(@"^[a-zA-Z0-9\S]{15}*$"), Required, StringLength(255, MinimumLength = 3)]
         public string Password { get; set; }
         public bool Is_verified { get; set; }
         public bool Is_active { get; set; }

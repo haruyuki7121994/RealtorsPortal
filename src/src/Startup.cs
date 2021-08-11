@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using src.Services;
+using src.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace src
 {
@@ -23,6 +26,11 @@ namespace src
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            string uri = "server=.;database=ProjectDB;uid=sa;pwd=123";
+            services.AddScoped<IPaymentPackageServices, PaymentPackageServices>();
+            services.AddScoped<ICustomersServices, CustomersServices>();
+            services.AddScoped<IAdminsServices, AdminsServices>();
+            services.AddDbContext<RealtorContext>(options => options.UseSqlServer(uri));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,7 +54,7 @@ namespace src
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Subscriptions}/{action=Index}/{id?}");
             });
         }
     }

@@ -1,0 +1,70 @@
+﻿@model IEnumerable<src.Models.PaymentPackage>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>
+    Notification Email
+</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Transaction_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Payment_price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Used_ads)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Package_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer_id)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Transaction_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Payment_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Used_ads)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Package_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer_id)
+            </td>
+            <td>
+                @Html.ActionLink("Send Email", "", new { /* id=item.PrimaryKey */ }) 
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

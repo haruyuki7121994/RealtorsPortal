@@ -70,9 +70,9 @@ namespace src.Services
             return context.Customers.ToList();
         }
 
-        public Customers fineOne(string uname)
+        public Customers fineOne(int id)
         {
-            Customers customers = context.Customers.SingleOrDefault(a => a.Username.Equals(uname));
+            Customers customers = context.Customers.SingleOrDefault(a => a.Id.Equals(id));
             if (customers != null)
             {
                 return customers;
@@ -94,7 +94,8 @@ namespace src.Services
                 editcustomers.Address = customers.Address;
                 editcustomers.Email = customers.Email;
                 editcustomers.Image = customers.Image;
-                editcustomers.Type = customers.Type;
+                editcustomers.Is_verified = customers.Is_verified;
+                editcustomers.Is_active = customers.Is_active;
                 
                 context.SaveChanges();
             }

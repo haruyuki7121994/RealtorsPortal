@@ -69,9 +69,9 @@ namespace src.Services
             return context.Admins.ToList();
         }
 
-        public Admins fineOne(string uname)
+        public Admins fineOne(int id)
         {
-            Admins admin = context.Admins.SingleOrDefault(a => a.Username.Equals(uname));
+            Admins admin = context.Admins.SingleOrDefault(a => a.Id.Equals(id));
             if (admin != null)
             {
                 return admin;
@@ -87,7 +87,10 @@ namespace src.Services
             Admins editAdmin = context.Admins.SingleOrDefault(a => a.Id.Equals(admin.Id));
             if (editAdmin != null)
             {
-                editAdmin.Username = admin.Username;
+                editAdmin.Password = admin.Password;
+                editAdmin.Is_active = admin.Is_active;
+                editAdmin.Is_verified = admin.Is_verified;
+                editAdmin.Role = admin.Role;
                 context.SaveChanges();
             }
             else

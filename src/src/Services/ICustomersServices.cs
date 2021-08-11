@@ -10,7 +10,7 @@ namespace src.Services
     {
         Customers checkLogin(string uname, string pass);
         List<Customers> findAll();
-        Customers fineOne(string uname);
+        Customers fineOne(int id);
         void addCustomer(Customers customers);
         void updateCustomer(Customers customers);
         void deleteCustomer(int id);
