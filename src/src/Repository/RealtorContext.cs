@@ -9,22 +9,22 @@ namespace src.Repository
 {
     public class RealtorContext:DbContext
     {
-        public RealtorContext(DbContextOptions options) : base(options) { }
-        public DbSet<Admins> Admins { get; set; }
-        public DbSet<Areas> Areas { get; set; }
-        public DbSet<Categories> Categories { get; set; }
-        public DbSet<Cities> Cities { get; set; }
-        public DbSet<Comments> Comments { get; set; }
-        public DbSet<Configurations> Configurations { get; set; }
-        public DbSet<Countries> Countries { get; set; }
-        public DbSet<Customers> Customers { get; set; }
-        public DbSet<Images> Images { get; set; }
-        public DbSet<Notifications> Notifications { get; set; }
-        public DbSet<Packages> Packages { get; set; }
+        public RealtorContext(DbContextOptions<RealtorContext> options) : base(options) { }
+        public DbSet<Admin> Admins { get; set; }
+        public DbSet<Area> Areas { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Configuration> Configurations { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Image> Images { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Package> Packages { get; set; }
         public DbSet<PaymentPackage> PaymentPackage { get; set; }
         public DbSet<PaymentSubscription> PaymentSubscription { get; set; }
-        public DbSet<Properties> Properties { get; set; }
-        public DbSet<Regions> Regions { get; set; }
+        public DbSet<Property> Properties { get; set; }
+        public DbSet<Region> Regions { get; set; }
         
 
     }
