@@ -16,7 +16,7 @@ namespace src.Models
         public string Name { get; set; }
         [Phone]
         public string Contact { get; set; }
-        [Required, StringLength(255, MinimumLength = 3)]
+        //[Required, StringLength(255, MinimumLength = 3)]
         public string Address { get; set; }
         [EmailAddress]
         public string Email { get; set; }

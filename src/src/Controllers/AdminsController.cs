@@ -42,14 +42,14 @@ namespace src.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult edit(int id)
+        public IActionResult Edit(int id)
         {
 
             Models.Admin admins = services.fineOne(id);
             return View(admins);
         }
         [HttpPost]
-        public IActionResult edit(Models.Admin admins)
+        public IActionResult Edit(Models.Admin admins)
         {
             try
             {
@@ -58,6 +58,10 @@ namespace src.Controllers
                 {
                     services.updateAdmin(admins);
                     return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.Msg = "Fail";
                 }
 
             }

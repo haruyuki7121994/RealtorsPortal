@@ -4,16 +4,18 @@
     ViewData["Title"] = "edit";
 }
 
-<h1>Edit Sellers</h1>
+<h2>edit</h2>
 
-
+<h4>Customer</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="edit" enctype="multipart/form-data" method="post">
+        <form asp-action="edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input type="hidden" asp-for="Id" />
+                <label asp-for="Id" hidden="hidden" class="control-label"></label>
+                <input asp-for="Id" hidden="hidden" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -35,8 +37,10 @@
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
+                
                 <input asp-for="Image" type="file" name="file" class="form-control-file" />
 
             </div>
@@ -50,18 +54,27 @@
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Is_verified" /> @Html.DisplayNameFor(model => model.Is_verified)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Is_active" /> @Html.DisplayNameFor(model => model.Is_active)
-                </label>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Is_verified" /> @Html.DisplayNameFor(model => model.Is_verified)
+                    </label>
+                </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Is_active" /> @Html.DisplayNameFor(model => model.Is_active)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Type" class="control-label"></label>
+                <input asp-for="Type" class="form-control" />
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </form>
     </div>

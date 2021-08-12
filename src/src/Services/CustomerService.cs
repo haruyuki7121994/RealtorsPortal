@@ -91,14 +91,16 @@ namespace src.Services
             Customer editcustomers = context.Customers.SingleOrDefault(a => a.Id.Equals(customers.Id));
             if (editcustomers != null)
             {
-                editcustomers.Username = customers.Username;
-                editcustomers.Password = customers.Password;
+                editcustomers.Name = customers.Name;
                 editcustomers.Contact = customers.Contact;
                 editcustomers.Address = customers.Address;
                 editcustomers.Email = customers.Email;
                 editcustomers.Image = customers.Image;
+                editcustomers.Username = customers.Username;
+                editcustomers.Password = customers.Password; 
                 editcustomers.Is_verified = customers.Is_verified;
                 editcustomers.Is_active = customers.Is_active;
+                editcustomers.Type = customers.Type;
                 context.SaveChanges();
             }
             else

@@ -64,7 +64,7 @@ namespace src.Controllers
             return View(customers);
         }
         [HttpPost]
-        public IActionResult editsellers(Models.Customer customers, IFormFile file)
+        public IActionResult edit(Models.Customer customers, IFormFile file)
         {
             try
             {
@@ -84,7 +84,6 @@ namespace src.Controllers
                     {
                         ViewBag.Msg = "Fail";
                     }
-
                 }
             }
             catch (Exception e)

@@ -88,6 +88,9 @@ namespace src.Services
             Admin editAdmin = context.Admins.SingleOrDefault(a => a.Id.Equals(admin.Id));
             if (editAdmin != null)
             {
+                
+                editAdmin.Email = admin.Email;
+                editAdmin.Username = admin.Username;
                 editAdmin.Password = admin.Password;
                 editAdmin.Is_active = admin.Is_active;
                 editAdmin.Is_verified = admin.Is_verified;
