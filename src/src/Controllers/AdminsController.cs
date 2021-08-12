@@ -42,10 +42,10 @@ namespace src.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult edit(string username)
+        public IActionResult edit(int id)
         {
 
-            Models.Admin admins = services.fineOne(username);
+            Models.Admin admins = services.fineOne(id);
             return View(admins);
         }
         [HttpPost]

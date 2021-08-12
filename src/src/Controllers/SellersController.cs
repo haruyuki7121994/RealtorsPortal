@@ -17,7 +17,9 @@ namespace src.Controllers
         }
         public IActionResult Index()
         {
-            return View(services.findAll());
+            var result = services.findAll();
+            var res = result.Where(e => e.Type == "private");
+            return View(res);
         }
 
         [HttpGet]
@@ -56,9 +58,9 @@ namespace src.Controllers
         }
 
         [HttpGet]
-        public IActionResult edit(string username)
+        public IActionResult edit(int id)
         {
-            Models.Customer customers = services.fineOne(username);
+            Models.Customer customers = services.fineOne(id);
             return View(customers);
         }
         [HttpPost]
@@ -66,7 +68,7 @@ namespace src.Controllers
         {
             try
             {
-                Models.Customer cus = services.fineOne(customers.Username);
+                Models.Customer cus = services.fineOne(customers.Id);
                 if (ModelState.IsValid)
                 {
                     if (file.Length > 0)

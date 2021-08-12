@@ -70,9 +70,9 @@ namespace src.Services
         }
 
 
-        public Admin fineOne(string uname)
+        public Admin fineOne(int id)
         {
-            Admin admin = context.Admins.SingleOrDefault(a => a.Username.Equals(uname));
+            Admin admin = context.Admins.SingleOrDefault(a => a.Id.Equals(id));
             if (admin != null)
             {
                 return admin;
@@ -91,7 +91,6 @@ namespace src.Services
                 editAdmin.Password = admin.Password;
                 editAdmin.Is_active = admin.Is_active;
                 editAdmin.Is_verified = admin.Is_verified;
-                editAdmin.Role = admin.Role;
                 context.SaveChanges();
             }
             else

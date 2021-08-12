@@ -15,7 +15,9 @@ namespace src.Controllers
         }
         public IActionResult Index()
         {
-            return View(services.findAll());
+            var result = services.findAll();
+            var res = result.Where(e => e.Is_active = false);
+            return View(res);
         }
     }
 }

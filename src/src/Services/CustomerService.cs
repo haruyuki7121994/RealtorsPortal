@@ -18,7 +18,7 @@ namespace src.Services
 
         public void addCustomer(Customer customers)
         {
-            Customer acc = context.Customers.SingleOrDefault(a => a.Username.Equals(customers.Username));
+            Customer acc = context.Customers.SingleOrDefault(a => a.Id.Equals(customers.Id));
             if (acc == null)
             {
                 context.Customers.Add(customers);
@@ -72,9 +72,9 @@ namespace src.Services
 
 
 
-        public Customer fineOne(string uname)
+        public Customer fineOne(int id)
         {
-            Customer customers = context.Customers.SingleOrDefault(a => a.Username.Equals(uname));
+            Customer customers = context.Customers.SingleOrDefault(a => a.Id.Equals(id));
 
             if (customers != null)
             {
@@ -99,7 +99,6 @@ namespace src.Services
                 editcustomers.Image = customers.Image;
                 editcustomers.Is_verified = customers.Is_verified;
                 editcustomers.Is_active = customers.Is_active;
-                
                 context.SaveChanges();
             }
             else
