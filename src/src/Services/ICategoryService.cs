@@ -8,7 +8,7 @@ namespace src.Services
 {
     public interface ICategoryService
     {
-        List<Category> findAll();
+        List<Category> findAll(bool isActive = false);
         Category fineOne(string name);
         void addCategory(Category categories);
         void updateCategory(Category categories);

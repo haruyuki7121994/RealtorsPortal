@@ -1,4 +1,5 @@
-﻿@{
+﻿@model src.Models.Customer
+@{
     Layout = "~/Views/Shared/_RealtorsPortalLayout.cshtml";
     ViewData["Title"] = "Register Page";
 }
@@ -20,51 +21,69 @@
     </div>
 </section>
 <!-- End Proerty header  -->
+
+@{
+    if (ViewBag.error != null)
+    {
+        <div class="error-blog">
+            <h1>@ViewBag.error</h1>
+        </div>
+    }
+    if (TempData.Peek("Message") != null)
+    {
+        <div class="error-blog">
+            <h3>Message: @TempData.Peek("Message")</h3>
+        </div>
+    }
+}
+
 <div class="container">
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6 wrapper-custom">
             <br />
-            <form asp-action="Create" enctype="multipart/form-data" method="post">
+            <form asp-action="Register" asp-controller="Auth" enctype="multipart/form-data" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label class="control-label">Name/ Company</label>
-                    <input class="form-control" />
-                    <span class="text-danger"></span>
+                    <label asp-for="Name" class="control-label">Name/ Company</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Email</label>
-                    <input class="form-control" />
-                    <span class="text-danger"></span>
+                    <label asp-for="Email" class="control-label">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Contact</label>
-                    <input class="form-control" />
-                    <span class="text-danger"></span>
+                    <label asp-for="Contact" class="control-label">Contact</label>
+                    <input asp-for="Contact" class="form-control" />
+                    <span asp-validation-for="Contact" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Username</label>
-                    <input class="form-control" />
-                    <span class="text-danger"></span>
+                    <label asp-for="Address" class="control-label">Address</label>
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Password</label>
-                    <input class="form-control" />
-                    <span class="text-danger"></span>
+                    <label asp-for="Username" class="control-label">Username</label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label">Password</label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Avatar</label>
                     <input name="file" type="file" class="form-control" />
-                    <span class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <div class="radio">
-                        <label><input type="radio" name="optradio" checked>Private Seller</label>
-                    </div>
-                    <div class="radio">
-                        <label><input type="radio" name="optradio">Agent</label>
-                    </div>
+                    <select asp-for="Type" class="form-control">
+                        <option value="private">Private Seller</option>
+                        <option value="agent">Agent</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Register" class="btn btn-dark" />

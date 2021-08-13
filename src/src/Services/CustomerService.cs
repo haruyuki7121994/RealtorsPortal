@@ -16,24 +16,62 @@ namespace src.Services
             this.context = context;
         }
 
-        public void addCustomer(Customer customers)
+        public bool addCustomer(Customer customer)
         {
-            Customer acc = context.Customers.SingleOrDefault(a => a.Username.Equals(customers.Username));
-            if (acc == null)
+            var acc = context.Customers.Where(a => a.Username.Equals(customer.Username) || a.Email.Equals(customer.Email)).ToList();
+            if (acc.Count() == 0)
             {
-                context.Customers.Add(customers);
-                context.SaveChanges();
+                try
+                {
+                    var cus = new Customer
+                    {
+                        Name = customer.Name,
+                        Contact = customer.Contact,
+                        Address = customer.Address,
+                        Email = customer.Email,
+                        Image = customer.Image,
+                        Username = customer.Username,
+                        Password = customer.Password,
+                        Is_verified = customer.Is_verified,
+                        Is_active = customer.Is_active,
+                        Has_contact_form = customer.Has_contact_form,
+                        Type = customer.Type,
+                    };
+                    context.Customers.Add(customer);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+
+                    var msg = e.Message;
+                }
+                
+                return true;
             }
             else
             {
-                //do nothing
+                return false;
             }
         }
 
-        public Customer checkLogin(string uname, string pass)
+        public Customer checkLogin(string uname, string pass, bool isActive = false, bool isVerified = false)
         {
             Customer customers = context.Customers.SingleOrDefault(a => a.Username.Equals(uname));
-            if (customers == null)
+
+            //check IsActive
+            if (isActive)
+            {
+                customers.Is_active.Equals(true);
+            }
+
+            //check IsVerified
+            if (isVerified)
+            {
+                customers.Is_verified.Equals(true);
+            }
+
+            //check password
+            if (customers != null)
             {
                 if (customers.Password.Equals(pass))
                 {
@@ -86,25 +124,26 @@ namespace src.Services
             }
         }
 
-        public void updateCustomer(Customer customers)
+        public bool updateCustomer(Customer customer)
         {
-            Customer editcustomers = context.Customers.SingleOrDefault(a => a.Id.Equals(customers.Id));
-            if (editcustomers != null)
+            Customer editcustomer = context.Customers.SingleOrDefault(a => a.Id.Equals(customer.Id));
+            if (editcustomer != null)
             {
-                editcustomers.Username = customers.Username;
-                editcustomers.Password = customers.Password;
-                editcustomers.Contact = customers.Contact;
-                editcustomers.Address = customers.Address;
-                editcustomers.Email = customers.Email;
-                editcustomers.Image = customers.Image;
-                editcustomers.Is_verified = customers.Is_verified;
-                editcustomers.Is_active = customers.Is_active;
+                editcustomer.Name = customer.Name;
+                editcustomer.Password = customer.Password;
+                editcustomer.Contact = customer.Contact;
+                editcustomer.Address = customer.Address;
+                editcustomer.Image = customer.Image;
+                editcustomer.Is_verified = customer.Is_verified;
+                editcustomer.Is_active = customer.Is_active;
+                editcustomer.Has_contact_form = customer.Has_contact_form;
                 
                 context.SaveChanges();
+                return true;
             }
             else
             {
-                //do nothing
+                return false;
             }
         }
     }

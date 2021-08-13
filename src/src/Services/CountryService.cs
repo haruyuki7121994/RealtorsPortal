@@ -34,7 +34,6 @@ namespace src.Services
                 else
                 {
                     c.Name = country.Name;
-                    c.Is_active = country.Is_active;
                     await _context.SaveChangesAsync();
 
                 }
@@ -71,6 +70,11 @@ namespace src.Services
                 return null;
             }
             return country;
+        }
+
+        public List<Country> FindAll()
+        {
+            return _context.Countries.ToList();
         }
     }
 }

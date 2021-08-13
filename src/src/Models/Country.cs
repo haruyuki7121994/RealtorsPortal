@@ -15,8 +15,6 @@ namespace src.Models
 
         public string Name { get; set; }
 
-        public bool Is_active { get; set; }
-
         public ICollection<Region> Regions { get; set; }
     }
 }

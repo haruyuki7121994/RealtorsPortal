@@ -13,5 +13,7 @@ namespace src.Services
         void addPaymentPackage(PaymentPackage payment_package);
         void updatePaymentPackage(PaymentPackage payment_package);
         void deletePaymentPackage(int id);
+
+        List<PaymentPackage> FindPackagesByCustomerId(int customerId);
     }
 }

@@ -29,23 +29,37 @@ namespace src
         {
 
             services.AddControllersWithViews();
-            string uri = "server=.;database=ProjectDB;uid=sa;pwd=123";
-            services.AddScoped<IPaymentPackageService, PaymentPackageService>();
-            services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<IAdminService, AdminService>();
-            services.AddDbContext<RealtorContext>(options => options.UseSqlServer(uri));
+
+            //string uri = "server=DESKTOP-7UKA67O;database=RealtorsPortalDB;uid=sa;pwd=123456";
+            //services.AddDbContext<RealtorContext>(options => options.UseSqlServer(uri));
 
             services.AddDbContext<RealtorContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-            services.AddScoped<ICountryService,CountryService>();
+            
+
+            services.AddSession();
+
+            services.AddScoped<IPaymentPackageService, PaymentPackageService>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<IPropertyService, PropertyService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IAreaService, AreaService>();
+            services.AddScoped<ICityService, CityService>();
+            services.AddScoped<IRegionservice, RegionService>();
+            services.AddScoped<IPackageService, PackageService>();
+
             services.AddControllersWithViews().AddJsonOptions(x =>
-   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -54,7 +68,12 @@ namespace src
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
             app.UseStaticFiles();
+
+            app.UseSession();
+
+            app.UseMiddleware<Middleware.CustomerMiddleware>();
 
             app.UseRouting();
 

@@ -43,9 +43,14 @@ namespace src.Services
             }
         }
 
-        public List<Category> findAll()
+        public List<Category> findAll(bool isActive = false)
         {
-            return context.Categories.ToList();
+            var list = context.Categories.ToList();
+            if (isActive)
+            {
+                list.Where(c => c.Is_active.Equals(true));
+            }
+            return list;
         }
 
         public Category fineOne(string name)

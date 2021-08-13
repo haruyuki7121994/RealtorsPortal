@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<src.Models.Package>
+@{
     Layout = "~/Views/Shared/_RealtorsPortalLayout.cshtml";
     ViewData["Title"] = "Profile Page";
 }
@@ -22,93 +23,40 @@
 <!-- End Proerty header  -->
 <div class="clearfix"></div>
 <div style="margin-top: 20px">
+    @{
+        if (ViewBag.error != null)
+        {
+            <div class="error-blog">
+                <h1>@ViewBag.error</h1>
+            </div>
+        }
+        if (TempData.Peek("Message") != null)
+        {
+            <div class="error-blog">
+                <h3>Message: @TempData.Peek("Message")</h3>
+            </div>
+        }
+    }
     <div class="container">
         <div class="row">
-            <div class="card col-md-4">
-                <div class="wrapper-custom" style="text-align: center">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Free</h4>
-                    </div>
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-                        <ul class="list-unstyled" style="margin: 5px">
-                            <li>10 users included</li>
-                            <li>2 GB of storage</li>
-                            <li>Email support</li>
-                            <li>Help center access</li>
-                        </ul>
-                        <button type="button" class="btn btn-lg btn-block btn-dark">Purchase</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card col-md-4">
-                <div class="wrapper-custom" style="text-align: center">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Free</h4>
-                    </div>
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-                        <ul class="list-unstyled" style="margin: 5px">
-                            <li>10 users included</li>
-                            <li>2 GB of storage</li>
-                            <li>Email support</li>
-                            <li>Help center access</li>
-                        </ul>
-                        <button type="button" class="btn btn-lg btn-block btn-dark">Purchase</button>
+            @foreach (var item in Model)
+            {
+                <div class="card col-md-4">
+                    <div class="wrapper-custom" style="text-align: center">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">@item.Name</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title pricing-card-title">VND @item.Price</h1>
+                            <ul class="list-unstyled" style="margin: 5px">
+                                <li>Limit Ads: @item.Limit_ads</li>
+                                <li>Limit Featured Ads: @item.Limit_featured_ads</li>
+                            </ul>
+                            <button type="button" class="btn btn-lg btn-block btn-dark">Purchase</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card col-md-4">
-                <div class="wrapper-custom" style="text-align: center">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Free</h4>
-                    </div>
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-                        <ul class="list-unstyled" style="margin: 5px">
-                            <li>10 users included</li>
-                            <li>2 GB of storage</li>
-                            <li>Email support</li>
-                            <li>Help center access</li>
-                        </ul>
-                        <button type="button" class="btn btn-lg btn-block btn-dark">Purchase</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card col-md-4">
-                <div class="wrapper-custom" style="text-align: center">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Free</h4>
-                    </div>
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-                        <ul class="list-unstyled" style="margin: 5px">
-                            <li>10 users included</li>
-                            <li>2 GB of storage</li>
-                            <li>Email support</li>
-                            <li>Help center access</li>
-                        </ul>
-                        <button type="button" class="btn btn-lg btn-block btn-dark">Purchase</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card col-md-4">
-                <div class="wrapper-custom" style="text-align: center">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Free</h4>
-                    </div>
-                    <div class="card-body">
-                        <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-                        <ul class="list-unstyled" style="margin: 5px">
-                            <li>10 users included</li>
-                            <li>2 GB of storage</li>
-                            <li>Email support</li>
-                            <li>Help center access</li>
-                        </ul>
-                        <button type="button" class="btn btn-lg btn-block btn-dark">Purchase</button>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
     <br />

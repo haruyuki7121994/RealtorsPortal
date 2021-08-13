@@ -67,7 +67,6 @@ namespace src.Services
             if (editRegion != null)
             {
                 editRegion.Name = regions.Name;
-                editRegion.Is_active = regions.Is_active;
                 context.SaveChanges();
             }
             else
