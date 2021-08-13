@@ -110,9 +110,9 @@ namespace src.Services
 
 
 
-        public Customer fineOne(string uname)
+        public Customer fineOne(int id)
         {
-            Customer customers = context.Customers.SingleOrDefault(a => a.Username.Equals(uname));
+            Customer customers = context.Customers.SingleOrDefault(a => a.Id.Equals(id));
 
             if (customers != null)
             {
