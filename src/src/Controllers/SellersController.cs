@@ -58,9 +58,9 @@ namespace src.Controllers
         }
 
         [HttpGet]
-        public IActionResult edit(int id)
+        public IActionResult edit(string username)
         {
-            Models.Customer customers = services.fineOne(id);
+            Models.Customer customers = services.fineOne(username);
             return View(customers);
         }
         [HttpPost]
@@ -68,7 +68,7 @@ namespace src.Controllers
         {
             try
             {
-                Models.Customer cus = services.fineOne(customers.Id);
+                Models.Customer cus = services.fineOne(customers.Username);
                 if (ModelState.IsValid)
                 {
                     if (file.Length > 0)
