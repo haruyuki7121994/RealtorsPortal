@@ -102,7 +102,7 @@ namespace src.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Categories = new SelectList(categoryService.findAll(), "Id", "Name");
+            ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
             ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
             return View();
         }
@@ -152,7 +152,7 @@ namespace src.Controllers
         public IActionResult Edit(int id)
         {
             var property = propertyService.FindOneWithRelation(id);
-            ViewBag.Categories = new SelectList(categoryService.findAll(), "Id", "Name");
+            ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
             ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
             return View(property);
         }
@@ -189,7 +189,7 @@ namespace src.Controllers
                 }
                 else
                 {
-                    ViewBag.Categories = new SelectList(categoryService.findAll(), "Id", "Name");
+                    ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
                     ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
                 }
             }

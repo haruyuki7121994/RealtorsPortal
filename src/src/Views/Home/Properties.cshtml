@@ -1,4 +1,5 @@
-﻿@{
+﻿@model dynamic
+@{
     Layout = "~/Views/Shared/_RealtorsPortalLayout.cshtml";
     ViewData["Title"] = "Properties Page";
 }
@@ -29,23 +30,6 @@
                     <!-- start properties content head -->
                     <div class="aa-properties-content-head">
                         <div class="aa-properties-content-head-left">
-                            <form action="" class="aa-sort-form">
-                                <label for="">Sort by</label>
-                                <select name="">
-                                    <option value="1" selected="Default">Default</option>
-                                    <option value="2">Name</option>
-                                    <option value="3">Price</option>
-                                    <option value="4">Date</option>
-                                </select>
-                            </form>
-                            <form action="" class="aa-show-form">
-                                <label for="">Show</label>
-                                <select name="">
-                                    <option value="1" selected="12">6</option>
-                                    <option value="2">12</option>
-                                    <option value="3">24</option>
-                                </select>
-                            </form>
                         </div>
                         <div class="aa-properties-content-head-right">
                             <a id="aa-grid-properties" href="#"><span class="fa fa-th"></span></a>
@@ -55,174 +39,53 @@
                     <!-- Start properties content body -->
                     <div class="aa-properties-content-body">
                         <ul class="aa-properties-nav">
-                            <li>
-                                <article class="aa-properties-item">
-                                    <a class="aa-properties-item-img" href="#">
-                                        <img alt="img" src="~/img/item/6.jpg">
-                                    </a>
-                                    <div class="aa-tag for-rent">
-                                        For Rent
-                                    </div>
-                                    <div class="aa-properties-item-content">
-                                        <div class="aa-properties-info">
-                                            <span>5 Rooms</span>
-                                            <span>2 Beds</span>
-                                            <span>3 Baths</span>
-                                            <span>1100 SQ FT</span>
+                            @foreach (var item in Model.filtedProps)
+                            {
+                                <li>
+                                    <article class="aa-properties-item">
+                                        <div style="width: 100%">
+                                            <a href="/Home/Property/@item.Id" class="aa-properties-item-img">
+                                                @if (item.Thumbnail_url != null)
+                                                {
+                                                    <img width="370" height="220" src="~/@item.Thumbnail_url" alt="img">
+                                                }
+                                                else
+                                                {
+                                                    <img src="img/item/1.jpg" alt="img">
+                                                }
+                                            </a>
                                         </div>
-                                        <div class="aa-properties-about">
-                                            <h3><a href="#">Appartment Title</a></h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
+                                        <div class="aa-tag for-@item.Method">
+                                            For @item.Method
                                         </div>
-                                        <div class="aa-properties-detial">
-                                            <span class="aa-price">
-                                                $35000
-                                            </span>
-                                            <a class="aa-secondary-btn" href="#">View Details</a>
+                                        <div class="aa-properties-item-content">
+                                            <div class="aa-properties-info">
+                                                @if (item.Features != null)
+                                                {
+                                                    <span>5 Rooms</span>
+                                                    <span>2 Beds</span>
+                                                    <span>3 Baths</span>
+                                                    <span>1100 SQ FT</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>Features is updating!</span>
+                                                }
+                                            </div>
+                                            <div class="aa-properties-about">
+                                                <h3 style="height: 25px; font-size: 22px; overflow: hidden"><a href="/Home/Property/@item.Id">@item.Title</a></h3>
+                                                <p style="height: 60px; overflow: hidden">@item.Introduction ...</p>
+                                            </div>
+                                            <div class="aa-properties-detial">
+                                                <span class="aa-price">
+                                                    $ @item.Price
+                                                </span>
+                                                @Html.ActionLink("View Details", "Property", "Home", new { id = item.Id }, new { @class = "aa-secondary-btn" })
+                                            </div>
                                         </div>
-                                    </div>
-                                </article>
-                            </li>
-                            <li>
-                                <article class="aa-properties-item">
-                                    <a class="aa-properties-item-img" href="#">
-                                        <img alt="img" src="~/img/item/1.jpg">
-                                    </a>
-                                    <div class="aa-tag sold-out">
-                                        Sold Out
-                                    </div>
-                                    <div class="aa-properties-item-content">
-                                        <div class="aa-properties-info">
-                                            <span>5 Rooms</span>
-                                            <span>2 Beds</span>
-                                            <span>3 Baths</span>
-                                            <span>1100 SQ FT</span>
-                                        </div>
-                                        <div class="aa-properties-about">
-                                            <h3><a href="#">Appartment Title</a></h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
-                                        </div>
-                                        <div class="aa-properties-detial">
-                                            <span class="aa-price">
-                                                $35000
-                                            </span>
-                                            <a class="aa-secondary-btn" href="#">View Details</a>
-                                        </div>
-                                    </div>
-                                </article>
-                            </li>
-                            <li>
-                                <article class="aa-properties-item">
-                                    <a class="aa-properties-item-img" href="#">
-                                        <img alt="img" src="~/img/item/2.jpg">
-                                    </a>
-                                    <div class="aa-tag sold-out">
-                                        Sold Out
-                                    </div>
-                                    <div class="aa-properties-item-content">
-                                        <div class="aa-properties-info">
-                                            <span>5 Rooms</span>
-                                            <span>2 Beds</span>
-                                            <span>3 Baths</span>
-                                            <span>1100 SQ FT</span>
-                                        </div>
-                                        <div class="aa-properties-about">
-                                            <h3><a href="#">Appartment Title</a></h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
-                                        </div>
-                                        <div class="aa-properties-detial">
-                                            <span class="aa-price">
-                                                $35000
-                                            </span>
-                                            <a class="aa-secondary-btn" href="#">View Details</a>
-                                        </div>
-                                    </div>
-                                </article>
-                            </li>
-                            <li>
-                                <article class="aa-properties-item">
-                                    <a class="aa-properties-item-img" href="#">
-                                        <img alt="img" src="~/img/item/5.jpg">
-                                    </a>
-                                    <div class="aa-tag for-sale">
-                                        For Sale
-                                    </div>
-                                    <div class="aa-properties-item-content">
-                                        <div class="aa-properties-info">
-                                            <span>5 Rooms</span>
-                                            <span>2 Beds</span>
-                                            <span>3 Baths</span>
-                                            <span>1100 SQ FT</span>
-                                        </div>
-                                        <div class="aa-properties-about">
-                                            <h3><a href="#">Appartment Title</a></h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
-                                        </div>
-                                        <div class="aa-properties-detial">
-                                            <span class="aa-price">
-                                                $35000
-                                            </span>
-                                            <a class="aa-secondary-btn" href="#">View Details</a>
-                                        </div>
-                                    </div>
-                                </article>
-                            </li>
-                            <li>
-                                <article class="aa-properties-item">
-                                    <a class="aa-properties-item-img" href="#">
-                                        <img alt="img" src="~/img/item/3.jpg">
-                                    </a>
-                                    <div class="aa-tag for-rent">
-                                        For Rent
-                                    </div>
-                                    <div class="aa-properties-item-content">
-                                        <div class="aa-properties-info">
-                                            <span>5 Rooms</span>
-                                            <span>2 Beds</span>
-                                            <span>3 Baths</span>
-                                            <span>1100 SQ FT</span>
-                                        </div>
-                                        <div class="aa-properties-about">
-                                            <h3><a href="#">Appartment Title</a></h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
-                                        </div>
-                                        <div class="aa-properties-detial">
-                                            <span class="aa-price">
-                                                $35000
-                                            </span>
-                                            <a class="aa-secondary-btn" href="#">View Details</a>
-                                        </div>
-                                    </div>
-                                </article>
-                            </li>
-                            <li>
-                                <article class="aa-properties-item">
-                                    <a class="aa-properties-item-img" href="#">
-                                        <img alt="img" src="~/img/item/4.jpg">
-                                    </a>
-                                    <div class="aa-tag for-sale">
-                                        For Sale
-                                    </div>
-                                    <div class="aa-properties-item-content">
-                                        <div class="aa-properties-info">
-                                            <span>5 Rooms</span>
-                                            <span>2 Beds</span>
-                                            <span>3 Baths</span>
-                                            <span>1100 SQ FT</span>
-                                        </div>
-                                        <div class="aa-properties-about">
-                                            <h3><a href="#">Appartment Title</a></h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
-                                        </div>
-                                        <div class="aa-properties-detial">
-                                            <span class="aa-price">
-                                                $35000
-                                            </span>
-                                            <a class="aa-secondary-btn" href="#">View Details</a>
-                                        </div>
-                                    </div>
-                                </article>
-                            </li>
+                                    </article>
+                                </li>
+                            }
                         </ul>
                     </div>
                     <!-- Start properties content bottom -->
@@ -254,104 +117,162 @@
                 <aside class="aa-properties-sidebar">
                     <!-- Start Single properties sidebar -->
                     <div class="aa-properties-single-sidebar">
-                        <h3>Properties Search</h3>
-                        <form action="">
+                        <h3>Properties Filter</h3>
+                        <form asp-action="Properties" asp-controller="Home" method="get">
                             <div class="aa-single-advance-search">
-                                <input type="text" placeholder="Type Your Location">
+                                <input type="text" name="title" placeholder="Type Your Title">
                             </div>
                             <div class="aa-single-advance-search">
-                                <select id="" name="">
-                                    <option selected="" value="0">Category</option>
-                                    <option value="1">Flat</option>
-                                    <option value="2">Land</option>
-                                    <option value="3">Plot</option>
-                                    <option value="4">Commercial</option>
+                                <input type="number" name="min_price" placeholder="Type Min Price">
+                            </div>
+                            <div class="aa-single-advance-search">
+                                <input type="number" name="max_price" placeholder="Type Max Price">
+                            </div>
+                            <div class="aa-single-advance-search">
+                                <select name="category_id" asp-items="Model.categories">
+                                    <option value="0">Category</option>
                                 </select>
                             </div>
                             <div class="aa-single-advance-search">
-                                <select id="" name="">
-                                    <option selected="" value="0">Type</option>
-                                    <option value="1">Flat</option>
-                                    <option value="2">Land</option>
-                                    <option value="3">Plot</option>
-                                    <option value="4">Commercial</option>
+                                <select name="method">
+                                    <option value="">Type</option>
+                                    <option value="sell">Sell</option>
+                                    <option value="buy">Buy</option>
+                                    <option value="rent">Rent</option>
                                 </select>
                             </div>
                             <div class="aa-single-advance-search">
-                                <select id="" name="">
-                                    <option selected="" value="0">Type</option>
-                                    <option value="1">Flat</option>
-                                    <option value="2">Land</option>
-                                    <option value="3">Plot</option>
-                                    <option value="4">Commercial</option>
+                                <select name="customer_role">
+                                    <option value="">Agent/Private Seller</option>
+                                    <option value="agent">Agent</option>
+                                    <option value="private">Private Seller</option>
                                 </select>
                             </div>
-                            <div class="aa-single-filter-search">
-                                <span>AREA (SQ)</span>
-                                <span>FROM</span>
-                                <span id="skip-value-lower" class="example-val">30.00</span>
-                                <span>TO</span>
-                                <span id="skip-value-upper" class="example-val">100.00</span>
-                                <div id="aa-sqrfeet-range" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
-                                </div>
-                            </div>
-                            <div class="aa-single-filter-search">
-                                <span>PRICE ($)</span>
-                                <span>FROM</span>
-                                <span id="skip-value-lower2" class="example-val">30.00</span>
-                                <span>TO</span>
-                                <span id="skip-value-upper2" class="example-val">100.00</span>
-                                <div id="aa-price-range" class="noUi-target noUi-ltr noUi-horizontal noUi-background">
-                                </div>
+                            <div class="aa-single-advance-search">
+                                <select id="CountryId" name="country_id" asp-items="Model.countries">
+                                    <option value="0">Category</option>
+                                </select>
                             </div>
                             <div class="aa-single-advance-search">
-                                <input type="submit" value="Search" class="aa-search-btn">
+                                <select id="RegionId" name="region_id">
+                                    <option value="0">Region</option>
+                                </select>
+                            </div>
+                            <div class="aa-single-advance-search">
+                                <select id="CityId" name="city_id">
+                                    <option value="0">City</option>
+                                </select>
+                            </div>
+                            <div class="aa-single-advance-search">
+                                <select id="AreaId" name="area_id">
+                                    <option value="0">Area</option>
+                                </select>
+                            </div>
+                            <div class="aa-single-advance-search">
+                                <select id="" name="sort_by">
+                                    <option value="">Sort By</option>
+                                    <option value="date-desc">Date Descending</option>
+                                    <option value="date-asc">Date Ascending</option>
+                                    <option value="name-desc">Name Descending</option>
+                                    <option value="name-asc">Name Ascending</option>
+                                    <option value="price-desc">Price Descending</option>
+                                    <option value="price-asc">Price Ascending</option>
+                                </select>
+                            </div>
+                            <div class="aa-single-advance-search">
+                                <select id="" name="limit">
+                                    <option value="0">Show</option>
+                                    <option value="6">6</option>
+                                    <option value="12">12</option>
+                                    <option value="24">24</option>
+                                </select>
+                            </div>
+                            <div class="aa-single-advance-search">
+                                <input type="submit" value="Filter" class="aa-search-btn">
+                                @Html.ActionLink("Reset", "Properties", "Home", new { }, new { @class = "aa-search-btn btn-reset" })
                             </div>
                         </form>
                     </div>
-                    <!-- Start Single properties sidebar -->
-                    <div class="aa-properties-single-sidebar">
-                        <h3>Populer Properties</h3>
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object" src="~/img/item/1.jpg" alt="img">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading"><a href="#">This is Title</a></h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                                <span>$65000</span>
-                            </div>
+                    @if (Model.featuredProps.Count > 0)
+                    {
+                        <!-- Start Single properties sidebar -->
+                        <div class="aa-properties-single-sidebar">
+                            <h3>Featured Properties</h3>
+                            @foreach (var item in Model.featuredProps)
+                            {
+                                <div class="media">
+                                    <div class="media-left">
+                                        <a href="/Home/Property/@item.Id">
+                                            @if (item.Thumbnail_url != null)
+                                            {
+                                                <img class="media-object" width="370" height="220" src="~/@item.Thumbnail_url" alt="img">
+                                            }
+                                            else
+                                            {
+                                                <img class="media-object" src="~/img/item/1.jpg" alt="img">
+                                            }
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 style="height: 20px; overflow: hidden" class="media-heading"><a href="#">@item.Title</a></h4>
+                                        <p style="height: 34px; overflow: hidden">@item.Description</p>
+                                        <span>$@item.Price</span>
+                                    </div>
+                                </div>
+                            }
                         </div>
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object" src="~/img/item/1.jpg" alt="img">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading"><a href="#">This is Title</a></h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                                <span>$65000</span>
-                            </div>
-                        </div>
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object" src="~/img/item/1.jpg" alt="img">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading"><a href="#">This is Title</a></h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                                <span>$65000</span>
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </aside>
             </div>
         </div>
     </div>
 </section>
 <!-- / Properties  -->
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $("#CountryId").change(function () {
+                var countryId = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: "/Customer/GetRegions?id=" + countryId,
+                    contentType: "html",
+                    success: function (res) {
+                        $("#RegionId").empty();
+                        $("#CityId").empty();
+                        $("#AreaId").empty();
+                        $("#RegionId").append(res);
+                    }
+                })
+            })
+
+            $("#RegionId").change(function () {
+                var regionId = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: "/Customer/GetCities?id=" + regionId,
+                    contentType: "html",
+                    success: function (res) {
+                        $("#CityId").empty();
+                        $("#AreaId").empty();
+                        $("#CityId").append(res);
+                    }
+                })
+            })
+
+            $("#CityId").change(function () {
+                var cityId = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: "/Customer/GetAreas?id=" + cityId,
+                    contentType: "html",
+                    success: function (res) {
+                        $("#AreaId").empty();
+                        $("#AreaId").append(res);
+                    }
+                })
+            })
+        })
+    </script>
+}

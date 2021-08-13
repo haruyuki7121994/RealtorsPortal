@@ -136,7 +136,7 @@ img {
 ====================*/
 
 #aa-header {
-  border-bottom: 1px solid #fff;
+    background-color: black;
   left: 0;
   position: absolute;
   right: 0;
@@ -569,8 +569,7 @@ img {
   border-radius: 10px 10px 0 0;
   display: inline;
   float: left;
-  margin-top: -100px;
-  min-height: 200px;
+  min-height: 100px;
   padding: 25px 20px;
   position: relative;
   width: 100%;
@@ -767,11 +766,14 @@ img {
   left: 15px;
   top: -15px;
 }
-.aa-properties-item .for-rent {
+.aa-properties-item .for-buy {
   background-color: #20ceb3;
 }
-.aa-properties-item .sold-out {
+.aa-properties-item .for-sell {
   background-color: #ff0000;
+}
+.aa-properties-item .for-rent {
+    background-color: deepskyblue;
 }
 .aa-properties-item .aa-properties-item-content {
   background-color: #fff;
@@ -1514,6 +1516,15 @@ img {
   width: 100%;
   font-size: 18px;
 }
+    #aa-properties .aa-properties-sidebar .aa-properties-single-sidebar .aa-single-advance-search input[type="number"] {
+        border: 1px solid #fff;
+        border-radius: 2px;
+        color: #555;
+        height: 40px;
+        padding: 5px;
+        width: 100%;
+        font-size: 18px;
+    }
 #aa-properties .aa-properties-sidebar .aa-properties-single-sidebar .aa-single-advance-search select {
   border: 1px solid #fff;
   border-radius: 2px;
@@ -3486,4 +3497,11 @@ img {
     margin-bottom: 0;
     background-color: rgba(0,0,0,.03);
     border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.btn-reset {
+    display: block;
+    text-align: center;
+    line-height: 50px;
+    background: red !important;
 }

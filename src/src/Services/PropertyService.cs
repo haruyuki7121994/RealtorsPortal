@@ -141,5 +141,42 @@ namespace src.Services
                         };
             return query.FirstOrDefault();
         }
+
+        public List<Property> FindAllWithRelation()
+        {
+            var query = from p in context.Properties
+                        join a in context.Areas on p.Area_id equals a.Id
+                        join c in context.Cities on a.City_id equals c.Id
+                        join re in context.Regions on c.Region_id equals re.Id
+                        join cou in context.Countries on re.Country_id equals cou.Id
+                        join cate in context.Categories on p.Category_id equals cate.Id
+                        join cus in context.Customers on p.Customer_id equals cus.Id
+                        select new Property
+                        {
+                            Id = p.Id,
+                            Title = p.Title,
+                            Introduction = p.Introduction,
+                            Description = p.Description,
+                            Features = p.Features,
+                            Method = p.Method,
+                            Price = p.Price,
+                            Deposit = p.Deposit,
+                            Thumbnail_url = p.Thumbnail_url,
+                            Is_featured = p.Is_featured,
+                            Is_active = p.Is_active,
+                            Created_at = p.Created_at,
+                            Ended_at = p.Ended_at,
+                            Area_id = p.Area_id,
+                            Category_id = p.Category_id,
+                            Customer_id = p.Customer_id,
+                            Region = re,
+                            City = c,
+                            Country = cou,
+                            Area = a,
+                            Category = cate,
+                            Customer = cus
+                        };
+            return query.ToList();
+        }
     }
 }

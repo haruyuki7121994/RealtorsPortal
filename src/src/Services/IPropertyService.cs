@@ -15,5 +15,6 @@ namespace src.Services
         bool updateProperty(Property property);
         void deleteProperty(int id);
         Property FindOneWithRelation(int id);
+        List<Property> FindAllWithRelation();
     }
 }
