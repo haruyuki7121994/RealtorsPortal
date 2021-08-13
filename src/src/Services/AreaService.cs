@@ -67,7 +67,6 @@ namespace src.Services
             if (editArea != null)
             {
                 editArea.Name = area.Name;
-                editArea.Is_active = area.Is_active;
                 context.SaveChanges();
             }
             else

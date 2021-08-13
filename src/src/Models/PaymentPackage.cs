@@ -25,5 +25,8 @@ namespace src.Models
         public int Package_id { get; set; }
         public int Customer_id { get; set; }
 
+        [NotMapped]
+        public string PackageName { get; set; }
+
     }
 }

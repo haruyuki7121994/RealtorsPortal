@@ -16,7 +16,6 @@ namespace src.Models
 
         public string Name { get; set; }
 
-        public bool Is_active { get; set; }
         [ForeignKey("Country_id")]
         public Country Country { get; set; }
 

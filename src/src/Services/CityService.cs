@@ -7,10 +7,10 @@ using src.Repository;
 
 namespace src.Services
 {
-    public class CitysService : ICityService
+    public class CityService : ICityService
     {
         private RealtorContext context;
-        public CitysService(RealtorContext context)
+        public CityService(RealtorContext context)
         {
             this.context = context;
         }
@@ -67,7 +67,6 @@ namespace src.Services
             if (editCity != null)
             {
                 editCity.Name = city.Name;
-                editCity.Is_active = city.Is_active;
                 context.SaveChanges();
             }
             else

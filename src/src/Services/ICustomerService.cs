@@ -8,11 +8,11 @@ namespace src.Services
 {
     public interface ICustomerService
     {
-        Customer checkLogin(string uname, string pass);
+        Customer checkLogin(string uname, string pass, bool isActive = false, bool isVerified = false);
         List<Customer> findAll();
-        Customer fineOne(int id);
-        void addCustomer(Customer customers);
-        void updateCustomer(Customer customers);
+        Customer fineOne(string uname);
+        bool addCustomer(Customer customer);
+        bool updateCustomer(Customer customer);
         void deleteCustomer(int id);
     }
 }

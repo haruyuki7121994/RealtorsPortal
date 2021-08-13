@@ -12,5 +12,7 @@ namespace src.Services
         Task<Country> GetCountryById(int id);
         Task<Country> CreateEditCountry(Country country);
         Task<bool> DeleteCountry(int id);
+
+        List<Country> FindAll();
     }
 }

@@ -58,32 +58,27 @@ namespace src.Controllers
         }
 
         [HttpGet]
-        public IActionResult edit(int id)
+        public IActionResult edit(string username)
         {
-            Models.Customer customers = services.fineOne(id);
+            Models.Customer customers = services.fineOne(username);
             return View(customers);
         }
         [HttpPost]
-        public IActionResult edit(Models.Customer customers, IFormFile file)
+        public IActionResult edit(Models.Customer customers, IFormFile? file)
         {
             try
             {
-                Models.Customer cus = services.fineOne(customers.Id);
                 if (ModelState.IsValid)
                 {
-                    if (file.Length > 0)
+                    if (file != null)
                     {
-                        var path = Path.Combine("wwwroot/images", file.FileName);
+                        var path = Path.Combine("wwwroot/images/avatars", file.FileName);
                         var stream = new FileStream(path, FileMode.Create);
                         file.CopyToAsync(stream);
-                        cus.Image = "images/" + file.FileName;
-                        services.updateCustomer(customers);
-                        return RedirectToAction("Index");
+                        customers.Image = "images/avatars/" + file.FileName;
                     }
-                    else
-                    {
-                        ViewBag.Msg = "Fail";
-                    }
+                    services.updateCustomer(customers);
+                    return RedirectToAction("Index");
                 }
             }
             catch (Exception e)

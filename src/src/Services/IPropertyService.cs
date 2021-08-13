@@ -9,9 +9,12 @@ namespace src.Services
     public interface IPropertyService
     {
         List<Property> findAll();
+        List<Property> FindByCustomerId(int customerId);
         Property fineOne(int id);
-        void addProperties(Property properties);
-        void updateProperties(Property properties);
-        void deleteProperties(int id);
+        bool addProperty(Property property);
+        bool updateProperty(Property property);
+        void deleteProperty(int id);
+        Property FindOneWithRelation(int id);
+        List<Property> FindAllWithRelation();
     }
 }

@@ -81,5 +81,22 @@ namespace src.Services
                 //do nothing
             }
         }
+
+        public List<PaymentPackage> FindPackagesByCustomerId(int customerId)
+        {
+            var query = from pp in context.PaymentPackage
+                        join p in context.Packages on pp.Package_id equals p.Id
+                        where pp.Customer_id == customerId
+                        select new PaymentPackage {
+                            Id = pp.Id,
+                            Limit_ads = pp.Limit_ads,
+                            Limit_featured_ads = pp.Limit_featured_ads,
+                            Used_ads = pp.Used_ads,
+                            Used_featured_ads = pp.Used_featured_ads,
+                            PackageName = p.Name,
+                        };
+            return query.ToList();
+                   
+        }
     }
 }
