@@ -8,12 +8,33 @@
 
 
 <hr />
+@{
+    if (ViewBag.error != null)
+    {
+        <div class="error-blog">
+            <h1>@ViewBag.error</h1>
+        </div>
+    }
+    if (ViewBag.Msg != null)
+    {
+        <div class="error-blog">
+            <h1>@ViewBag.Msg</h1>
+        </div>
+    }
+    if (TempData.Peek("Message") != null)
+    {
+        <div class="error-blog">
+            <h3>Message: @TempData.Peek("Message")</h3>
+        </div>
+    }
+}
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="edit" enctype="multipart/form-data" method="post">
+        <form asp-action="Edit" asp-controller="Agents" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Type" />
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -37,7 +58,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" type="file" name="file" class="form-control-file" />
+                <input type="file" name="file" class="form-control-file" />
 
             </div>
             <div class="form-group">
