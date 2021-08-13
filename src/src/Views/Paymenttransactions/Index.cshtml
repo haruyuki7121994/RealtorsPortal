@@ -7,17 +7,21 @@
 <h1>
     Notification Email
 </h1>
-<div class="row">
-    <div class="col-md-5">
-        <input type="search" class="form-control" placeholder="Start Date">
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-5">
+            <input type="search" class="form-control" placeholder="Start Date">
+        </div>
+        <div class="col-md-5">
+            <input type="search" class="form-control" placeholder="End Date">
+        </div>
+        <div class="col-md-2">
+            <input type="submit" value="Filter" class="form-control" style="background-color: lightgreen;">
+        </div>
     </div>
-    <div class="col-md-5">
-        <input type="search" class="form-control" placeholder="End Date">
-    </div>
-    <div class="col-md-2">
-        <input type="submit" value="Filter" class="form-control" style="background-color: lightgreen;">
-    </div>
-</div>
+}
+
 <br />
 <table class="table">
     <thead>
