@@ -25,7 +25,7 @@ namespace src.Controllers
         }
         [HttpPost]
         [ActionName("Create")]
-        public IActionResult createSub(Models.PaymentPackage payment_Package)
+        public IActionResult Create(Models.PaymentPackage payment_Package)
         {
             try
             {
