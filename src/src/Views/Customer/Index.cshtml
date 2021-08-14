@@ -25,28 +25,109 @@
 <div style="margin-top: 20px">
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
+            @{
+                if (ViewBag.error != null)
+                {
+                    <div class="error-blog">
+                        <h1>@ViewBag.error</h1>
+                    </div>
+                }
+                if (TempData.Peek("Message") != null)
+                {
+                    <div class="error-blog">
+                        <h3>Message: @TempData.Peek("Message")</h3>
+                    </div>
+                }
+            }
+            <div class="col-md-3">
                 <a style="text-decoration: none" asp-controller="Customer" asp-action="Profile">
                     <button type="button" class="btn btn-danger btn-block btn-lg">
-                        <span class="fa fa-google-plus-square"></span>Profile
+                        <span class="fa fa-user"></span> Profile
                     </button>
                 </a>
             </div>
-            <div class="col-md-4">
-                <a style="text-decoration: none" asp-controller="Customer" asp-action="Create">
-                    <button type="button" class="btn btn-danger btn-block btn-lg">
-                        <span class="fa fa-google-plus-square"></span>Create Ads
+            <div class="col-md-3">
+                <a style="text-decoration: none" asp-controller="Customer" asp-action="Create" asp-route-featured="false">
+                    <button type="button" class="btn btn-primary btn-block btn-lg">
+                        <span class="fa fa-home"></span> Create Normal Ads
                     </button>
                 </a>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <a style="text-decoration: none" asp-controller="Customer" asp-action="Create" asp-route-featured="true">
+                    <button type="button" class="btn btn-success btn-block btn-lg">
+                        <span class="fa fa-home"></span> Create Featured Ads
+                    </button>
+                </a>
+            </div>
+            <div class="col-md-3">
                 <a style="text-decoration: none" asp-controller="Customer" asp-action="Package">
-                    <button type="button" class="btn btn-danger btn-block btn-lg">
-                        <span class="fa fa-google-plus-square"></span>Package
+                    <button type="button" class="btn btn-warning btn-block btn-lg">
+                        <span class="fa fa-archive"></span> Package
                     </button>
                 </a>
             </div>
         </div>
+
+        <div class="row">
+            <marquee><h3>Welcome back, @Model.Customer.Name!</h3></marquee>
+        </div>
+
+        <div class="row">
+            <h1>List Packages</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-12 wrapper-custom" style="margin: 0px">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Package Name
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                Used
+                            </th>
+                            <th>
+                                Featured Used
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.PaymentPackages)
+                        {
+                            <tr>
+                                <td>
+                                    @item.PackageName
+                                </td>
+                                @if (item.Status == PaymentPackage.APPROVED_STATUS)
+                                {
+                                    <td><span class="label label-success">Approved</span></td>
+                                }
+                                @if (item.Status == PaymentPackage.EXPIRED_STATUS)
+                                {
+                                    <td><span class="label label-danger">Expired</span></td>
+                                }
+                                @if (item.Status == PaymentPackage.PENDING_STATUS)
+                                {
+                                    <td><span class="label label-warning">Pending</span></td>
+                                }
+
+                                <td>
+                                    @item.Used_ads/@item.Limit_ads
+                                </td>
+                                <td>
+                                    @item.Used_featured_ads/@item.Limit_featured_ads
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="row">
             <h1>List Properties</h1>
         </div>
@@ -80,65 +161,37 @@
                         @foreach (var item in Model.Properties)
                         {
                             <tr>
-                                <td>
-                                    @item.Title
-                                </td>
-                                <td>
-                                    @item.Created_at
-                                </td>
-                                <td>
-                                    @item.Ended_at
-                                </td>
-                                <td>
-                                    @item.Is_featured
-                                </td>
-                                <td>
-                                    @item.Is_active
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-controller="Customer" asp-route-id="@item.Id">Details</a> |
-                                    <a asp-action="Delete" asp-controller="Customer" onclick="return confirm('Do you really want delete the property ?')" asp-route-id="@item.Id">Delete</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="row">
-            <h1>List Packages</h1>
-        </div>
-        <div class="row">
-            <div class="col-md-12 wrapper-custom" style="margin: 0px">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                Package Name
-                            </th>
-                            <th>
-                                Used
-                            </th>
-                            <th>
-                                Featured Used
-                            </th>
+                            <td>
+                                @item.Title
+                            </td>
+                            <td>
+                                @item.Created_at
+                            </td>
+                            <td>
+                                @item.Ended_at
+                            </td>
+                            @if (item.Is_featured)
+                            {
+                                <td><span class="label label-success">@item.Is_featured</span></td>
+                            }
+                            else
+                            {
+                                <td><span class="label label-danger">@item.Is_featured</span></td>
+                            }
+                            @if (item.Is_active)
+                            {
+                                <td><span class="label label-success">@item.Is_active</span></td>
+                            }
+                            else
+                            {
+                                <td><span class="label label-danger">@item.Is_active</span></td>
+                            }
+                            <td>
+                                <a asp-action="Edit" asp-controller="Customer" class="label label-primary" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Gallary" asp-controller="Customer" class="label label-success" asp-route-id="@item.Id">Gallary</a> |
+                                <a asp-action="Delete" asp-controller="Customer" class="label label-danger" onclick="return confirm('Do you really want delete the property ?')" asp-route-id="@item.Id">Delete</a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.PaymentPackages)
-                        {
-                            <tr>
-                                <td>
-                                    @item.PackageName
-                                </td>
-                                <td>
-                                    @item.Used_ads/@item.Limit_ads
-                                </td>
-                                <td>
-                                    @item.Used_featured_ads/@item.Limit_featured_ads
-                                </td>
-                            </tr>
                         }
                     </tbody>
                 </table>

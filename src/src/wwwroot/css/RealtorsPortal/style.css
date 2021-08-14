@@ -3505,3 +3505,26 @@ img {
     line-height: 50px;
     background: red !important;
 }
+
+.ads-gallary .slick-next {
+    height: 50px;
+    top: 47%;
+    width: 50px;
+}
+.ads-gallary .slick-next {
+    background-color: #59abe3;
+}
+
+.ads-gallary .slick-prev {
+    height: 50px;
+    top: 47%;
+    width: 50px;
+}
+
+.ads-gallary .slick-prev {
+    background-color: #59abe3;
+}
+
+.ads-gallary .slick-slide {
+    max-height: 500px;
+}

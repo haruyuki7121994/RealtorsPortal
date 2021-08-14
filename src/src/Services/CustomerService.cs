@@ -146,5 +146,21 @@ namespace src.Services
                 return false;
             }
         }
+
+        public bool updateStatus(int customerId, bool isActive, bool isVerified)
+        {
+            Customer editcustomer = context.Customers.SingleOrDefault(a => a.Id.Equals(customerId));
+            if (editcustomer != null)
+            {
+                editcustomer.Is_active = isActive;
+                editcustomer.Is_verified = isVerified;
+                context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

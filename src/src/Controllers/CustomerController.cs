@@ -23,6 +23,7 @@ namespace src.Controllers
         private readonly Services.IAreaService areaService;
         private readonly Services.IPaymentPackageService paymentPackageService;
         private readonly Services.IPackageService packageService;
+        private readonly Services.IImageService imageService;
         public CustomerController
         (
             Services.ICustomerService customerService,
@@ -33,7 +34,8 @@ namespace src.Controllers
             Services.ICityService cityService,
             Services.IAreaService areaService,
             Services.IPaymentPackageService paymentPackageService,
-            Services.IPackageService packageService
+            Services.IPackageService packageService,
+            Services.IImageService imageService
         )
         {
             this.customerService = customerService;
@@ -45,6 +47,7 @@ namespace src.Controllers
             this.areaService = areaService;
             this.paymentPackageService = paymentPackageService;
             this.packageService = packageService;
+            this.imageService = imageService;
         }
 
         [TempData]
@@ -56,6 +59,7 @@ namespace src.Controllers
             dynamic model = new ExpandoObject();
             model.Properties = propertyService.FindByCustomerId(cus.Id);
             model.PaymentPackages = paymentPackageService.FindPackagesByCustomerId(cus.Id);
+            model.Customer = cus;
             return View(model);
         }
 
@@ -100,11 +104,26 @@ namespace src.Controllers
             return View();
         }
 
-        public IActionResult Create()
+        public IActionResult Create(bool featured)
         {
-            ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
-            ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
-            return View();
+            //check can or not create new ads
+            var cus = GetCustomerFromSession();
+            bool canCreateAds = paymentPackageService.CheckCanCreateAds(cus.Id, featured);
+
+            if (canCreateAds)
+            {
+                //get dependencies
+                ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
+                ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
+                ViewBag.Featured = featured;
+                return View();
+            }
+            else
+            {
+                Message = "Cannot create ads! Please purchase new package!";
+                return RedirectToAction("Index");
+            }
+            
         }
 
         [HttpPost]
@@ -136,25 +155,28 @@ namespace src.Controllers
                         ViewBag.error = "Fail";
                     }
                 }
-                else
-                {
-                    ViewBag.Categories = new SelectList(categoryService.findAll(), "Id", "Name");
-                    ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
-                }
             }
             catch (Exception e)
             {
                 ViewBag.error = e.Message;
             }
+            ViewBag.Categories = new SelectList(categoryService.findAll(), "Id", "Name");
+            ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
+            ViewBag.Featured = property.Is_featured;
             return View();
         }
 
         public IActionResult Edit(int id)
         {
             var property = propertyService.FindOneWithRelation(id);
-            ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
-            ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
-            return View(property);
+            var cus = GetCustomerFromSession();
+            if (property.Customer_id == cus.Id)
+            {
+                ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
+                ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
+                return View(property);
+            }
+            return NotFound();
         }
 
         [HttpPost]
@@ -215,10 +237,67 @@ namespace src.Controllers
             return View(packages);
         }
 
+        public IActionResult Gallary(int id)
+        {
+            var cus = GetCustomerFromSession();
+            var prop = propertyService.FindOneWithRelation(id);
+            if (cus.Id == prop.Customer_id)
+            {
+                ViewBag.prop = propertyService.FindOneWithRelation(id);
+                ViewBag.images = imageService.FindByPropertyId(id);
+                return View();
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult Upload(Image image, IFormFile? file)
+        {
+            try
+            {
+                if (file != null)
+                {
+                    string fileName = file.FileName;
+                    var filepath = Path.Combine("wwwroot/images/properties", fileName);
+                    var stream = new FileStream(filepath, FileMode.Create);
+                    file.CopyToAsync(stream);
+                    image.Url = "images/properties/" + fileName; //ex: images/b1.gif
+                }
+                imageService.addImage(image);
+                Message = "Upload Successful";
+                return RedirectToAction("Gallary", new { id = image.Property_id });
+            }
+            catch (Exception e)
+            {
+                ViewBag.error = e.Message;
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult DeleteImage(Image image)
+        {
+            try
+            {
+                imageService.deleteImage(image.Id);
+                Message = "Delete Successful";
+                return RedirectToAction("Gallary", new { id = image.Property_id });
+            }
+            catch (Exception e)
+            {
+                ViewBag.error = e.Message;
+            }
+            return View();
+        }
+
         public Customer GetCustomerFromSession()
         {
-            var jsonCus = HttpContext.Session.GetString("customer");
-            return JsonConvert.DeserializeObject<Customer>(jsonCus);
+            if (HttpContext.Session.GetString("customer") != null)
+            {
+                var jsonCus = HttpContext.Session.GetString("customer");
+                return JsonConvert.DeserializeObject<Customer>(jsonCus);
+            }
+            return null;
         }
 
         public List<Country> GetCountries()

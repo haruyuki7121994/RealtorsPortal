@@ -38,6 +38,7 @@ namespace src.Middleware
                           await context.Response.WriteAsync(html);
                       }
                     );
+                    return;
                 }
                 else
                 {

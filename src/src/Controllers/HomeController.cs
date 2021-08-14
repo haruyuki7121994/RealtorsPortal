@@ -20,6 +20,7 @@ namespace src.Controllers
         private readonly Services.IRegionservice regionService;
         private readonly Services.ICityService cityService;
         private readonly Services.IAreaService areaService;
+        private readonly Services.IImageService imageService;
 
         public HomeController
         (
@@ -29,7 +30,8 @@ namespace src.Controllers
             Services.ICountryService countryService,
             Services.IRegionservice regionService,
             Services.ICityService cityService,
-            Services.IAreaService areaService
+            Services.IAreaService areaService,
+            Services.IImageService imageService
         )
         {
             _logger = logger;
@@ -39,6 +41,7 @@ namespace src.Controllers
             this.regionService = regionService;
             this.cityService = cityService;
             this.areaService = areaService;
+            this.imageService = imageService;
         }
 
         public IActionResult Index()
@@ -190,9 +193,12 @@ namespace src.Controllers
                 .Take(10)
                 .ToList();
 
+                var images = imageService.FindByPropertyId(id);
+
                 dynamic model = new ExpandoObject();
                 model.currentProp = prop;
                 model.featuredProps = featuredProps;
+                model.images = images;
 
                 return View(model);
             }

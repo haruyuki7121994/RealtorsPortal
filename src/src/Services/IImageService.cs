@@ -10,8 +10,9 @@ namespace src.Services
     {
         List<Image> findAll();
         Image fineOne(int id);
-        void addImages(Image images);
-        void updateImages(Image images);
-        void deleteImages(int id);
+        List<Image> FindByPropertyId(int property_id);
+        void addImage(Image image);
+        void updateImage(Image image);
+        void deleteImage(int id);
     }
 }
