@@ -1,16 +1,18 @@
-﻿using System;
+﻿using src.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using src.Models;
 
 namespace src.Services
 {
     public interface IConfigurationService
     {
-        List<Configuration> findAll();
+        Task<List<Configuration>> GetConfigurations();
         
-        void updateCongiguration(Configuration configurations);
+        Task<Configuration> UpdateCongiguration(Configuration c);
+
+        Task<Configuration> GetConfigurationByObj(string obj);
         
     }
 }
