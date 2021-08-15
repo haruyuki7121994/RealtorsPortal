@@ -53,6 +53,8 @@ namespace src.Models
         public bool Is_active { get; set; }
         public DateTime Created_at { get; set; }
         public DateTime Ended_at { get; set; }
+
+        [Required]
         public int Area_id { get; set; }
         public int Category_id { get; set; }
         public int Customer_id { get; set; }

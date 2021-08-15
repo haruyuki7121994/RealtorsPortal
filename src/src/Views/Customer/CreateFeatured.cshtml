@@ -1,7 +1,7 @@
 ﻿@model src.Models.Property
 @{
     Layout = "~/Views/Shared/_RealtorsPortalLayout.cshtml";
-    ViewData["Title"] = "Create Ads Page";
+    ViewData["Title"] = "Create Featured Ads Page";
 }
 }
 <!-- Start Proerty header  -->
@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="aa-property-header-inner">
-                    <h2>Create New Ads</h2>
+                    <h2>Create New Featured Ads</h2>
                     <ol class="breadcrumb">
                         <li><a href="#">HOME</a></li>
                         <li class="active">Customer</li>
@@ -44,7 +44,7 @@
                 <br />
                 <form asp-action="CreateAds" asp-controller="Customer" enctype="multipart/form-data" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input asp-for="Is_featured" type="hidden" value="false" />
+                    <input asp-for="Is_featured" type="hidden" value="true" />
 
                     <div class="form-group">
                         <label class="control-label">Category</label>

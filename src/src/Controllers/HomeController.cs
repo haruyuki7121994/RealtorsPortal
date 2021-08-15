@@ -70,7 +70,7 @@ namespace src.Controllers
             string method,
             string customer_role,
             int? category_id,
-            string title,
+            string key,
             int? min_price,
             int? max_price,
             int? country_id,
@@ -78,7 +78,8 @@ namespace src.Controllers
             int? city_id,
             int? area_id,
             string sort_by,
-            int limit
+            int limit,
+            int? page
         )
         {
             var properties = propertyService.FindAllWithRelation().Where(p => p.Is_active.Equals(true));
@@ -90,39 +91,43 @@ namespace src.Controllers
             var cagetories = new SelectList(categoryService.findAll(true), "Id", "Name");
             var countries = new SelectList(GetCountries(), "Id", "Name");
 
-            int limit_per_page = limit > 0 ? limit : 6 ;
-
             //filer method
+            ViewBag.method = method;
             if (!string.IsNullOrEmpty(method))
             {
                 properties = properties.Where(p => p.Method.Equals(method));
             }
 
             //filter category
+            ViewBag.category_id = category_id;
             if (category_id > 0)
             {
                 properties = properties.Where(p => p.Category.Id.Equals(category_id));
             }
 
             //filter customer role
+            ViewBag.customer_role = customer_role;
             if (!string.IsNullOrEmpty(customer_role))
             {
                 properties = properties.Where(p => p.Customer.Type.Equals(customer_role));
             }
 
             //filter title
-            if (!string.IsNullOrEmpty(title))
+            ViewBag.key = key;
+            if (!string.IsNullOrEmpty(key))
             {
-                properties = properties.Where(p => p.Title.ToLower().Contains(title.ToLower()));
+                properties = properties.Where(p => p.Title.ToLower().Contains(key.ToLower()));
             }
 
             //filter min price
+            ViewBag.min_price = min_price;
             if (min_price != null)
             {
                 properties = properties.Where(p => p.Price >= min_price);
             }
 
             //filter max price
+            ViewBag.max_price = max_price;
             if (max_price != null)
             {
                 properties = properties.Where(p => p.Price <= max_price);
@@ -130,6 +135,11 @@ namespace src.Controllers
 
 
             //filter location
+            ViewBag.area_id = area_id;
+            ViewBag.city_id = city_id;
+            ViewBag.region_id = region_id;
+            ViewBag.country_id = country_id;
+
             if (area_id > 0)
             {
                 properties = properties.Where(p => p.Area.Id.Equals(area_id));
@@ -148,6 +158,7 @@ namespace src.Controllers
             }
 
             //filter sort by
+            ViewBag.sort_by = sort_by;
             switch (sort_by)
             {
                 case "name-desc":
@@ -170,14 +181,23 @@ namespace src.Controllers
                     break;
             }
 
-            //filter limit
-            properties = properties.Take(limit_per_page).ToList();
+            
+            int pageNumber = page ?? 1;
+            int limit_per_page = limit > 0 ? limit : 6;
+            ViewBag.page = pageNumber;
+            ViewBag.limit = limit_per_page;
 
-            dynamic model = new ExpandoObject();
-            model.filtedProps = properties;
-            model.categories = cagetories;
-            model.countries = countries;
-            model.featuredProps = featuredProps;
+
+            //filter limit
+            properties = PaginatedList<Property>.CreateAsnyc(properties.ToList(), pageNumber, limit_per_page);
+
+            PropertiesPagingModel model = new PropertiesPagingModel
+            {
+                Categories = cagetories,
+                Countries = countries,
+                FeaturedProperties = featuredProps,
+                PagingProperies = properties,
+            };
 
             return View(model);
         }

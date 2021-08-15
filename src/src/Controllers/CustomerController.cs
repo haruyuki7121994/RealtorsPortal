@@ -9,6 +9,9 @@ using src.Models;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Dynamic;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using Microsoft.Extensions.FileProviders;
 
 namespace src.Controllers
 {
@@ -57,8 +60,8 @@ namespace src.Controllers
         {
             var cus = GetCustomerFromSession();
             dynamic model = new ExpandoObject();
-            model.Properties = propertyService.FindByCustomerId(cus.Id);
-            model.PaymentPackages = paymentPackageService.FindPackagesByCustomerId(cus.Id);
+            model.Properties = propertyService.FindByCustomerId(cus.Id).OrderByDescending(p => p.Created_at);
+            model.PaymentPackages = paymentPackageService.FindPackagesByCustomerId(cus.Id).OrderByDescending(pp => pp.Updated_at);
             model.Customer = cus;
             return View(model);
         }
@@ -78,16 +81,19 @@ namespace src.Controllers
                 {
                     if (file != null)
                     {
-                        var filepath = Path.Combine("wwwroot/images/avatar", file.FileName);
+                        var filepath = Path.Combine("wwwroot/images/avatars", file.FileName);
                         var stream = new FileStream(filepath, FileMode.Create);
                         file.CopyToAsync(stream);
-                        customer.Image = "images/avatar" + file.FileName; //ex: images/b1.gif
+                        customer.Image = "images/avatars/" + file.FileName; //ex: images/b1.gif
                     }
+                    var cus = GetCustomerFromSession();
+                    customer.Is_active = cus.Is_active;
+                    customer.Is_verified = cus.Is_verified;
                     var result = customerService.updateCustomer(customer);
                     if (result)
                     {
                         Message = "Update Successful";
-                        var cus = customerService.checkLogin(customer.Username, customer.Password);
+                        cus = customerService.checkLogin(customer.Username, customer.Password);
                         HttpContext.Session.SetString("customer", JsonConvert.SerializeObject(cus));
                         return RedirectToAction("Profile");
                     }
@@ -101,21 +107,20 @@ namespace src.Controllers
             {
                 ViewBag.error = e.Message;
             }
-            return View();
+            return View(GetCustomerFromSession());
         }
 
-        public IActionResult Create(bool featured)
+        public IActionResult Create()
         {
             //check can or not create new ads
             var cus = GetCustomerFromSession();
-            bool canCreateAds = paymentPackageService.CheckCanCreateAds(cus.Id, featured);
+            bool canCreateAds = paymentPackageService.CheckCanCreateAds(cus.Id, false);
 
             if (canCreateAds)
             {
                 //get dependencies
                 ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
                 ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
-                ViewBag.Featured = featured;
                 return View();
             }
             else
@@ -123,11 +128,31 @@ namespace src.Controllers
                 Message = "Cannot create ads! Please purchase new package!";
                 return RedirectToAction("Index");
             }
-            
+        }
+
+        public IActionResult CreateFeatured()
+        {
+            //check can or not create new ads
+            var cus = GetCustomerFromSession();
+            bool canCreateAds = paymentPackageService.CheckCanCreateAds(cus.Id, true);
+
+            if (canCreateAds)
+            {
+                //get dependencies
+                ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
+                ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
+                return View();
+            }
+            else
+            {
+                Message = "Cannot create ads! Please purchase new package!";
+                return RedirectToAction("Index");
+            }
         }
 
         [HttpPost]
-        public IActionResult Create(Property property, IFormFile? file)
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateAds(Property property, IFormFile? file)
         {
             try
             {
@@ -136,10 +161,17 @@ namespace src.Controllers
                     if (file != null)
                     {
                         string fileName = file.FileName;
-                        var filepath = Path.Combine("wwwroot/images/properties", fileName);
-                        var stream = new FileStream(filepath, FileMode.Create);
-                        file.CopyToAsync(stream);
-                        property.Thumbnail_url = "images/properties/" + fileName; //ex: images/b1.gif
+                        using (var image = SixLabors.ImageSharp.Image.Load(file.OpenReadStream()))
+                        {
+                            string systemFileExtenstion = fileName.Substring(fileName.LastIndexOf('.'));
+                            int scaleWidth = property.Is_featured ? 750 : 370;
+                            int scaleHeight = property.Is_featured ? 500 : 220;
+                            image.Mutate(x => x.Resize(scaleWidth, scaleHeight));
+                            var newfileNameScale = GenerateFileName("scale_", systemFileExtenstion);
+                            var filepath160 = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "properties")).Root + $@"\{newfileNameScale}";
+                            image.Save(filepath160);
+                            property.Thumbnail_url = "images/properties/" + newfileNameScale; //ex: images/b1.gif
+                        }
                     }
 
                     var cus = GetCustomerFromSession();
@@ -148,7 +180,7 @@ namespace src.Controllers
                     if (result)
                     {
                         Message = "Add Property Successful";
-                        return RedirectToAction("Create");
+                        return RedirectToAction("Index");
                     }
                     else
                     {
@@ -162,7 +194,6 @@ namespace src.Controllers
             }
             ViewBag.Categories = new SelectList(categoryService.findAll(), "Id", "Name");
             ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
-            ViewBag.Featured = property.Is_featured;
             return View();
         }
 
@@ -190,13 +221,20 @@ namespace src.Controllers
                     if (file != null)
                     {
                         string fileName = file.FileName;
-                        var filepath = Path.Combine("wwwroot/images/properties", fileName);
-                        var stream = new FileStream(filepath, FileMode.Create);
-                        file.CopyToAsync(stream);
-                        property.Thumbnail_url = "images/properties/" + fileName; //ex: images/b1.gif
+                        using (var image = SixLabors.ImageSharp.Image.Load(file.OpenReadStream()))
+                        {
+                            string systemFileExtenstion = fileName.Substring(fileName.LastIndexOf('.'));
+                            int scaleWidth = property.Is_featured ? 750 : 370;
+                            int scaleHeight = property.Is_featured ? 500 : 220;
+                            image.Mutate(x => x.Resize(scaleWidth, scaleHeight));
+                            var newfileNameScale = GenerateFileName("scale_", systemFileExtenstion);
+                            var filepath160 = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "properties")).Root + $@"\{newfileNameScale}";
+                            image.Save(filepath160);
+                            property.Thumbnail_url = "images/properties/" + newfileNameScale; //ex: images/b1.gif
+                        }
                     }
 
-                    property.Is_active = false;
+                    property.Is_active = oldProp.Is_active;
                     property.Customer_id = oldProp.Customer_id;
                     var result = propertyService.updateProperty(property);
                     if (result)
@@ -223,6 +261,13 @@ namespace src.Controllers
             return View(oldProp);
         }
 
+        public string GenerateFileName(string fileTypeName, string fileextenstion)
+        {
+            if (fileTypeName == null) throw new ArgumentNullException(nameof(fileTypeName));
+            if (fileextenstion == null) throw new ArgumentNullException(nameof(fileextenstion));
+            return $"{fileTypeName}_{DateTime.Now:yyyyMMddHHmmssfff}_{Guid.NewGuid():N}{fileextenstion}";
+        }
+
         public IActionResult Delete(int id)
         {
             propertyService.deleteProperty(id);
@@ -235,6 +280,45 @@ namespace src.Controllers
                 .Where(p => p.Is_active.Equals(true) && p.Name != "Trial")
                 .ToList();
             return View(packages);
+        }
+
+        public IActionResult Payment(string name)
+        {
+            var package = packageService.fineOne(name);
+            if (package != null)
+            {
+                return View(package);
+            }
+            Message = "Package Not Found!";
+            return RedirectToAction("Package");
+        }
+
+        public IActionResult Success(Package package)
+        {
+            try
+            {
+                var cus = GetCustomerFromSession();
+                var now = DateTime.Now;
+                var newPayment = new PaymentPackage
+                {
+                    Customer_id = cus.Id,
+                    Package_id = package.Id,
+                    Payment_price = package.Price,
+                    Limit_ads = package.Limit_ads,
+                    Limit_featured_ads = package.Limit_featured_ads,
+                    Created_at = now,
+                    Updated_at = now,
+                    Transaction_id = $"{package.Name}{now:yyyyMMddHHmmssfff}",
+                    Status = PaymentPackage.APPROVED_STATUS
+                };
+                paymentPackageService.addPaymentPackage(newPayment);
+                Message = "Payment Successful!";
+            }
+            catch (Exception e)
+            {
+                Message = e.Message;
+            }
+            return RedirectToAction("Index");
         }
 
         public IActionResult Gallary(int id)
@@ -251,18 +335,26 @@ namespace src.Controllers
         }
 
         [HttpPost]
-        public IActionResult Upload(Image image, IFormFile? file)
+        public IActionResult Upload(Models.Image image, IFormFile? file)
         {
             try
             {
                 if (file != null)
                 {
                     string fileName = file.FileName;
-                    var filepath = Path.Combine("wwwroot/images/properties", fileName);
-                    var stream = new FileStream(filepath, FileMode.Create);
-                    file.CopyToAsync(stream);
-                    image.Url = "images/properties/" + fileName; //ex: images/b1.gif
+                    using (var processImage = SixLabors.ImageSharp.Image.Load(file.OpenReadStream()))
+                    {
+                        string systemFileExtenstion = fileName.Substring(fileName.LastIndexOf('.'));
+                        int scaleWidth = 750;
+                        int scaleHeight = 500;
+                        processImage.Mutate(x => x.Resize(scaleWidth, scaleHeight));
+                        var newfileNameScale = GenerateFileName("scale_", systemFileExtenstion);
+                        var filepath160 = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "properties")).Root + $@"\{newfileNameScale}";
+                        processImage.Save(filepath160);
+                        image.Url = "images/properties/" + newfileNameScale; //ex: images/b1.gif
+                    }
                 }
+                
                 imageService.addImage(image);
                 Message = "Upload Successful";
                 return RedirectToAction("Gallary", new { id = image.Property_id });
@@ -275,7 +367,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteImage(Image image)
+        public IActionResult DeleteImage(Models.Image image)
         {
             try
             {

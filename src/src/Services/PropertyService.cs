@@ -16,34 +16,26 @@ namespace src.Services
         }
         public bool addProperty(Property property)
         {
-            Property prop = context.Properties.SingleOrDefault(a => a.Id.Equals(property.Id));
-            if (prop == null)
+            var newProp = new Property
             {
-                var newProp = new Property
-                {
-                    Title = property.Title,
-                    Introduction = property.Introduction,
-                    Description = property.Description,
-                    Method = property.Method,
-                    Price = property.Price,
-                    Deposit = property.Deposit,
-                    Thumbnail_url = property.Thumbnail_url,
-                    Is_featured = property.Is_featured,
-                    Is_active = property.Is_active,
-                    Created_at = DateTime.Now,
-                    Ended_at = DateTime.Now,
-                    Area_id = property.Area_id,
-                    Category_id = property.Category_id,
-                    Customer_id = property.Customer_id,
-                };
-                context.Properties.Add(newProp);
-                context.SaveChanges();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+                Title = property.Title,
+                Introduction = property.Introduction,
+                Description = property.Description,
+                Method = property.Method,
+                Price = property.Price,
+                Deposit = property.Deposit,
+                Thumbnail_url = property.Thumbnail_url,
+                Is_featured = property.Is_featured,
+                Is_active = property.Is_active,
+                Created_at = DateTime.Now,
+                Ended_at = DateTime.Now,
+                Area_id = property.Area_id,
+                Category_id = property.Category_id,
+                Customer_id = property.Customer_id,
+            };
+            context.Properties.Add(newProp);
+            context.SaveChanges();
+            return true;
         }
 
         public void deleteProperty(int id)
