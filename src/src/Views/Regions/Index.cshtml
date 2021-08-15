@@ -1,4 +1,4 @@
-﻿@model IEnumerable<src.Models.Country>
+﻿@model IEnumerable<src.Models.Region>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,7 +16,10 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Is_active)
+                Active
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Country)
             </th>
             <th></th>
         </tr>
@@ -29,6 +32,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Is_active)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

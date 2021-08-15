@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using src.Models;
 using src.Repository;
 
@@ -9,70 +10,49 @@ namespace src.Services
 {
     public class CityService : ICityService
     {
-        private RealtorContext context;
+        private readonly RealtorContext _context;
         public CityService(RealtorContext context)
         {
-            this.context = context;
-        }
-        public void addCity(City city)
-        {
-            City newCity = context.Cities.SingleOrDefault(a => a.Name.Equals(city.Name));
-            if (newCity == null)
-            {
-                context.Cities.Add(city);
-                context.SaveChanges();
-            }
-            else
-            {
-                //do nothing
-            }
+            this._context = context;
         }
 
-        public void deleteCity(int id)
+        public async Task<City> CreateEditCity(City city)
         {
-            City city = context.Cities.SingleOrDefault(a => a.Id.Equals(id));
-            if (city != null)
+           if(city.Id == 0)
             {
-                context.Cities.Remove(city);
-                context.SaveChanges();
-            }
-            else
+                _context.Add(city);
+            }else
             {
-                //do nothing
-
+                var c = await GetCityById(city.Id);
+                if (c == null) return null;
+                c.Name = city.Name;
+                c.Region_id = city.Region_id;
+                c.Is_active = city.Is_active;
+                
             }
+          await  _context.SaveChangesAsync();
+            return city;
         }
 
-        public List<City> findAll()
+        public async Task<bool> DeleteCity(int id)
         {
-            return context.Cities.ToList();
+            var city = await _context.Cities.FirstOrDefaultAsync(x => x.Id == id);
+            if (city == null) return false;
+            _context.Remove<City>(city);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public City fineOne(string name)
+        public async Task<List<City>> GetCities()
         {
-            City city = context.Cities.SingleOrDefault(a => a.Name.Equals(name));
-            if (city != null)
-            {
-                return city;
-            }
-            else
-            {
-                return null;
-            }
+            return await _context.Cities.ToListAsync();
         }
 
-        public void updateCity(City city)
+        public async Task<City> GetCityById(int id)
         {
-            City editCity = context.Cities.SingleOrDefault(a => a.Id.Equals(city.Id));
-            if (editCity != null)
-            {
-                editCity.Name = city.Name;
-                context.SaveChanges();
-            }
-            else
-            {
-                //do nothing
-            }
+            var city = await _context.Cities.FirstOrDefaultAsync(x => x.Id == id);
+            if (city == null) return null;
+            return city;
         }
     }
 }

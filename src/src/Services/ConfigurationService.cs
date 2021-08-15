@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using src.Models;
 using src.Repository;
 
@@ -9,28 +10,31 @@ namespace src.Services
 {
     public class ConfigurationService : IConfigurationService
     {
-        private RealtorContext context;
+        private RealtorContext _context;
         public ConfigurationService(RealtorContext context)
         {
-            this.context = context;
-        }
-        public List<Configuration> findAll()
-        {
-            return context.Configurations.ToList();
+            this._context = context;
         }
 
-        public void updateCongiguration(Configuration configurations)
+        public async Task<Configuration> GetConfigurationByObj(string obj)
         {
-            Configuration editConfig = context.Configurations.SingleOrDefault(a => a.Obj.Equals(configurations.Obj));
-            if (editConfig != null)
-            {
-                editConfig.Val = configurations.Val;
-                context.SaveChanges();
-            }
-            else
-            {
-                //do nothing
-            }
+            var config = await _context.Configurations.FirstOrDefaultAsync(x => x.Obj.Equals(obj));
+            if (config == null) return null;
+            return config;
+        }
+
+        public async Task<List<Configuration>> GetConfigurations()
+        {
+            return await _context.Configurations.ToListAsync();
+        }
+
+        public async Task<Configuration> UpdateCongiguration(Configuration c)
+        {
+            var config = await GetConfigurationByObj(c.Obj);
+            if (config == null) return null;
+            config.Val = c.Val;
+            await _context.SaveChangesAsync();
+            return config;
         }
     }
 }

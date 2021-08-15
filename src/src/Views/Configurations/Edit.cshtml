@@ -1,0 +1,45 @@
+﻿@model src.Models.Configuration
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Configuration</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label asp-for="Obj" class="control-label"></label>
+                    <input type="text" class="form-control" readonly asp-for="Obj" />
+                </div>
+                <div class="form-group col-md-5">
+                    <label asp-for="Val" class="control-label"></label>
+                    <input asp-for="Val" class="form-control" />
+                    <span asp-validation-for="Val" class="text-danger"></span>
+                </div>
+               
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+
+
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

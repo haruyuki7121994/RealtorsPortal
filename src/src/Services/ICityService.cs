@@ -8,10 +8,9 @@ namespace src.Services
 {
     public interface ICityService
     {
-        List<City> findAll();
-        City fineOne(string name);
-        void addCity(City city);
-        void updateCity(City city);
-        void deleteCity(int id);
+        Task<List<City>> GetCities();
+        Task<City> GetCityById(int id);
+        Task<City> CreateEditCity(City city);
+        Task<bool> DeleteCity(int id);
     }
 }
