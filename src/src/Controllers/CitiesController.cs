@@ -14,27 +14,28 @@ namespace src.Controllers
     public class CitiesController : Controller
     {
         private readonly ICityService _cityService;
+        private readonly IRegionService _regionService;
 
-        public CitiesController(ICityService cityService)
+        public CitiesController(ICityService cityService, IRegionService regionService)
         {
             _cityService = cityService;
+            _regionService = regionService; 
         }
 
-        // GET: Cities
+       
         public async Task<IActionResult> Index()
         {
             return View(await _cityService.GetCities());
         }
 
         
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewData["Regions"] = new SelectList(await _regionService.GetRegionByActive(true), "Id", "Name"); ;
             return View();
         }
 
-        // POST: Cities/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Is_active,Region_id")] City city)
@@ -48,7 +49,7 @@ namespace src.Controllers
             return View(city);
         }
 
-        // GET: Cities/Edit/5
+      
         public async Task<IActionResult> Edit(int id)
         {
 
@@ -58,12 +59,11 @@ namespace src.Controllers
             {
                 return NotFound();
             }
+            ViewData["Regions"] = new SelectList(await _regionService.GetRegionByActive(true), "Id", "Name", city.Region_id);
             return View(city);
         }
 
-        // POST: Cities/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Is_active,Region_id")] City city)
@@ -80,17 +80,17 @@ namespace src.Controllers
             return View(city);
         }
 
-        // GET: Cities/Delete/5
+      
         public async Task<IActionResult> Delete(int id)
         {
 
-            var c = await _cityService.CreateEditCity(id);
-            if (c == false) return NotFound();
+            var c = await _cityService.GetCityById(id);
+            if (c == null) return NotFound();
 
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Cities/Delete/5
+      
        
     }
 }

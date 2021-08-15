@@ -8,13 +8,11 @@ namespace src.Services
 {
     public interface IPropertyService
     {
-        List<Property> findAll();
-        List<Property> FindByCustomerId(int customerId);
-        Property fineOne(int id);
-        bool addProperty(Property property);
-        bool updateProperty(Property property);
-        void deleteProperty(int id);
-        Property FindOneWithRelation(int id);
-        List<Property> FindAllWithRelation();
+        Task<IEnumerable<Property>> GetProperties();
+        Task<IEnumerable<Property>> GetPropertiesByCustomerId(int Id);
+        Task<Property> GetPropertyById(int id);
+        Task<Property> CreateEditProperty(Property property);
+       
+        Task<bool> DeleteProperty(int id);
     }
 }

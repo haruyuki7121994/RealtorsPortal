@@ -23,7 +23,7 @@ namespace src.Services
             return config;
         }
 
-        public async Task<List<Configuration>> GetConfigurations()
+        public async Task<IEnumerable<Configuration>> GetConfigurations()
         {
             return await _context.Configurations.ToListAsync();
         }

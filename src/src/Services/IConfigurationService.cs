@@ -8,7 +8,7 @@ namespace src.Services
 {
     public interface IConfigurationService
     {
-        Task<List<Configuration>> GetConfigurations();
+        Task<IEnumerable<Configuration>> GetConfigurations();
         
         Task<Configuration> UpdateCongiguration(Configuration c);
 

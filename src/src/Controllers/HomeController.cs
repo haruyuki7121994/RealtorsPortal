@@ -8,46 +8,47 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using src.Models;
+using src.Services;
 
 namespace src.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly Services.IPropertyService propertyService;
-        private readonly Services.ICategoryService categoryService;
-        private readonly Services.ICountryService countryService;
-        private readonly Services.IRegionservice regionService;
-        private readonly Services.ICityService cityService;
-        private readonly Services.IAreaService areaService;
-        private readonly Services.IImageService imageService;
+        private readonly IPropertyService _propertyService;
+        private readonly ICategoryService _categoryService;
+        private readonly ICountryService _countryService;
+        private readonly IRegionService _regionService;
+        private readonly ICityService _cityService;
+        private readonly IAreaService _areaService;
+        private readonly IImageService _imageService;
 
         public HomeController
         (
             ILogger<HomeController> logger,
-            Services.IPropertyService propertyService,
-            Services.ICategoryService categoryService,
-            Services.ICountryService countryService,
-            Services.IRegionservice regionService,
-            Services.ICityService cityService,
-            Services.IAreaService areaService,
-            Services.IImageService imageService
+            IPropertyService propertyService,
+            ICategoryService categoryService,
+            ICountryService countryService,
+            IRegionService regionService,
+            ICityService cityService,
+            IAreaService areaService,
+            IImageService imageService
         )
         {
             _logger = logger;
-            this.propertyService = propertyService;
-            this.categoryService = categoryService;
-            this.countryService = countryService;
-            this.regionService = regionService;
-            this.cityService = cityService;
-            this.areaService = areaService;
-            this.imageService = imageService;
+            this._propertyService = propertyService;
+            this._categoryService = categoryService;
+            this._countryService = countryService;
+            this._regionService = regionService;
+            this._cityService = cityService;
+            this._areaService = areaService;
+            this._imageService = imageService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult>Index()
         {
-            var cagetories = new SelectList(categoryService.findAll(true), "Id", "Name");
-            var properties = propertyService.FindAllWithRelation();
+            var cagetories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+            var properties = await _propertyService.GetProperties();
             var lastestProps = properties.Where(p => p.Is_active.Equals(true))
                 .OrderByDescending(p => p.Created_at)
                 .Take(6)
@@ -65,7 +66,7 @@ namespace src.Controllers
             return View(model);
         }
 
-        public IActionResult Properties
+        public async Task<IActionResult> Properties
         (
             string method,
             string customer_role,
@@ -82,14 +83,15 @@ namespace src.Controllers
             int? page
         )
         {
-            var properties = propertyService.FindAllWithRelation().Where(p => p.Is_active.Equals(true));
+            var properties = await _propertyService.GetProperties();
+            properties.Where(p => p.Is_active.Equals(true));
             var featuredProps = properties.Where(p => p.Is_featured.Equals(true))
                 .OrderByDescending(p => p.Created_at)
                 .Take(3)
                 .ToList();
 
-            var cagetories = new SelectList(categoryService.findAll(true), "Id", "Name");
-            var countries = new SelectList(GetCountries(), "Id", "Name");
+            var cagetories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+            var countries = new SelectList(await _countryService.GetCountries(), "Id", "Name") ;
 
             //filer method
             ViewBag.method = method;
@@ -202,18 +204,18 @@ namespace src.Controllers
             return View(model);
         }
 
-        public IActionResult Property(int id)
+        public async Task<IActionResult> Property(int id)
         {
-            var prop = propertyService.FindOneWithRelation(id);
+            var prop = await _propertyService.GetPropertyById(id);
             if (prop != null)
             {
-                var featuredProps = propertyService.FindAllWithRelation()
-                .Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true))
+                var featuredProps = await _propertyService.GetProperties();
+                featuredProps.Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true))
                 .OrderByDescending(p => p.Created_at)
                 .Take(10)
                 .ToList();
 
-                var images = imageService.FindByPropertyId(id);
+                var images = _imageService.FindByPropertyId(id);
 
                 dynamic model = new ExpandoObject();
                 model.currentProp = prop;
@@ -249,9 +251,9 @@ namespace src.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public List<Country> GetCountries()
+        public async Task<IEnumerable<Country>> GetCountries()
         {
-            return countryService.FindAll();
+            return await _countryService.GetCountries();
         }
     }
 }

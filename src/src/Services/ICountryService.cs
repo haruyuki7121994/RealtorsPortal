@@ -8,7 +8,8 @@ namespace src.Services
 {
     public interface ICountryService
     {
-        Task<List<Country>> GetAllCountry();
+        Task<IEnumerable<Country>> GetCountries();
+        Task<IEnumerable<Country>> GetCountryByActive(bool active = false);
         Task<Country> GetCountryById(int id);
         Task<Country> CreateEditCountry(Country country);
         Task<bool> DeleteCountry(int id);

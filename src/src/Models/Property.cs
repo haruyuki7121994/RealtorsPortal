@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel;
 
 namespace src.Models
 {
@@ -49,15 +50,17 @@ namespace src.Models
             Range(0, 100000000000000)
         ]
         public float Deposit { get; set; }
+        [DisplayName("Featured")]
         public bool Is_featured { get; set; }
         public bool Is_active { get; set; }
         public DateTime Created_at { get; set; }
+ [DisplayName("End At")]
         public DateTime Ended_at { get; set; }
 
         [Required]
         public int Area_id { get; set; }
         public int Category_id { get; set; }
-        public int Customer_id { get; set; }
+       
 
         [ForeignKey("Category_id")]
         public Category Category { get; set; }
@@ -67,7 +70,7 @@ namespace src.Models
 
         [ForeignKey("Customer_id")]
         public Customer Customer { get; set; }
-
+        public int Customer_id { get; set; }
         [NotMapped]
         public City City { get; set; }
         [NotMapped]

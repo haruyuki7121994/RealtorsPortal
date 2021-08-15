@@ -12,45 +12,46 @@ using System.Dynamic;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Microsoft.Extensions.FileProviders;
+using src.Services;
 
 namespace src.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly Services.ICustomerService customerService;
-        private readonly Services.IPropertyService propertyService;
-        private readonly Services.ICategoryService categoryService;
-        private readonly Services.ICountryService countryService;
-        private readonly Services.IRegionservice regionService;
-        private readonly Services.ICityService cityService;
-        private readonly Services.IAreaService areaService;
-        private readonly Services.IPaymentPackageService paymentPackageService;
-        private readonly Services.IPackageService packageService;
-        private readonly Services.IImageService imageService;
+        private readonly ICustomerService _customerService;
+        private readonly IPropertyService _propertyService;
+        private readonly ICategoryService _categoryService;
+        private readonly ICountryService _countryService;
+        private readonly IRegionService _regionService;
+        private readonly ICityService _cityService;
+        private readonly IAreaService _areaService;
+        private readonly IPaymentPackageService _paymentPackageService;
+        private readonly IPackageService _packageService;
+        private readonly IImageService _imageService;
         public CustomerController
         (
-            Services.ICustomerService customerService,
-            Services.IPropertyService propertyService,
-            Services.ICategoryService categoryService,
-            Services.ICountryService countryService,
-            Services.IRegionservice regionService,
-            Services.ICityService cityService,
-            Services.IAreaService areaService,
-            Services.IPaymentPackageService paymentPackageService,
-            Services.IPackageService packageService,
-            Services.IImageService imageService
+            ICustomerService customerService,
+            IPropertyService propertyService,
+            ICategoryService categoryService,
+            ICountryService countryService,
+            IRegionService regionService,
+            ICityService cityService,
+            IAreaService areaService,
+            IPaymentPackageService paymentPackageService,
+            IPackageService packageService,
+            IImageService imageService
         )
         {
-            this.customerService = customerService;
-            this.propertyService = propertyService;
-            this.categoryService = categoryService;
-            this.countryService = countryService;
-            this.regionService = regionService;
-            this.cityService = cityService;
-            this.areaService = areaService;
-            this.paymentPackageService = paymentPackageService;
-            this.packageService = packageService;
-            this.imageService = imageService;
+            this._customerService = customerService;
+            this._propertyService = propertyService;
+            this._categoryService = categoryService;
+            this._countryService = countryService;
+            this._regionService = regionService;
+            this._cityService = cityService;
+            this._areaService = areaService;
+            this._paymentPackageService = paymentPackageService;
+            this._packageService = packageService;
+            this._imageService = imageService;
         }
 
         [TempData]
@@ -60,8 +61,8 @@ namespace src.Controllers
         {
             var cus = GetCustomerFromSession();
             dynamic model = new ExpandoObject();
-            model.Properties = propertyService.FindByCustomerId(cus.Id).OrderByDescending(p => p.Created_at);
-            model.PaymentPackages = paymentPackageService.FindPackagesByCustomerId(cus.Id).OrderByDescending(pp => pp.Updated_at);
+            model.Properties = _propertyService.GetPropertiesByCustomerId(cus.Id);
+            model.PaymentPackages = _paymentPackageService.FindPackagesByCustomerId(cus.Id).OrderByDescending(pp => pp.Updated_at);
             model.Customer = cus;
             return View(model);
         }
@@ -89,11 +90,11 @@ namespace src.Controllers
                     var cus = GetCustomerFromSession();
                     customer.Is_active = cus.Is_active;
                     customer.Is_verified = cus.Is_verified;
-                    var result = customerService.updateCustomer(customer);
+                    var result = _customerService.updateCustomer(customer);
                     if (result)
                     {
                         Message = "Update Successful";
-                        cus = customerService.checkLogin(customer.Username, customer.Password);
+                        cus = _customerService.checkLogin(customer.Username, customer.Password);
                         HttpContext.Session.SetString("customer", JsonConvert.SerializeObject(cus));
                         return RedirectToAction("Profile");
                     }
@@ -110,17 +111,17 @@ namespace src.Controllers
             return View(GetCustomerFromSession());
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             //check can or not create new ads
             var cus = GetCustomerFromSession();
-            bool canCreateAds = paymentPackageService.CheckCanCreateAds(cus.Id, false);
+            bool canCreateAds = _paymentPackageService.CheckCanCreateAds(cus.Id, false);
 
             if (canCreateAds)
             {
                 //get dependencies
-                ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
-                ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
+                ViewBag.Categories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+                ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
                 return View();
             }
             else
@@ -130,17 +131,17 @@ namespace src.Controllers
             }
         }
 
-        public IActionResult CreateFeatured()
+        public async Task<IActionResult> CreateFeatured()
         {
             //check can or not create new ads
             var cus = GetCustomerFromSession();
-            bool canCreateAds = paymentPackageService.CheckCanCreateAds(cus.Id, true);
+            bool canCreateAds = _paymentPackageService.CheckCanCreateAds(cus.Id, true);
 
             if (canCreateAds)
             {
                 //get dependencies
-                ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
-                ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
+                ViewBag.Categories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+                ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
                 return View();
             }
             else
@@ -152,7 +153,7 @@ namespace src.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateAds(Property property, IFormFile? file)
+        public async Task<IActionResult> CreateAds(Property property, IFormFile? file)
         {
             try
             {
@@ -176,8 +177,8 @@ namespace src.Controllers
 
                     var cus = GetCustomerFromSession();
                     property.Customer_id = cus.Id;
-                    var result = propertyService.addProperty(property);
-                    if (result)
+                    var result = await _propertyService.CreateEditProperty(property);
+                    if (result!=null)
                     {
                         Message = "Add Property Successful";
                         return RedirectToAction("Index");
@@ -192,28 +193,28 @@ namespace src.Controllers
             {
                 ViewBag.error = e.Message;
             }
-            ViewBag.Categories = new SelectList(categoryService.findAll(), "Id", "Name");
-            ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
+            ViewBag.Categories = new SelectList(_categoryService.findAll(), "Id", "Name");
+            ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
             return View();
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var property = propertyService.FindOneWithRelation(id);
+            var property = await _propertyService.GetPropertyById(id);
             var cus = GetCustomerFromSession();
             if (property.Customer_id == cus.Id)
             {
-                ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
-                ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
+                ViewBag.Categories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+                ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
                 return View(property);
             }
             return NotFound();
         }
 
         [HttpPost]
-        public IActionResult Edit(Property property, IFormFile? file)
+        public async Task<IActionResult> Edit(Property property, IFormFile? file)
         {
-            var oldProp = propertyService.FindOneWithRelation(property.Id);
+           
             try
             {
                 if (ModelState.IsValid)
@@ -234,13 +235,12 @@ namespace src.Controllers
                         }
                     }
 
-                    property.Is_active = oldProp.Is_active;
-                    property.Customer_id = oldProp.Customer_id;
-                    var result = propertyService.updateProperty(property);
-                    if (result)
+                   
+                    var result = await _propertyService.CreateEditProperty(property);
+                    if (result != null)
                     {
                         Message = "Update Property Successful";
-                        return RedirectToAction("Edit", new { id = oldProp.Id});
+                        return RedirectToAction("Edit", new { id = result.Id});
                     }
                     else
                     {
@@ -249,8 +249,8 @@ namespace src.Controllers
                 }
                 else
                 {
-                    ViewBag.Categories = new SelectList(categoryService.findAll(true), "Id", "Name");
-                    ViewBag.Countries = new SelectList(GetCountries(), "Id", "Name");
+                    ViewBag.Categories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+                    ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
                 }
             }
             catch (Exception e)
@@ -258,7 +258,7 @@ namespace src.Controllers
                 ViewBag.error = e.Message;
             }
             
-            return View(oldProp);
+            return View(property);
         }
 
         public string GenerateFileName(string fileTypeName, string fileextenstion)
@@ -268,15 +268,20 @@ namespace src.Controllers
             return $"{fileTypeName}_{DateTime.Now:yyyyMMddHHmmssfff}_{Guid.NewGuid():N}{fileextenstion}";
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            propertyService.deleteProperty(id);
-            return RedirectToAction("Index");
+            var deleteSuccess = await _propertyService.DeleteProperty(id);
+            if(deleteSuccess)
+            {
+                return RedirectToAction("Index");
+            }
+            return NotFound();
+          
         }
 
         public IActionResult Package()
         {
-            var packages = packageService.findAll()
+            var packages = _packageService.findAll()
                 .Where(p => p.Is_active.Equals(true) && p.Name != "Trial")
                 .ToList();
             return View(packages);
@@ -284,7 +289,7 @@ namespace src.Controllers
 
         public IActionResult Payment(string name)
         {
-            var package = packageService.fineOne(name);
+            var package = _packageService.fineOne(name);
             if (package != null)
             {
                 return View(package);
@@ -311,7 +316,7 @@ namespace src.Controllers
                     Transaction_id = $"{package.Name}{now:yyyyMMddHHmmssfff}",
                     Status = PaymentPackage.APPROVED_STATUS
                 };
-                paymentPackageService.addPaymentPackage(newPayment);
+                _paymentPackageService.addPaymentPackage(newPayment);
                 Message = "Payment Successful!";
             }
             catch (Exception e)
@@ -321,14 +326,14 @@ namespace src.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Gallary(int id)
+        public async Task<IActionResult> Gallary(int id)
         {
             var cus = GetCustomerFromSession();
-            var prop = propertyService.FindOneWithRelation(id);
+            var prop = await _propertyService.GetPropertyById(id);
             if (cus.Id == prop.Customer_id)
             {
-                ViewBag.prop = propertyService.FindOneWithRelation(id);
-                ViewBag.images = imageService.FindByPropertyId(id);
+                ViewBag.prop = _propertyService.GetPropertyById(id);
+                ViewBag.images = _imageService.FindByPropertyId(id);
                 return View();
             }
             return NotFound();
@@ -355,7 +360,7 @@ namespace src.Controllers
                     }
                 }
                 
-                imageService.addImage(image);
+                _imageService.addImage(image);
                 Message = "Upload Successful";
                 return RedirectToAction("Gallary", new { id = image.Property_id });
             }
@@ -371,7 +376,7 @@ namespace src.Controllers
         {
             try
             {
-                imageService.deleteImage(image.Id);
+                _imageService.deleteImage(image.Id);
                 Message = "Delete Successful";
                 return RedirectToAction("Gallary", new { id = image.Property_id });
             }
@@ -392,32 +397,29 @@ namespace src.Controllers
             return null;
         }
 
-        public List<Country> GetCountries()
+        public async Task<IEnumerable<Country>> GetCountries()
         {
-            return countryService.FindAll();
+            return await _countryService.GetCountries();
         }
 
-        public ActionResult GetRegions(int id)
+        public async Task<ActionResult> GetRegions(int id)
         {
-            var regions = regionService.findAll();
-            regions = regions.Where(r => r.Country_id.Equals(id)).ToList();
-            ViewBag.Regions = new SelectList(regions, "Id", "Name");
+           
+            ViewBag.Regions = new SelectList(await _regionService.GetRegionsByCountryId(id), "Id", "Name");
             return PartialView("DisplayRegions");
         }
 
-        public ActionResult GetCities(int id)
+        public async Task<ActionResult> GetCities(int id)
         {
-            var cities = cityService.findAll();
-            cities = cities.Where(c => c.Region_id.Equals(id)).ToList();
-            ViewBag.Cities = new SelectList(cities, "Id", "Name");
+            ViewBag.Cities = new SelectList( await _cityService.GetCitiesByRegionId(id), "Id", "Name");
             return PartialView("DisplayCities");
         }
 
-        public ActionResult GetAreas(int id)
+        public async Task<ActionResult> GetAreas(int id)
         {
-            var areas = areaService.findAll();
-            areas = areas.Where(a => a.City_id.Equals(id)).ToList();
-            ViewBag.Areas = new SelectList(areas, "Id", "Name");
+            
+            
+            ViewBag.Areas = new SelectList(await _areaService.GetAreasByCityId(id), "Id", "Name");
             return PartialView("DisplayAreas");
         }
     }

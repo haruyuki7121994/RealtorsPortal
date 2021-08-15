@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-success" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -19,7 +19,7 @@
                 @Html.DisplayNameFor(model => model.Is_active)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Region_id)
+               Region Name
             </th>
             <th></th>
         </tr>
@@ -34,12 +34,12 @@
                 @Html.DisplayFor(modelItem => item.Is_active)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Region_id)
+                @Html.DisplayFor(modelItem => item.region.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+               
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

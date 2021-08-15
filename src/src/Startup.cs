@@ -33,7 +33,7 @@ namespace src
 
             services.AddOptions();
 
-            string uri = "server=DESKTOP-7UKA67O;database=RealtorsPortalDB;uid=sa;pwd=123456";
+            string uri = "Data Source=MYCOMPUTERABCD\\SQLEXPRESS;Initial Catalog=RealtorsPortalDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<RealtorContext>(options => options.UseSqlServer(uri));
                 
             //services.AddDbContext<RealtorContext>(options => {
@@ -51,10 +51,16 @@ namespace src
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAreaService, AreaService>();
             services.AddScoped<ICityService, CityService>();
-            services.AddScoped<IRegionservice, RegionService>();
+            services.AddScoped<IRegionService, RegionService>();
             services.AddScoped<IPackageService, PackageService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IConfigurationService, ConfigurationService>();
+           
+          
+
+          
+          
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

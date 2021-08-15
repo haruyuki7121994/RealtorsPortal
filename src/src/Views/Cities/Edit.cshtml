@@ -24,9 +24,9 @@
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="Region_id" class="control-label"></label>
-                <input asp-for="Region_id" class="form-control" />
-                <span asp-validation-for="Region_id" class="text-danger"></span>
+                <label for="Region_id" class="control-label">Region Name</label>
+              
+                @Html.DropDownListFor(m => m.Region_id, (IEnumerable<SelectListItem>)ViewBag.Regions, new { @class = "form-control" })
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

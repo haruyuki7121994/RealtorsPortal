@@ -43,16 +43,23 @@ namespace src.Services
             return true;
         }
 
-        public async Task<List<City>> GetCities()
+        public async Task<IEnumerable<City>> GetCities()
         {
-            return await _context.Cities.ToListAsync();
+            return await _context.Cities.Include(x => x.region).ToListAsync();
         }
-
+        public async Task<IEnumerable<City>> GetCityByActive(bool active = false)
+        {
+            return await _context.Cities.Where(x => x.Is_active == active).ToListAsync();
+        }
         public async Task<City> GetCityById(int id)
         {
             var city = await _context.Cities.FirstOrDefaultAsync(x => x.Id == id);
             if (city == null) return null;
             return city;
+        }
+        public async Task<IEnumerable<City>> GetCitiesByRegionId(int id)
+        {
+           return  await _context.Cities.Where(x => x.Region_id == id).ToListAsync();
         }
     }
 }

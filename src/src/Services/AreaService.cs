@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using src.Models;
 using src.Repository;
 
@@ -9,70 +10,58 @@ namespace src.Services
 {
     public class AreaService : IAreaService
     {
-        private RealtorContext context;
+        private RealtorContext _context;
         public AreaService(RealtorContext context)
         {
-            this.context = context;
+            this._context = context;
         }
-        public void addArea(Area area)
+
+        public async Task<Area> CreateEditArea(Area area)
         {
-            Area newArea = context.Areas.SingleOrDefault(a => a.Name.Equals(area.Name));
-            if (newArea == null)
+            if (area.Id == 0)
             {
-                context.Areas.Add(area);
-                context.SaveChanges();
+                _context.Add(area);
             }
             else
             {
-                //do nothing
+                var areaRepo = await GetAreaById(area.Id);
+                if (area == null) return null;
+                areaRepo.Name = area.Name;
+                areaRepo.Is_active = area.Is_active;
+                areaRepo.Properties = area.Properties;
+                areaRepo.City_id = area.City_id;
             }
+            await _context.SaveChangesAsync();
+            return area;
         }
 
-        public void deleteArea(int id)
+        public async Task<bool> deleteArea(int id)
         {
-            Area area = context.Areas.SingleOrDefault(a => a.Id.Equals(id));
-            if (area != null)
-            {
-                context.Areas.Remove(area);
-                context.SaveChanges();
-            }
-            else
-            {
-                //do nothing
-
-            }
+            var area = await GetAreaById(id);
+            if (area == null) return false;
+            _context.Remove<Area>(area);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public List<Area> findAll()
+        public async Task<Area> GetAreaById(int areaId)
         {
-            return context.Areas.ToList();
+            var area = await _context.Areas.FirstOrDefaultAsync(x => x.Id == areaId);
+            if (area == null) return null;
+            return area;
         }
 
-        public Area fineOne(string name)
+        public async Task<IEnumerable<Area>> GetAreas()
         {
-            Area area = context.Areas.SingleOrDefault(a => a.Name.Equals(name));
-            if (name != null)
-            {
-                return area;
-            }
-            else
-            {
-                return null;
-            }
+            return await _context.Areas.Include(x => x.city).ToListAsync();
         }
-
-        public void updateArea(Area area)
+        public async Task<IEnumerable<Area>> GetAreaByActive(bool active = false)
         {
-            Area editArea = context.Areas.SingleOrDefault(a => a.Id.Equals(area.Id));
-            if (editArea != null)
-            {
-                editArea.Name = area.Name;
-                context.SaveChanges();
-            }
-            else
-            {
-                //do nothing
-            }
+            return await _context.Areas.Where(x => x.Is_active == active).ToListAsync();
+        }
+        public async Task<IEnumerable<Area>> GetAreasByCityId(int Id)
+        {
+            return await _context.Areas.Where(x => x.City_id == Id).ToListAsync();
         }
     }
 }

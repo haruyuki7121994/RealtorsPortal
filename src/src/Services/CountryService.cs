@@ -58,7 +58,7 @@ namespace src.Services
             return true;
         }
 
-        public async Task<List<Country>> GetAllCountry()
+        public async Task<IEnumerable<Country>> GetCountries()
         {
             return await _context.Countries.ToListAsync();
         }
@@ -71,6 +71,10 @@ namespace src.Services
                 return null;
             }
             return country;
+        }
+        public async Task<IEnumerable<Country>> GetCountryByActive(bool active = false)
+        {
+            return await _context.Countries.Where(x=>x.Is_active == active).ToListAsync();
         }
     }
 }

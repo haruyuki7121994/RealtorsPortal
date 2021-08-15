@@ -57,7 +57,7 @@ namespace src.Services
 
         }
 
-        public async Task<List<Region>> GetAllRegion()
+        public async Task<IEnumerable<Region>> GetRegions()
         {
             return await _context.Regions.Include(x => x.Country).ToListAsync();
         }
@@ -71,9 +71,16 @@ namespace src.Services
             }
             return region;
         }
+        public async Task<IEnumerable<Region>> GetRegionByActive(bool active = false)
+        {
+            return await _context.Regions.Where(x =>x.Is_active == active).ToListAsync();
+        }
 
-       
+        public async Task<IEnumerable<Region>> GetRegionsByCountryId(int id)
+        {
+            return await _context.Regions.Where(x=> x.Country_id == id).ToListAsync();
+        }
 
-      
+
     }
 }
