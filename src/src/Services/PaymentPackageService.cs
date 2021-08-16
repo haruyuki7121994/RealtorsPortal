@@ -50,6 +50,12 @@ namespace src.Services
             return context.PaymentPackage.ToList();
         }
 
+        public PaymentPackage GetDetails(int id)
+        {
+            PaymentPackage paymentPackage = context.PaymentPackage.Find(id);
+            return paymentPackage;
+        }
+
         public PaymentPackage fineOne(int id)
         {
             PaymentPackage Payment_package = context.PaymentPackage.SingleOrDefault(a => a.Id.Equals(id));

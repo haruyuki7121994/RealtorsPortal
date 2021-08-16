@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using src.Models;
 
 namespace src.Controllers
 {
@@ -19,5 +20,7 @@ namespace src.Controllers
             var res = result.Where(e => e.Is_active = false);
             return View(res);
         }
+
+       
     }
 }

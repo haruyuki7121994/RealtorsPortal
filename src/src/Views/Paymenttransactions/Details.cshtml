@@ -1,0 +1,94 @@
+﻿@model src.Models.PaymentPackage
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details Notification</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Transaction_id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Transaction_id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Payment_price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Payment_price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Limit_ads)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Limit_ads)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Limit_featured_ads)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Limit_featured_ads)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Used_ads)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Used_ads)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Used_featured_ads)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Used_featured_ads)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Created_at)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Created_at)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_at)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Updated_at)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Package_id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Package_id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer_id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Customer_id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PackageName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PackageName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
