@@ -1,4 +1,4 @@
-﻿@model dynamic
+﻿@model src.Models.PropertiesPagingModel
 @{
     Layout = "~/Views/Shared/_RealtorsPortalLayout.cshtml";
     ViewData["Title"] = "Properties Page";
@@ -37,79 +37,9 @@
                         </div>
                     </div>
                     <!-- Start properties content body -->
-                    <div class="aa-properties-content-body">
-                        <ul class="aa-properties-nav">
-                            @foreach (var item in Model.filtedProps)
-                            {
-                                <li>
-                                    <article class="aa-properties-item">
-                                        <div style="width: 100%">
-                                            <a href="/Home/Property/@item.Id" class="aa-properties-item-img">
-                                                @if (item.Thumbnail_url != null)
-                                                {
-                                                    <img width="370" height="220" src="~/@item.Thumbnail_url" alt="img">
-                                                }
-                                                else
-                                                {
-                                                    <img src="img/item/1.jpg" alt="img">
-                                                }
-                                            </a>
-                                        </div>
-                                        <div class="aa-tag for-@item.Method">
-                                            For @item.Method
-                                        </div>
-                                        <div class="aa-properties-item-content">
-                                            <div class="aa-properties-info">
-                                                @if (item.Features != null)
-                                                {
-                                                    <span>5 Rooms</span>
-                                                    <span>2 Beds</span>
-                                                    <span>3 Baths</span>
-                                                    <span>1100 SQ FT</span>
-                                                }
-                                                else
-                                                {
-                                                    <span>Features is updating!</span>
-                                                }
-                                            </div>
-                                            <div class="aa-properties-about">
-                                                <h3 style="height: 25px; font-size: 22px; overflow: hidden"><a href="/Home/Property/@item.Id">@item.Title</a></h3>
-                                                <p style="height: 60px; overflow: hidden">@item.Introduction ...</p>
-                                            </div>
-                                            <div class="aa-properties-detial">
-                                                <span class="aa-price">
-                                                    $ @item.Price
-                                                </span>
-                                                @Html.ActionLink("View Details", "Property", "Home", new { id = item.Id }, new { @class = "aa-secondary-btn" })
-                                            </div>
-                                        </div>
-                                    </article>
-                                </li>
-                            }
-                        </ul>
-                    </div>
+                    @await Html.PartialAsync("ListProperties", Model.PagingProperies)
                     <!-- Start properties content bottom -->
-                    <div class="aa-properties-content-bottom">
-                        <nav>
-                            <ul class="pagination">
-                                <li>
-                                    <a href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li class="active"><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li>
-                                    <a href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+                    
                 </div>
             </div>
             <!-- Start properties sidebar -->
@@ -120,21 +50,23 @@
                         <h3>Properties Filter</h3>
                         <form asp-action="Properties" asp-controller="Home" method="get">
                             <div class="aa-single-advance-search">
-                                <input type="text" name="title" placeholder="Type Your Title">
+                                <input type="text" value="@ViewBag.key" name="key" placeholder="Type Your Title">
                             </div>
                             <div class="aa-single-advance-search">
-                                <input type="number" name="min_price" placeholder="Type Min Price">
+                                <input type="number" value="@ViewBag.min_price" name="min_price" placeholder="Type Min Price">
                             </div>
                             <div class="aa-single-advance-search">
-                                <input type="number" name="max_price" placeholder="Type Max Price">
+                                <input type="number" value="@ViewBag.max_price" name="max_price" placeholder="Type Max Price">
                             </div>
                             <div class="aa-single-advance-search">
-                                <select name="category_id" asp-items="Model.categories">
+                                <input type="hidden" class="group-filter" data-ele="category-select" value="@ViewBag.category_id" />
+                                <select id="category-select" name="category_id" asp-items="Model.Categories">
                                     <option value="0">Category</option>
                                 </select>
                             </div>
                             <div class="aa-single-advance-search">
-                                <select name="method">
+                                <input type="hidden" class="group-filter" data-ele="method-select" value="@ViewBag.method" />
+                                <select id="method-select" name="method">
                                     <option value="">Type</option>
                                     <option value="sell">Sell</option>
                                     <option value="buy">Buy</option>
@@ -142,15 +74,16 @@
                                 </select>
                             </div>
                             <div class="aa-single-advance-search">
-                                <select name="customer_role">
+                                <input type="hidden" class="group-filter" data-ele="role-select" value="@ViewBag.customer_role" />
+                                <select id="role-select" name="customer_role">
                                     <option value="">Agent/Private Seller</option>
                                     <option value="agent">Agent</option>
                                     <option value="private">Private Seller</option>
                                 </select>
                             </div>
                             <div class="aa-single-advance-search">
-                                <select id="CountryId" name="country_id" asp-items="Model.countries">
-                                    <option value="0">Category</option>
+                                <select id="CountryId" name="country_id" asp-items="Model.Countries">
+                                    <option value="0">Countries</option>
                                 </select>
                             </div>
                             <div class="aa-single-advance-search">
@@ -169,22 +102,24 @@
                                 </select>
                             </div>
                             <div class="aa-single-advance-search">
-                                <select id="" name="sort_by">
-                                    <option value="">Sort By</option>
-                                    <option value="date-desc">Date Descending</option>
-                                    <option value="date-asc">Date Ascending</option>
-                                    <option value="name-desc">Name Descending</option>
-                                    <option value="name-asc">Name Ascending</option>
-                                    <option value="price-desc">Price Descending</option>
-                                    <option value="price-asc">Price Ascending</option>
+                                <input type="hidden" class="group-filter" data-ele="sortby-select" value="@ViewBag.sort_by" />
+                                <select id="sortby-select" name="sort_by">
+                                    <option value="date-desc">Sort By</option>
+                                    <option value="date-desc">Sort By: Date Descending</option>
+                                    <option value="date-asc">Sort By: Date Ascending</option>
+                                    <option value="name-desc">Sort By: Name Descending</option>
+                                    <option value="name-asc">Sort By: Name Ascending</option>
+                                    <option value="price-desc">Sort By: Price Descending</option>
+                                    <option value="price-asc">Sort By: Price Ascending</option>
                                 </select>
                             </div>
                             <div class="aa-single-advance-search">
-                                <select id="" name="limit">
-                                    <option value="0">Show</option>
-                                    <option value="6">6</option>
-                                    <option value="12">12</option>
-                                    <option value="24">24</option>
+                                <input type="hidden" class="group-filter" data-ele="limit-select" value="@ViewBag.limit" />
+                                <select id="limit-select" name="limit">
+                                    <option value="6">Show</option>
+                                    <option value="6">Limit: 6</option>
+                                    <option value="12">Limit: 12</option>
+                                    <option value="24">Limit: 24</option>
                                 </select>
                             </div>
                             <div class="aa-single-advance-search">
@@ -193,12 +128,10 @@
                             </div>
                         </form>
                     </div>
-                    @if (Model.featuredProps.Count > 0)
-                    {
                         <!-- Start Single properties sidebar -->
                         <div class="aa-properties-single-sidebar">
                             <h3>Featured Properties</h3>
-                            @foreach (var item in Model.featuredProps)
+                            @foreach (var item in Model.FeaturedProperties)
                             {
                                 <div class="media">
                                     <div class="media-left">
@@ -221,7 +154,6 @@
                                 </div>
                             }
                         </div>
-                    }
                 </aside>
             </div>
         </div>
@@ -232,6 +164,17 @@
 @section scripts {
     <script>
         $(document).ready(function () {
+            $('.group-filter').each(function (idx, ele) {
+                var val = $(ele).val()
+                var ele = $(ele).data("ele")
+               
+                if (val != '' || val === 0) {
+                    var selected = $("#" + ele + " option[value = " + val + "]")
+                    console.log(selected)
+                    selected.attr("selected", "selected");
+                }
+                
+            })
             $("#CountryId").change(function () {
                 var countryId = $(this).val();
                 $.ajax({

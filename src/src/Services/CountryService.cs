@@ -34,6 +34,7 @@ namespace src.Services
                 else
                 {
                     c.Name = country.Name;
+                    c.Is_active = country.Is_active;
                     await _context.SaveChangesAsync();
 
                 }
@@ -57,7 +58,7 @@ namespace src.Services
             return true;
         }
 
-        public async Task<List<Country>> GetAllCountry()
+        public async Task<IEnumerable<Country>> GetCountries()
         {
             return await _context.Countries.ToListAsync();
         }
@@ -71,10 +72,9 @@ namespace src.Services
             }
             return country;
         }
-
-        public List<Country> FindAll()
+        public async Task<IEnumerable<Country>> GetCountryByActive(bool active = false)
         {
-            return _context.Countries.ToList();
+            return await _context.Countries.Where(x=>x.Is_active == active).ToListAsync();
         }
     }
 }

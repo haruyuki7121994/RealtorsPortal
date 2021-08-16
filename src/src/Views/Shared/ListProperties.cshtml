@@ -1,0 +1,105 @@
+﻿@model PaginatedList<src.Models.Property>
+<div class="aa-properties-content-body">
+    <ul class="aa-properties-nav">
+        @foreach (var item in Model)
+        {
+            <li>
+                <article class="aa-properties-item">
+                    <div style="width: 100%">
+                        <a href="/Home/Property/@item.Id" class="aa-properties-item-img">
+                            @if (item.Thumbnail_url != null)
+                            {
+                                <img style="object-fit: cover" width="370" height="220" src="~/@item.Thumbnail_url" alt="img">
+                            }
+                            else
+                            {
+                                <img src="img/item/1.jpg" alt="img">
+                            }
+                        </a>
+                    </div>
+                    <div class="aa-tag for-@item.Method">
+                        For @item.Method
+                    </div>
+                    <div class="aa-properties-item-content">
+                        <div class="aa-properties-info">
+                            @if (item.Features != null)
+                            {
+                                <span>5 Rooms</span>
+                                <span>2 Beds</span>
+                                <span>3 Baths</span>
+                                <span>1100 SQ FT</span>
+                            }
+                            else
+                            {
+                                <span>Features is updating!</span>
+                            }
+                        </div>
+                        <div class="aa-properties-about">
+                            <h3 style="height: 25px; font-size: 22px; overflow: hidden"><a href="/Home/Property/@item.Id">@item.Title</a></h3>
+                            <p style="height: 60px; overflow: hidden">@item.Introduction ...</p>
+                        </div>
+                        <div class="aa-properties-detial">
+                            <span class="aa-price">
+                                $ @item.Price
+                            </span>
+                            @Html.ActionLink("View Details", "Property", "Home", new { id = item.Id }, new { @class = "aa-secondary-btn" })
+                        </div>
+                    </div>
+                </article>
+            </li>
+        }
+    </ul>
+</div>
+<div class="aa-properties-content-bottom">
+    <nav>
+        <ul class="pagination">
+            @if (Model.PreviousPage)
+            {
+                <li>
+                    <a aria-label="Previous"
+                       asp-action="Properties" 
+                       asp-route-page="@(Model.PageIndex - 1)" 
+                       asp-route-category_id="@ViewBag.category_id"
+                       asp-route-method="@ViewBag.method"
+                       asp-route-customer_role="@ViewBag.customer_role"
+                       asp-route-key="@ViewBag.key"
+                       asp-route-min_price="@ViewBag.min_price"
+                       asp-route-max_price="@ViewBag.max_price"
+                       asp-route-country_id="@ViewBag.country_id"
+                       asp-route-region_id="@ViewBag.region_id"
+                       asp-route-city_id="@ViewBag.city_id"
+                       asp-route-area_id="@ViewBag.area_id"
+                       asp-route-sort_by="@ViewBag.sort_by"
+                       asp-route-limit="@ViewBag.limit"
+                    >
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            }
+
+            @if (Model.NextPage)
+            {
+                <li>
+                    <a aria-label="Next"
+                       asp-action="Properties"
+                       asp-route-page="@(Model.PageIndex + 1)"
+                       asp-route-category_id="@ViewBag.category_id"
+                       asp-route-method="@ViewBag.method"
+                       asp-route-customer_role="@ViewBag.customer_role"
+                       asp-route-key="@ViewBag.key"
+                       asp-route-min_price="@ViewBag.min_price"
+                       asp-route-max_price="@ViewBag.max_price"
+                       asp-route-country_id="@ViewBag.country_id"
+                       asp-route-region_id="@ViewBag.region_id"
+                       asp-route-city_id="@ViewBag.city_id"
+                       asp-route-area_id="@ViewBag.area_id"
+                       asp-route-sort_by="@ViewBag.sort_by"
+                       asp-route-limit="@ViewBag.limit"
+                    >
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

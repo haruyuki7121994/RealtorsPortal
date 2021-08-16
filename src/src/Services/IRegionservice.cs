@@ -6,12 +6,13 @@ using src.Models;
 
 namespace src.Services
 {
-    public interface IRegionservice
+    public interface IRegionService
     {
-        List<Region> findAll();
-        Region fineOne(string name);
-        void addRegion(Region regions);
-        void updateRegion(Region regions);
-        void deleteRegion(int id);
+        Task<IEnumerable<Region>> GetRegions();
+        Task<IEnumerable<Region>> GetRegionsByCountryId(int id);
+        Task<IEnumerable<Region>> GetRegionByActive(bool active = false);
+        Task<Region> GetRegionById(int id);
+        Task<Region> CreateEditRegion(Region region);
+        Task<bool> DeleteRegion(int id);
     }
 }

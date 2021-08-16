@@ -8,10 +8,12 @@ namespace src.Services
 {
     public interface IAreaService
     {
-        List<Area> findAll();
-        Area fineOne(string name);
-        void addArea(Area area);
-        void updateArea(Area area);
-        void deleteArea(int id);
+        Task<IEnumerable<Area>> GetAreas();
+        Task<IEnumerable<Area>> GetAreasByCityId(int Id);
+        Task<IEnumerable<Area>> GetAreaByActive(bool active = false);
+
+        Task<Area> GetAreaById(int areaId);
+        Task<Area> CreateEditArea(Area area);
+        Task<bool> deleteArea(int id);
     }
 }

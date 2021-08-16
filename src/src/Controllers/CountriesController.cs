@@ -20,19 +20,13 @@ namespace src.Controllers
             _countryService = countryService;
         }
 
-        // GET: Countries
         public async Task<IActionResult> Index()
         {
-           
-            return View(await _countryService.GetAllCountry());
+            return View(await _countryService.GetCountries());
         }
-
-        // GET: Countries/Details/5
         public async Task<IActionResult> Details(int id)
         {
-          
             var country = await _countryService.GetCountryById(id);
-
             if (country == null)
             {
                 return NotFound();
@@ -40,14 +34,11 @@ namespace src.Controllers
 
             return View(country);
         }
-
-        
         public IActionResult Create()
         {
             return View();
         }
 
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Is_active")] Country country)
@@ -58,13 +49,9 @@ namespace src.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(country);
-        }
-
-        // GET: Countries/Edit/5
+        }  
         public async Task<IActionResult> Edit(int id)
         {
-            
-
             var country = await _countryService.GetCountryById(id);
             if (country == null)
             {
@@ -72,10 +59,6 @@ namespace src.Controllers
             }
             return View(country);
         }
-
-        // POST: Countries/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Is_active")] Country country)
@@ -84,7 +67,6 @@ namespace src.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 var c = await _countryService.CreateEditCountry(country);
@@ -96,18 +78,13 @@ namespace src.Controllers
             }
             return View(country);
         }
-
-        // GET: Countries/Delete/5
-        public async Task<IActionResult> Delete(int id)
+       public async Task<IActionResult> Delete(int id)
         {
-            
-
             var deleteSuccess = await _countryService.DeleteCountry(id);
             if (!deleteSuccess)
             {
                 return NotFound();
             }
-
             return RedirectToAction(nameof(Index));
         }
 

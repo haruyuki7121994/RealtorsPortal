@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -18,7 +20,7 @@
     <link id="switcher" href="~/css/RealtorsPortal/theme-color/default-theme.css" rel="stylesheet">
 
     <!-- Main style sheet -->
-    <link href="~/css/RealtorsPortal/style.css?version=2.0" rel="stylesheet">
+    <link href="~/css/RealtorsPortal/style.css?version=2.2" rel="stylesheet">
 
     <!-- Google Font -->
     <link href='https://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
@@ -52,10 +54,20 @@
                                 </div>
                             </div>
                             <div class="col-md-6 col-sm-6 col-xs-6">
-                                <div class="aa-header-right">
-                                    @Html.ActionLink("Register", "Register", "Auth", new { }, new { @class = "aa-register" })
-                                    @Html.ActionLink("Login", "Login", "Auth", new { }, new { @class = "aa-login" })
-                                </div>
+                                @if (HttpContextAccessor.HttpContext.Session.GetString("customer") != null)
+                                {
+                                    <div class="aa-header-right">
+                                        @Html.ActionLink("Profile", "Index", "Customer", new { }, new { @class = "aa-register" })
+                                        @Html.ActionLink("Logout", "Logout", "Auth", new { }, new { @class = "aa-login" })
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="aa-header-right">
+                                        @Html.ActionLink("Register", "Register", "Auth", new { }, new { @class = "aa-register" })
+                                        @Html.ActionLink("Login", "Login", "Auth", new { }, new { @class = "aa-login" })
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>

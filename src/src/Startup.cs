@@ -11,7 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using src.Services;
 using src.Repository;
-
+using src.Config;
+using Microsoft.AspNetCore.Http;
 
 namespace src
 {
@@ -27,12 +28,14 @@ namespace src
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.Configure<EmailSettings>(Configuration.GetSection(EmailSettings.SectionName));
             services.AddControllersWithViews();
 
-            string uri = "server=DESKTOP-7UKA67O;database=RealtorsPortalDB;uid=sa;pwd=123456";
-            services.AddDbContext<RealtorContext>(options => options.UseSqlServer(uri));
+            services.AddOptions();
 
+            string uri = "Data Source=MYCOMPUTERABCD\\SQLEXPRESS;Initial Catalog=RealtorsPortalDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            services.AddDbContext<RealtorContext>(options => options.UseSqlServer(uri));
+                
             //services.AddDbContext<RealtorContext>(options => {
             //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             //});
@@ -48,8 +51,18 @@ namespace src
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAreaService, AreaService>();
             services.AddScoped<ICityService, CityService>();
-            services.AddScoped<IRegionservice, RegionService>();
+            services.AddScoped<IRegionService, RegionService>();
             services.AddScoped<IPackageService, PackageService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IConfigurationService, ConfigurationService>();
+           
+          
+
+          
+          
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddControllersWithViews().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve

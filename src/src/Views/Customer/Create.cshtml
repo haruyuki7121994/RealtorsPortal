@@ -1,7 +1,7 @@
 ﻿@model src.Models.Property
 @{
     Layout = "~/Views/Shared/_RealtorsPortalLayout.cshtml";
-    ViewData["Title"] = "Profile Page";
+    ViewData["Title"] = "Create Ads Page";
 }
 }
 <!-- Start Proerty header  -->
@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="aa-property-header-inner">
-                    <h2>Create Ads</h2>
+                    <h2>Create New Ads</h2>
                     <ol class="breadcrumb">
                         <li><a href="#">HOME</a></li>
                         <li class="active">Customer</li>
@@ -23,28 +23,28 @@
 <!-- End Proerty header  -->
 <div class="clearfix"></div>
 <div style="margin-top: 20px">
-    @{
-        if (ViewBag.error != null)
-        {
-            <div class="error-blog">
-                <h1>@ViewBag.error</h1>
-            </div>
-        }
-        if (TempData.Peek("Message") != null)
-        {
-            <div class="error-blog">
-                <h3>Message: @TempData.Peek("Message")</h3>
-            </div>
-        }
-    }
-
     <div class="container">
         <div class="row">
+            @{
+                if (ViewBag.error != null)
+                {
+                    <div class="error-blog">
+                        <h1>@ViewBag.error</h1>
+                    </div>
+                }
+                if (TempData.Peek("Message") != null)
+                {
+                    <div class="error-blog">
+                        <h3>Message: @TempData.Peek("Message")</h3>
+                    </div>
+                }
+            }
             <div class="col-md-3"></div>
             <div class="col-md-6 wrapper-custom">
                 <br />
-                <form asp-action="Create" asp-controller="Customer" enctype="multipart/form-data" method="post">
+                <form asp-action="CreateAds" asp-controller="Customer" enctype="multipart/form-data" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="Is_featured" type="hidden" value="false" />
 
                     <div class="form-group">
                         <label class="control-label">Category</label>
@@ -115,14 +115,6 @@
                             <option value="">Select Area</option>
                         </select>
                         <span asp-validation-for="Area_id" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">If You Want Recommend Property, Choose Featured! </label>
-                        <select class="form-control" asp-for="Is_featured">
-                            <option value="false">Normal</option>
-                            <option value="true">Featured</option>
-                        </select>
-                        <span asp-validation-for="Is_featured" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <input type="button" value="Back" class="btn btn-danger" />

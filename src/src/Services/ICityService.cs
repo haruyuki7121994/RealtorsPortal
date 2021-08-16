@@ -8,10 +8,11 @@ namespace src.Services
 {
     public interface ICityService
     {
-        List<City> findAll();
-        City fineOne(string name);
-        void addCity(City city);
-        void updateCity(City city);
-        void deleteCity(int id);
+        Task<IEnumerable<City>> GetCities();
+        Task<IEnumerable<City>> GetCityByActive(bool active = false);
+        Task<City> GetCityById(int id);
+        Task<IEnumerable<City>> GetCitiesByRegionId(int id);
+        Task<City> CreateEditCity(City city);
+        Task<bool> DeleteCity(int id);
     }
 }
