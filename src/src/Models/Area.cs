@@ -16,8 +16,6 @@ namespace src.Models
         [DisplayName("Area Name")]
         [RegularExpression(@"^[A-Z]+[a-zA-Z0-9\s]*$"), Required, StringLength(150, MinimumLength = 3)]
         public string Name { get; set; }
-        [DisplayName("Active")]
-        public bool Is_active { get; set; }
         [ForeignKey("City_id")]
         public City city { get; set; }
         public int City_id { get; set; }

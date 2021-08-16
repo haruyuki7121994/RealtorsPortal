@@ -27,7 +27,6 @@ namespace src.Services
                 var areaRepo = await GetAreaById(area.Id);
                 if (area == null) return null;
                 areaRepo.Name = area.Name;
-                areaRepo.Is_active = area.Is_active;
                 areaRepo.Properties = area.Properties;
                 areaRepo.City_id = area.City_id;
             }
@@ -57,7 +56,7 @@ namespace src.Services
         }
         public async Task<IEnumerable<Area>> GetAreaByActive(bool active = false)
         {
-            return await _context.Areas.Where(x => x.Is_active == active).ToListAsync();
+            return await _context.Areas.ToListAsync();
         }
         public async Task<IEnumerable<Area>> GetAreasByCityId(int Id)
         {

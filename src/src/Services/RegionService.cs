@@ -34,7 +34,6 @@ namespace src.Services
                 else
                 {
                     c.Name = region.Name;
-                    c.Is_active = region.Is_active;
                     c.Country_id = region.Country_id;
                     await _context.SaveChangesAsync();
 
@@ -73,7 +72,7 @@ namespace src.Services
         }
         public async Task<IEnumerable<Region>> GetRegionByActive(bool active = false)
         {
-            return await _context.Regions.Where(x =>x.Is_active == active).ToListAsync();
+            return await _context.Regions.ToListAsync();
         }
 
         public async Task<IEnumerable<Region>> GetRegionsByCountryId(int id)
