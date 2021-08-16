@@ -8,43 +8,47 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using src.Models;
+using src.Services;
 
 namespace src.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly Services.IPropertyService propertyService;
-        private readonly Services.ICategoryService categoryService;
-        private readonly Services.ICountryService countryService;
-        private readonly Services.IRegionservice regionService;
-        private readonly Services.ICityService cityService;
-        private readonly Services.IAreaService areaService;
+        private readonly IPropertyService _propertyService;
+        private readonly ICategoryService _categoryService;
+        private readonly ICountryService _countryService;
+        private readonly IRegionService _regionService;
+        private readonly ICityService _cityService;
+        private readonly IAreaService _areaService;
+        private readonly IImageService _imageService;
 
         public HomeController
         (
             ILogger<HomeController> logger,
-            Services.IPropertyService propertyService,
-            Services.ICategoryService categoryService,
-            Services.ICountryService countryService,
-            Services.IRegionservice regionService,
-            Services.ICityService cityService,
-            Services.IAreaService areaService
+            IPropertyService propertyService,
+            ICategoryService categoryService,
+            ICountryService countryService,
+            IRegionService regionService,
+            ICityService cityService,
+            IAreaService areaService,
+            IImageService imageService
         )
         {
             _logger = logger;
-            this.propertyService = propertyService;
-            this.categoryService = categoryService;
-            this.countryService = countryService;
-            this.regionService = regionService;
-            this.cityService = cityService;
-            this.areaService = areaService;
+            this._propertyService = propertyService;
+            this._categoryService = categoryService;
+            this._countryService = countryService;
+            this._regionService = regionService;
+            this._cityService = cityService;
+            this._areaService = areaService;
+            this._imageService = imageService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult>Index()
         {
-            var cagetories = new SelectList(categoryService.findAll(true), "Id", "Name");
-            var properties = propertyService.FindAllWithRelation();
+            var cagetories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+            var properties = await _propertyService.GetProperties();
             var lastestProps = properties.Where(p => p.Is_active.Equals(true))
                 .OrderByDescending(p => p.Created_at)
                 .Take(6)
@@ -62,12 +66,12 @@ namespace src.Controllers
             return View(model);
         }
 
-        public IActionResult Properties
+        public async Task<IActionResult> Properties
         (
             string method,
             string customer_role,
             int? category_id,
-            string title,
+            string key,
             int? min_price,
             int? max_price,
             int? country_id,
@@ -75,51 +79,57 @@ namespace src.Controllers
             int? city_id,
             int? area_id,
             string sort_by,
-            int limit
+            int limit,
+            int? page
         )
         {
-            var properties = propertyService.FindAllWithRelation().Where(p => p.Is_active.Equals(true));
+            var properties = await _propertyService.GetProperties();
+            properties.Where(p => p.Is_active.Equals(true));
             var featuredProps = properties.Where(p => p.Is_featured.Equals(true))
                 .OrderByDescending(p => p.Created_at)
                 .Take(3)
                 .ToList();
 
-            var cagetories = new SelectList(categoryService.findAll(true), "Id", "Name");
-            var countries = new SelectList(GetCountries(), "Id", "Name");
-
-            int limit_per_page = limit > 0 ? limit : 6 ;
+            var cagetories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+            var countries = new SelectList(await _countryService.GetCountries(), "Id", "Name") ;
 
             //filer method
+            ViewBag.method = method;
             if (!string.IsNullOrEmpty(method))
             {
                 properties = properties.Where(p => p.Method.Equals(method));
             }
 
             //filter category
+            ViewBag.category_id = category_id;
             if (category_id > 0)
             {
                 properties = properties.Where(p => p.Category.Id.Equals(category_id));
             }
 
             //filter customer role
+            ViewBag.customer_role = customer_role;
             if (!string.IsNullOrEmpty(customer_role))
             {
                 properties = properties.Where(p => p.Customer.Type.Equals(customer_role));
             }
 
             //filter title
-            if (!string.IsNullOrEmpty(title))
+            ViewBag.key = key;
+            if (!string.IsNullOrEmpty(key))
             {
-                properties = properties.Where(p => p.Title.ToLower().Contains(title.ToLower()));
+                properties = properties.Where(p => p.Title.ToLower().Contains(key.ToLower()));
             }
 
             //filter min price
+            ViewBag.min_price = min_price;
             if (min_price != null)
             {
                 properties = properties.Where(p => p.Price >= min_price);
             }
 
             //filter max price
+            ViewBag.max_price = max_price;
             if (max_price != null)
             {
                 properties = properties.Where(p => p.Price <= max_price);
@@ -127,6 +137,11 @@ namespace src.Controllers
 
 
             //filter location
+            ViewBag.area_id = area_id;
+            ViewBag.city_id = city_id;
+            ViewBag.region_id = region_id;
+            ViewBag.country_id = country_id;
+
             if (area_id > 0)
             {
                 properties = properties.Where(p => p.Area.Id.Equals(area_id));
@@ -145,6 +160,7 @@ namespace src.Controllers
             }
 
             //filter sort by
+            ViewBag.sort_by = sort_by;
             switch (sort_by)
             {
                 case "name-desc":
@@ -167,32 +183,44 @@ namespace src.Controllers
                     break;
             }
 
-            //filter limit
-            properties = properties.Take(limit_per_page).ToList();
+            
+            int pageNumber = page ?? 1;
+            int limit_per_page = limit > 0 ? limit : 6;
+            ViewBag.page = pageNumber;
+            ViewBag.limit = limit_per_page;
 
-            dynamic model = new ExpandoObject();
-            model.filtedProps = properties;
-            model.categories = cagetories;
-            model.countries = countries;
-            model.featuredProps = featuredProps;
+
+            //filter limit
+            properties = PaginatedList<Property>.CreateAsnyc(properties.ToList(), pageNumber, limit_per_page);
+
+            PropertiesPagingModel model = new PropertiesPagingModel
+            {
+                Categories = cagetories,
+                Countries = countries,
+                FeaturedProperties = featuredProps,
+                PagingProperies = properties,
+            };
 
             return View(model);
         }
 
-        public IActionResult Property(int id)
+        public async Task<IActionResult> Property(int id)
         {
-            var prop = propertyService.FindOneWithRelation(id);
+            var prop = await _propertyService.GetPropertyById(id);
             if (prop != null)
             {
-                var featuredProps = propertyService.FindAllWithRelation()
-                .Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true))
+                var featuredProps = await _propertyService.GetProperties();
+                featuredProps.Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true))
                 .OrderByDescending(p => p.Created_at)
                 .Take(10)
                 .ToList();
 
+                var images = _imageService.FindByPropertyId(id);
+
                 dynamic model = new ExpandoObject();
                 model.currentProp = prop;
                 model.featuredProps = featuredProps;
+                model.images = images;
 
                 return View(model);
             }
@@ -227,9 +255,9 @@ namespace src.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public List<Country> GetCountries()
+        public async Task<IEnumerable<Country>> GetCountries()
         {
-            return countryService.FindAll();
+            return await _countryService.GetCountries();
         }
     }
 }

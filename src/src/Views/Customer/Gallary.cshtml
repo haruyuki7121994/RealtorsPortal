@@ -1,0 +1,86 @@
+﻿@model src.Models.Image
+@{
+    Layout = "~/Views/Shared/_RealtorsPortalLayout.cshtml";
+    ViewData["Title"] = "Customer Page";
+}
+}
+<!-- Start Proerty header  -->
+<section id="aa-property-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="aa-property-header-inner">
+                    <h2>Gallary</h2>
+                    <ol class="breadcrumb">
+                        <li><a href="#">HOME</a></li>
+                        <li class="active">Customer</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Proerty header  -->
+<div class="clearfix"></div>
+<div style="margin-top: 20px">
+    <div class="container">
+        <div class="row">
+            @{
+                if (ViewBag.error != null)
+                {
+                    <div class="error-blog">
+                        <h1>@ViewBag.error</h1>
+                    </div>
+                }
+                if (TempData.Peek("Message") != null)
+                {
+                    <div class="error-blog">
+                        <h3>Message: @TempData.Peek("Message")</h3>
+                    </div>
+                }
+            }
+            <div class="col-md-12">
+                <form asp-action="Upload" asp-controller="Customer" enctype="multipart/form-data" method="post">
+                    <input asp-for="Property_id" type="hidden" value="@ViewBag.prop.Id"/>
+                    <div class="form-group">
+                        <label class="control-label">Upload Image</label>
+                        <input name="file" type="file" class="form-control" />
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" value="Back" class="btn btn-danger" />
+                        <input type="submit" value="Upload" class="btn btn-dark" />
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-12">
+                <div class="ads-gallary">
+                    @foreach (var item in ViewBag.images)
+                    {
+                        <form asp-action="DeleteImage" asp-controller="Customer" enctype="multipart/form-data" method="post">
+                            <input asp-for="Id" type="hidden" value="@item.Id" />
+                            <input asp-for="Property_id" type="hidden" value="@ViewBag.prop.Id" />
+                            <div style="position: relative">
+                                <input style="position: absolute" type="submit" value="X" class="btn btn-danger" />
+                                <img style="height: 500px; object-fit: cover; width: 100%" src="~/@item.Url" alt="img">
+                            </div>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+@section scripts {
+    <script>
+        jQuery('.ads-gallary').slick({
+            dots: false,
+            infinite: true,
+            arrows: true,
+            speed: 500,
+            cssEase: 'linear'
+        });
+    </script>
+}

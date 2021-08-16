@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel;
 
 namespace src.Models
 {
@@ -14,6 +15,8 @@ namespace src.Models
         public int Id { get; set; }
 
         public string Name { get; set; }
+        [DisplayName("Active")]
+        public bool Is_active { get; set; }
 
         public ICollection<Region> Regions { get; set; }
     }

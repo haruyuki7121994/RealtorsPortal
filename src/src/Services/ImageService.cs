@@ -14,21 +14,13 @@ namespace src.Services
         {
             this.context = context;
         }
-        public void addImages(Image images)
+        public void addImage(Image image)
         {
-            Image newRegion = context.Images.SingleOrDefault(a => a.Id.Equals(images.Id));
-            if (newRegion == null)
-            {
-                context.Images.Add(images);
-                context.SaveChanges();
-            }
-            else
-            {
-                //do nothing
-            }
+            context.Images.Add(image);
+            context.SaveChanges();
         }
 
-        public void deleteImages(int id)
+        public void deleteImage(int id)
         {
             Image images = context.Images.SingleOrDefault(a => a.Id.Equals(id));
             if (images != null)
@@ -61,19 +53,23 @@ namespace src.Services
             }
         }
 
-        public void updateImages(Image images)
+        public void updateImage(Image image)
         {
-            Image editImages = context.Images.SingleOrDefault(a => a.Id.Equals(images.Id));
+            Image editImages = context.Images.SingleOrDefault(a => a.Id.Equals(image.Id));
             if (editImages != null)
             {
-                editImages.Url = images.Url;
-                editImages.Thumbnail_url = images.Thumbnail_url;
+                editImages.Url = image.Url;
                 context.SaveChanges();
             }
             else
             {
                 //do nothing
             }
+        }
+
+        public List<Image> FindByPropertyId(int property_id)
+        {
+            return context.Images.Where(i => i.Property_id.Equals(property_id)).ToList();
         }
     }
 }

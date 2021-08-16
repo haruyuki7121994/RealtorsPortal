@@ -15,7 +15,14 @@
                 {
                     <!-- Top slider single slide -->
                     <div class="aa-top-slider-single">
-                        <img width="1920" height="1080" style="object-fit: cover" src="~/@item.Thumbnail_url" alt="img">
+                        @if (item.Thumbnail_url != null)
+                        {
+                            <img width="1920" height="1080" style="object-fit: cover" src="~/@item.Thumbnail_url" alt="img">
+                        }
+                        else
+                        {
+                            <img src="~/img/property-header-bg.jpg" alt="img">
+                        }
                         <!-- Top slider content -->
                         <div class="aa-top-slider-content">
                             <span class="aa-top-slider-catg">@item.Title</span>
@@ -151,7 +158,7 @@
                                     <a href="/Home/Property/@item.Id" class="aa-properties-item-img">
                                         @if (item.Thumbnail_url != null)
                                         {
-                                            <img width="370" height="220" src="~/@item.Thumbnail_url" alt="img">
+                                            <img style="object-fit: cover" width="370" height="220" src="~/@item.Thumbnail_url" alt="img">
                                         }
                                         else
                                         {

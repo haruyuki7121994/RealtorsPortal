@@ -2,77 +2,85 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using src.Models;
 using src.Repository;
 
 namespace src.Services
 {
-    public class RegionService : IRegionservice
+    public class RegionService : IRegionService
     {
-        private RealtorContext context;
+        private readonly RealtorContext _context;
         public RegionService(RealtorContext context)
         {
-            this.context = context;
+            this._context = context;
         }
-        public void addRegion(Region regions)
+
+        public async Task<Region> CreateEditRegion(Region region)
         {
-            Region newRegion = context.Regions.SingleOrDefault(a => a.Name.Equals(regions.Name));
-            if (newRegion == null)
+            if (region.Id == 0)
             {
-                context.Regions.Add(regions);
-                context.SaveChanges();
+                _context.Add(region);
+                await _context.SaveChangesAsync();
+
             }
             else
             {
-                //do nothing
+                var c = await _context.Regions.FirstOrDefaultAsync(c => c.Id == region.Id);
+                if (c == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    c.Name = region.Name;
+                    c.Is_active = region.Is_active;
+                    c.Country_id = region.Country_id;
+                    await _context.SaveChangesAsync();
+
+                }
+
             }
+            return region;
+
         }
 
-        public void deleteRegion(int id)
-        {
-            Region regions = context.Regions.SingleOrDefault(a => a.Id.Equals(id));
-            if (regions != null)
-            {
-                context.Regions.Remove(regions);
-                context.SaveChanges();
-            }
-            else
-            {
-                //do nothing
+      
 
-            }
+        public async Task<bool> DeleteRegion(int id)
+        {
+            var region = await GetRegionById(id);
+            if (region == null) return false;
+            _context.Remove<Region>(region);
+            await _context.SaveChangesAsync();
+            return true;
+
         }
 
-        public List<Region> findAll()
+        public async Task<IEnumerable<Region>> GetRegions()
         {
-            return context.Regions.ToList();
+            return await _context.Regions.Include(x => x.Country).ToListAsync();
         }
 
-        public Region fineOne(string name)
+        public async Task<Region> GetRegionById(int id)
         {
-            Region regions = context.Regions.SingleOrDefault(a => a.Name.Equals(name));
-            if (name != null)
-            {
-                return regions;
-            }
-            else
+               var region = await  _context.Regions.FirstOrDefaultAsync(x => x.Id ==id);
+            if (region == null)
             {
                 return null;
             }
+            return region;
+        }
+        public async Task<IEnumerable<Region>> GetRegionByActive(bool active = false)
+        {
+            return await _context.Regions.Where(x =>x.Is_active == active).ToListAsync();
         }
 
-        public void updateRegion(Region regions)
+        public async Task<IEnumerable<Region>> GetRegionsByCountryId(int id)
         {
-            Region editRegion = context.Regions.SingleOrDefault(a => a.Id.Equals(regions.Id));
-            if (editRegion != null)
-            {
-                editRegion.Name = regions.Name;
-                context.SaveChanges();
-            }
-            else
-            {
-                //do nothing
-            }
+            return await _context.Regions.Where(x=> x.Country_id == id).ToListAsync();
         }
+
+
     }
 }

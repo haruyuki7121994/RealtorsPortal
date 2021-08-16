@@ -15,5 +15,9 @@ namespace src.Services
         void deletePaymentPackage(int id);
 
         List<PaymentPackage> FindPackagesByCustomerId(int customerId);
+        PaymentPackage AddTrialPaymentPackageForCustomer(int customerId);
+        PaymentPackage CheckPaymentCode(string code);
+        bool CheckCanCreateAds(int customerId, bool featuredAds = false);
+        bool UpdateUsedAdsForCustomer(int customerId, bool featuredAds = false);
     }
 }

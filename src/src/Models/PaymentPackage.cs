@@ -10,6 +10,13 @@ namespace src.Models
     [Table("Payment_package")]
     public class PaymentPackage
     {
+        [NotMapped]
+        public static int PENDING_STATUS = 0;
+        [NotMapped]
+        public static int APPROVED_STATUS = 1;
+        [NotMapped]
+        public static int EXPIRED_STATUS = 2;
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

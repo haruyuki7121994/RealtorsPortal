@@ -52,7 +52,7 @@
                                 <li>Limit Ads: @item.Limit_ads</li>
                                 <li>Limit Featured Ads: @item.Limit_featured_ads</li>
                             </ul>
-                            <button type="button" class="btn btn-lg btn-block btn-dark">Purchase</button>
+                            @Html.ActionLink("Purchase", "Payment", "Customer", new { name = item.Name }, new { @class = "btn btn-lg btn-block btn-dark" })
                         </div>
                     </div>
                 </div>
