@@ -13,9 +13,18 @@ namespace src.Controllers
         {
             this.services = services;
         }
-        public IActionResult Index()
+        public IActionResult Index(DateTime startdate,DateTime enddate)
         {
-            return View(services.findAll());
+            var result = services.findAll();
+            if (startdate == enddate)
+            {
+                return View(result);
+            }
+            else
+            {
+                var res = result.Where(e => e.Created_at >= startdate && e.Created_at <= enddate);
+                return View(res);
+            }
         }
     }
 }
