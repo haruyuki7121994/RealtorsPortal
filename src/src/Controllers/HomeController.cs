@@ -48,7 +48,8 @@ namespace src.Controllers
         public async Task<IActionResult>Index()
         {
             var cagetories = new SelectList(_categoryService.findAll(true), "Id", "Name");
-            var properties = await _propertyService.GetProperties();
+            var properties = _propertyService.FindAllWithRelation();
+
             var lastestProps = properties.Where(p => p.Is_active.Equals(true))
                 .OrderByDescending(p => p.Created_at)
                 .Take(6)
@@ -83,8 +84,8 @@ namespace src.Controllers
             int? page
         )
         {
-            var properties = await _propertyService.GetProperties();
-            properties.Where(p => p.Is_active.Equals(true));
+            var properties = _propertyService.FindAllWithRelation().Where(p => p.Is_active.Equals(true));
+
             var featuredProps = properties.Where(p => p.Is_featured.Equals(true))
                 .OrderByDescending(p => p.Created_at)
                 .Take(3)
@@ -206,10 +207,10 @@ namespace src.Controllers
 
         public async Task<IActionResult> Property(int id)
         {
-            var prop = await _propertyService.GetPropertyById(id);
+            var prop = _propertyService.FindOneWithRelation(id);
             if (prop != null)
             {
-                var featuredProps = await _propertyService.GetProperties();
+                var featuredProps = _propertyService.FindAllWithRelation();
                 featuredProps.Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true))
                 .OrderByDescending(p => p.Created_at)
                 .Take(10)

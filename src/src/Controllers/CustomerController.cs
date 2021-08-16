@@ -61,7 +61,7 @@ namespace src.Controllers
         {
             var cus = GetCustomerFromSession();
             dynamic model = new ExpandoObject();
-            model.Properties = _propertyService.GetPropertiesByCustomerId(cus.Id);
+            model.Properties = _propertyService.FindPropertiesByCustomerId(cus.Id).OrderByDescending(pp => pp.Created_at);
             model.PaymentPackages = _paymentPackageService.FindPackagesByCustomerId(cus.Id).OrderByDescending(pp => pp.Updated_at);
             model.Customer = cus;
             return View(model);
@@ -177,8 +177,8 @@ namespace src.Controllers
 
                     var cus = GetCustomerFromSession();
                     property.Customer_id = cus.Id;
-                    var result = await _propertyService.CreateEditProperty(property);
-                    if (result!=null)
+                    var result = _propertyService.addProperty(property);
+                    if (result)
                     {
                         Message = "Add Property Successful";
                         return RedirectToAction("Index");
@@ -195,12 +195,12 @@ namespace src.Controllers
             }
             ViewBag.Categories = new SelectList(_categoryService.findAll(), "Id", "Name");
             ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
-            return View();
+            return View("Create");
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var property = await _propertyService.GetPropertyById(id);
+            var property = _propertyService.FindOneWithRelation(id);
             var cus = GetCustomerFromSession();
             if (property.Customer_id == cus.Id)
             {
@@ -214,7 +214,7 @@ namespace src.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Property property, IFormFile? file)
         {
-           
+            var oldProp = _propertyService.FindOneWithRelation(property.Id);
             try
             {
                 if (ModelState.IsValid)
@@ -235,29 +235,26 @@ namespace src.Controllers
                         }
                     }
 
-                   
-                    var result = await _propertyService.CreateEditProperty(property);
-                    if (result != null)
+                    property.Is_active = oldProp.Is_active;
+                    property.Customer_id = oldProp.Customer_id;
+                    var result = _propertyService.updateProperty(property);
+                    if (result)
                     {
                         Message = "Update Property Successful";
-                        return RedirectToAction("Edit", new { id = result.Id});
+                        return RedirectToAction("Edit", new { id = oldProp.Id});
                     }
                     else
                     {
                         ViewBag.error = "Cannot Update Property";
                     }
                 }
-                else
-                {
-                    ViewBag.Categories = new SelectList(_categoryService.findAll(true), "Id", "Name");
-                    ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
-                }
             }
             catch (Exception e)
             {
                 ViewBag.error = e.Message;
             }
-            
+            ViewBag.Categories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+            ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
             return View(property);
         }
 
@@ -332,7 +329,7 @@ namespace src.Controllers
             var prop = await _propertyService.GetPropertyById(id);
             if (cus.Id == prop.Customer_id)
             {
-                ViewBag.prop = _propertyService.GetPropertyById(id);
+                ViewBag.prop = prop;
                 ViewBag.images = _imageService.FindByPropertyId(id);
                 return View();
             }
@@ -368,7 +365,8 @@ namespace src.Controllers
             {
                 ViewBag.error = e.Message;
             }
-            return View();
+            Message = "Cannot Upload Image";
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

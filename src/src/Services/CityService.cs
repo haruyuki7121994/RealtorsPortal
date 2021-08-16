@@ -27,7 +27,6 @@ namespace src.Services
                 if (c == null) return null;
                 c.Name = city.Name;
                 c.Region_id = city.Region_id;
-                c.Is_active = city.Is_active;
                 
             }
           await  _context.SaveChangesAsync();
@@ -49,7 +48,7 @@ namespace src.Services
         }
         public async Task<IEnumerable<City>> GetCityByActive(bool active = false)
         {
-            return await _context.Cities.Where(x => x.Is_active == active).ToListAsync();
+            return await _context.Cities.ToListAsync();
         }
         public async Task<City> GetCityById(int id)
         {

@@ -14,5 +14,12 @@ namespace src.Services
         Task<Property> CreateEditProperty(Property property);
        
         Task<bool> DeleteProperty(int id);
+
+        List<Property> FindAllWithRelation();
+        Property FindOneWithRelation(int id);
+        List<Property> FindPropertiesByCustomerId(int id);
+
+        bool updateProperty(Property property);
+        bool addProperty(Property property);
     }
 }
