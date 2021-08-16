@@ -207,11 +207,15 @@ namespace src.Controllers
             return View();
         }
 
-        public IActionResult Blog()
+        public IActionResult Blog1()
         {
             return View();
         }
-
+        public IActionResult Blog2()
+        {
+            return View();
+        }
+     
         public IActionResult Contact()
         {
             return View();
