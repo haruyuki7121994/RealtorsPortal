@@ -7,6 +7,10 @@
 <h1>
     Notification Email
 </h1>
+@if (ViewBag.Msg)
+{
+    <h3>@ViewBag.Msg</h3>
+}
 <table class="table">
     <thead>
         <tr>
@@ -17,19 +21,22 @@
                 @Html.DisplayNameFor(model => model.Transaction_id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Payment_price)
+                Payment Price
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Used_ads)
+                Used Ads
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Package_id)
+                Used Featured Ads
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Customer_id)
+                Package
+            </th>
+            <th>
+                Customer
             </th>
             <th>
                 Actions
@@ -49,20 +56,25 @@
                 @Html.DisplayFor(modelItem => item.Payment_price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+                @if (item.Status == PaymentPackage.EXPIRED_STATUS)
+                {
+                    <span>Expired</span>
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Used_ads)
+                @Html.DisplayFor(modelItem => item.Used_ads)/@Html.DisplayFor(modelItem => item.Limit_ads)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Package_id)
+                @Html.DisplayFor(modelItem => item.Used_featured_ads)/@Html.DisplayFor(modelItem => item.Limit_featured_ads)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Customer_id)
+                @item.Package.Name
             </td>
             <td>
-                @Html.ActionLink("Send Email", "", new { /* id=item.PrimaryKey */ }) 
-
+                @item.Customer.Email
+            </td>
+            <td>
+                @Html.ActionLink("Send Email", "Send", "Notifications", new { id = item.Id })
             </td>
         </tr>
 }

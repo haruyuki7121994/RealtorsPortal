@@ -183,10 +183,8 @@ namespace src.Controllers
                         Message = "Add Property Successful";
                         return RedirectToAction("Index");
                     }
-                    else
-                    {
-                        ViewBag.error = "Fail";
-                    }
+
+                    ViewBag.error = "Fail";
                 }
             }
             catch (Exception e)

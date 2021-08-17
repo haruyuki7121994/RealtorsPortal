@@ -210,25 +210,26 @@ namespace src.Controllers
             var prop = _propertyService.FindOneWithRelation(id);
             if (prop != null)
             {
-                var featuredProps = _propertyService.FindAllWithRelation();
-                featuredProps.Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true))
-                .OrderByDescending(p => p.Created_at)
-                .Take(10)
-                .ToList();
+                if (prop.Is_active.Equals(true))
+                {
+                    var properties = _propertyService.FindAllWithRelation().Where(p => p.Is_active.Equals(true));
 
-                var images = _imageService.FindByPropertyId(id);
+                    var featuredProps = properties.Where(p => p.Is_featured.Equals(true))
+                        .OrderByDescending(p => p.Created_at)
+                        .Take(10)
+                        .ToList();
 
-                dynamic model = new ExpandoObject();
-                model.currentProp = prop;
-                model.featuredProps = featuredProps;
-                model.images = images;
+                    var images = _imageService.FindByPropertyId(id);
 
-                return View(model);
+                    dynamic model = new ExpandoObject();
+                    model.currentProp = prop;
+                    model.featuredProps = featuredProps;
+                    model.images = images;
+
+                    return View(model);
+                }
             }
-            else
-            {
-                return RedirectToAction("Index");
-            }
+            return RedirectToAction("Index");
         }
 
         public IActionResult Blogs()

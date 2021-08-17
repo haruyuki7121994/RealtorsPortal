@@ -43,7 +43,7 @@
                             <h4>@Model.currentProp.Country.Name, @Model.currentProp.Region.Name, @Model.currentProp.City.Name, @Model.currentProp.Area.Name</h4>
                             <span class="aa-price">$@Model.currentProp.Price - <span style="text-transform: uppercase">@Model.currentProp.Method</span></span>
                             <div>
-                                @Model.currentProp.Description
+                                @Html.Raw(@Model.currentProp.Description)
                             </div>
                             <h4>Propery Features</h4>
                             <ul>
