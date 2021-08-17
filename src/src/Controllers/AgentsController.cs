@@ -36,7 +36,7 @@ namespace src.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (file.Length > 0)
+                    if (file != null)
                     {
                         var filepath = Path.Combine("wwwroot/images", file.FileName);
                         var stream = new FileStream(filepath, FileMode.Create);

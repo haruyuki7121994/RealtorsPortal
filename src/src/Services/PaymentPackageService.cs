@@ -8,7 +8,7 @@ using src.Repository;
 namespace src.Services
 {
     
-    public class PaymentPackageService:IPaymentPackageService
+    public class PaymentPackageService : IPaymentPackageService
     {
         private RealtorContext context;
         public PaymentPackageService(RealtorContext context)
@@ -50,9 +50,50 @@ namespace src.Services
             return context.PaymentPackage.ToList();
         }
 
+        public List<PaymentPackage> FindByStatus(int status)
+        {
+            return (from pp in context.PaymentPackage
+                    join p in context.Packages on pp.Package_id equals p.Id
+                    join cus in context.Customers on pp.Customer_id equals cus.Id
+                    where pp.Status == status
+                    select new PaymentPackage
+                    {
+                        Id = pp.Id,
+                        Limit_ads = pp.Limit_ads,
+                        Limit_featured_ads = pp.Limit_featured_ads,
+                        Used_ads = pp.Used_ads,
+                        Used_featured_ads = pp.Used_featured_ads,
+                        PackageName = p.Name,
+                        Status = pp.Status,
+                        Customer = cus,
+                        Package = p,
+                        Payment_price = pp.Payment_price,
+                        Transaction_id = pp.Transaction_id,
+                        Created_at = pp.Created_at,
+                        Updated_at = pp.Updated_at
+                    }).OrderByDescending(p => p.Id).ToList();
+        }
+
         public PaymentPackage fineOne(int id)
         {
-            PaymentPackage Payment_package = context.PaymentPackage.SingleOrDefault(a => a.Id.Equals(id));
+            var Payment_package = (from pp in context.PaymentPackage
+                        join p in context.Packages on pp.Package_id equals p.Id
+                        join cus in context.Customers on pp.Customer_id equals cus.Id
+                        where pp.Id == id
+                        select new PaymentPackage
+                        {
+                            Id = pp.Id,
+                            Limit_ads = pp.Limit_ads,
+                            Limit_featured_ads = pp.Limit_featured_ads,
+                            Used_ads = pp.Used_ads,
+                            Used_featured_ads = pp.Used_featured_ads,
+                            PackageName = p.Name,
+                            Status = pp.Status,
+                            Customer = cus,
+                            Package = p,
+                            Payment_price = pp.Payment_price,
+                            Transaction_id = pp.Transaction_id,
+                        }).SingleOrDefault();
             if (Payment_package != null)
             {
                 return Payment_package;
@@ -73,6 +114,9 @@ namespace src.Services
                 editPayment_package.Status = payment_package.Status;
                 editPayment_package.Customer_id = payment_package.Customer_id;
                 editPayment_package.Package_id = payment_package.Package_id;
+                editPayment_package.Used_ads = payment_package.Used_ads;
+                editPayment_package.Used_featured_ads = payment_package.Used_featured_ads;
+                editPayment_package.Updated_at = payment_package.Updated_at;
 
                 context.SaveChanges();
             }
@@ -165,11 +209,55 @@ namespace src.Services
 
         public bool UpdateUsedAdsForCustomer(int customerId, bool featuredAds = false)
         {
-            var payment = context.PaymentPackage.Where(pp =>
-                            pp.Customer_id.Equals(customerId) &&
-                            pp.Status.Equals(PaymentPackage.APPROVED_STATUS))
-                        .OrderByDescending(pp => pp.Updated_at)
-                        .FirstOrDefault();
+            var payment = new PaymentPackage();
+            if (featuredAds)
+            {
+                payment = (from p in context.PaymentPackage
+                            join p2 in context.PaymentPackage on p.Id equals p2.Id
+                            where p.Customer_id.Equals(customerId) && 
+                            p.Status.Equals(PaymentPackage.APPROVED_STATUS) &&
+                            p.Limit_featured_ads != p2.Used_featured_ads
+                           select new PaymentPackage 
+                            {
+                                Id = p.Id,
+                                Updated_at = p.Updated_at,
+                                Used_featured_ads = p.Used_featured_ads,
+                                Used_ads = p.Used_ads,
+                                Limit_ads = p.Limit_ads,
+                                Limit_featured_ads = p.Limit_featured_ads,
+                                Status = p.Status,
+                                Customer_id = p.Customer_id,
+                                Package_id = p.Package_id,
+                                Created_at = p.Created_at,
+                                Payment_price = p.Payment_price,
+                                Transaction_id = p.Transaction_id
+                            }).OrderByDescending(p => p.Updated_at)
+                            .FirstOrDefault();
+            }
+            else
+            {
+                payment = (from p in context.PaymentPackage
+                            join p2 in context.PaymentPackage on p.Id equals p2.Id
+                            where p.Customer_id.Equals(customerId) &&
+                            p.Status.Equals(PaymentPackage.APPROVED_STATUS) &&
+                            p.Limit_ads != p2.Limit_featured_ads
+                            select new PaymentPackage
+                            {
+                                Id = p.Id,
+                                Updated_at = p.Updated_at,
+                                Used_featured_ads = p.Used_featured_ads,
+                                Used_ads = p.Used_ads,
+                                Limit_ads = p.Limit_ads,
+                                Limit_featured_ads = p.Limit_featured_ads,
+                                Status = p.Status,
+                                Customer_id = p.Customer_id,
+                                Package_id = p.Package_id,
+                                Created_at = p.Created_at,
+                                Payment_price = p.Payment_price,
+                                Transaction_id = p.Transaction_id
+                            }).OrderByDescending(p => p.Updated_at)
+                            .FirstOrDefault();
+            }
             if (payment != null)
             {
                 if (featuredAds)
@@ -185,7 +273,8 @@ namespace src.Services
                 {
                     payment.Status = PaymentPackage.EXPIRED_STATUS;
                 }
-                context.SaveChanges();
+                payment.Updated_at = DateTime.Now;
+                this.updatePaymentPackage(payment);
                 return true;
             }
             return false;

@@ -31,6 +31,11 @@ namespace src.Models
         public DateTime Updated_at {get; set;}
         public int Package_id { get; set; }
         public int Customer_id { get; set; }
+        [ForeignKey("Package_id")]
+        public Package Package { get; set; }
+
+        [ForeignKey("Customer_id")]
+        public Customer Customer { get; set; }
 
         [NotMapped]
         public string PackageName { get; set; }
