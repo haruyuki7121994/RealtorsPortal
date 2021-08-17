@@ -1,0 +1,154 @@
+﻿@model IEnumerable<src.Models.Property>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index</title>
+    <link rel="stylesheet" href="../bootstrap-4.5.3-dist/bootstrap-4.5.3-dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/1fdbb78d95.js" crossorigin="anonymous"></script>
+
+    <script src="../jquery/jquery-3.2.1.min.js"></script>
+    <script src="../bootstrap-4.5.3-dist/bootstrap-4.5.3-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+
+        .panel {
+            box-shadow: 0 2px 0 rgba(0,0,0,0.05);
+            border-radius: 0;
+            border: 0;
+            margin-bottom: 24px;
+        }
+
+        .panel-dark.panel-colorful {
+            background-color: #3b4146;
+            border-color: #3b4146;
+            color: #fff;
+        }
+
+        .panel-danger.panel-colorful {
+            background-color: #f76c51;
+            border-color: #f76c51;
+            color: #fff;
+        }
+
+        .panel-primary.panel-colorful {
+            background-color: #5fa2dd;
+            border-color: #5fa2dd;
+            color: #fff;
+        }
+
+        .panel-info.panel-colorful {
+            background-color: #4ebcda;
+            border-color: #4ebcda;
+            color: #fff;
+        }
+
+        .panel-body {
+            padding: 25px 20px;
+        }
+
+        .panel hr {
+            border-color: rgba(0,0,0,0.1);
+        }
+
+        .mar-btm {
+            margin-bottom: 15px;
+        }
+
+        h2, .h2 {
+            font-size: 28px;
+        }
+
+        .small, small {
+            font-size: 85%;
+        }
+
+        .text-sm {
+            font-size: .9em;
+        }
+
+        .text-thin {
+            font-weight: 300;
+        }
+
+        .text-semibold {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<div class="container">
+    <h1>Statistics</h1>
+    <br>
+    <div class="row">
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="panel panel-dark panel-colorful">
+                <div class="panel-body text-center">
+                    <p class="text-uppercase mar-btm text-sm">Payments received today</p>
+                    <i class="fab fa-cc-amazon-pay fa-5x"></i>
+                    <hr>
+                    <p class="h2 text-thin">254,487</p>
+                    <small><span class="text-semibold">7%</span> Higher than yesterday</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="panel panel-danger panel-colorful">
+                <div class="panel-body text-center">
+                    <p class="text-uppercase mar-btm text-sm">Unapproved</p>
+                    <i class="fas fa-lock fa-5x"></i>
+                    <hr>
+                    <p class="h2 text-thin">873</p>
+                    <small><span class="text-semibold"><i class="fas fa-lock"></i></i> 154</span> Unapproved</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="panel panel-primary panel-colorful">
+                <div class="panel-body text-center">
+                    <p class="text-uppercase mar-btm text-sm">Approved</p>
+                    <i class="fas fa-unlock fa-5x"></i>
+                    <hr>
+                    <p class="h2 text-thin">2,423</p>
+                    <small><span class="text-semibold"><i class="fas fa-unlock"></i> 954</span> Approved</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="panel panel-info panel-colorful">
+                <div class="panel-body text-center">
+                    <p class="text-uppercase mar-btm text-sm">Categories</p>
+                    <i class="fas fa-mouse-pointer fa-5x"></i>
+                    <hr>
+                    <p class="h2 text-thin">7,428</p>
+                    <small><span class="text-semibold"><i class="fas fa-mouse-pointer"></i> 2,675</span> Categories</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="panel panel-colorful" style="background-color: lightseagreen;">
+                <div class="panel-body text-center">
+                    <p style="color: white;" class="text-uppercase mar-btm text-sm">Sellers</p>
+                    <i style="color: white;" class="fas fa-user fa-5x"></i>
+                    <hr>
+                    <p style="color: white;" class="h2 text-thin">7,428</p>
+                    <small style="color: white;"><span class="text-semibold"><i class="fas fa-user"></i> 22,675</span> Users</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="panel panel panel-colorful" style="background-color: lightsteelblue;">
+                <div class="panel-body text-center">
+                    <p style="color: white;" class="text-uppercase mar-btm text-sm">Agents</p>
+                    <i style="color: white;" class="fas fa-building fa-5x"></i>
+                    <hr>
+                    <p style="color: white;" class="h2 text-thin">5,428</p>
+                    <small style="color: white;"><span class="text-semibold"><i class="fas fa-building"></i> 20,000</span> Agents</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
