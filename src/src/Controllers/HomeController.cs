@@ -23,7 +23,7 @@ namespace src.Controllers
         private readonly IAreaService _areaService;
         private readonly IImageService _imageService;
         private readonly ICommentService _commentService;
-
+        private readonly INotificationService _noti_services;
         public HomeController
         (
             ILogger<HomeController> logger,
@@ -34,7 +34,8 @@ namespace src.Controllers
             ICityService cityService,
             IAreaService areaService,
             IImageService imageService,
-            ICommentService commentService
+            ICommentService commentService,
+            INotificationService notificationService
         )
         {
             _logger = logger;
@@ -46,6 +47,7 @@ namespace src.Controllers
             this._areaService = areaService;
             this._imageService = imageService;
             this._commentService = commentService;
+            this._noti_services = notificationService;
         }
 
         public async Task<IActionResult>Index()
@@ -285,8 +287,34 @@ namespace src.Controllers
         {
             return View();
         }
+        
+        
+        [HttpGet]
         public IActionResult Contact()
         {
+            return View();
+        }
+        [HttpPost]
+        [ActionName("Contact")]
+        public IActionResult addContact(Notification noti)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _noti_services.addNoti(noti);
+                    Message = "Success";
+                    return RedirectToAction("Contact");
+                }
+                else
+                {
+                    Message = "Fail";
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.Msg = e.Message;
+            }
             return View();
         }
 

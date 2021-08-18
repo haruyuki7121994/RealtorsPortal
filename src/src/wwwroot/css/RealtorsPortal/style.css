@@ -452,9 +452,10 @@ img {
 ====================*/
 
 #aa-slider {
-  float: left;
-  display: inline;
-  width: 100%;
+    
+    float: left;
+    display: inline;
+    width: 100%;
 }
 #aa-slider .aa-slider-area {
   display: inline;
@@ -493,7 +494,8 @@ img {
   position: relative;
 }
 #aa-slider .aa-slider-area .aa-top-slider .aa-top-slider-single img {
-  width: 100%;
+  
+  width: 1348px;
   height: 700px;
 }
 #aa-slider .aa-slider-area .aa-top-slider .aa-top-slider-single .aa-top-slider-content {
