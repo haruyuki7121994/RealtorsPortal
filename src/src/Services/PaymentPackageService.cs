@@ -126,6 +126,30 @@ namespace src.Services
                    
         }
 
+        public List<PaymentPackage> FindByStatus(int status)
+        {
+            return (from pp in context.PaymentPackage
+                    join p in context.Packages on pp.Package_id equals p.Id
+                    join cus in context.Customers on pp.Customer_id equals cus.Id
+                    where pp.Status == status
+                    select new PaymentPackage
+                    {
+                        Id = pp.Id,
+                        Limit_ads = pp.Limit_ads,
+                        Limit_featured_ads = pp.Limit_featured_ads,
+                        Used_ads = pp.Used_ads,
+                        Used_featured_ads = pp.Used_featured_ads,
+                        PackageName = p.Name,
+                        Status = pp.Status,
+                        Customer = cus,
+                        Package = p,
+                        Payment_price = pp.Payment_price,
+                        Transaction_id = pp.Transaction_id,
+                        Created_at = pp.Created_at,
+                        Updated_at = pp.Updated_at
+                    }).OrderByDescending(p => p.Id).ToList();
+        }
+
         public PaymentPackage AddTrialPaymentPackageForCustomer(int customerId)
         {
             var trialPackage = context.Packages.SingleOrDefault(p => p.Name == "Trial" && p.Is_active.Equals(true));
