@@ -23,22 +23,25 @@
 <!-- End Proerty header  -->
 <div class="clearfix"></div>
 <div style="margin-top: 20px">
-    @{
-        if (ViewBag.error != null)
-        {
-            <div class="error-blog">
-                <h1>@ViewBag.error</h1>
-            </div>
-        }
-        if (TempData.Peek("Message") != null)
-        {
-            <div class="error-blog">
-                <h3>Message: @TempData.Peek("Message")</h3>
-            </div>
-        }
-    }
+    
     <div class="container">
+        <div class="row">@Html.ActionLink("Back", "Index", "Customer", null, new { @class = "btn btn-danger" })</div>
         <div class="row">
+            @{
+                if (ViewBag.error != null)
+                {
+                    <div class="error-blog">
+                        <h1>@ViewBag.error</h1>
+                    </div>
+                }
+                if (TempData.Peek("Message") != null)
+                {
+                    <div class="error-blog">
+                        <h3>Message: @TempData.Peek("Message")</h3>
+                    </div>
+                }
+            }
+
             @foreach (var item in Model)
             {
                 <div class="card col-md-4">

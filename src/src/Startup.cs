@@ -57,6 +57,7 @@ namespace src
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IConfigurationService, ConfigurationService>();
             services.AddScoped<IStaticService, StaticService>();
+            services.AddScoped<ICommentService, CommentService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

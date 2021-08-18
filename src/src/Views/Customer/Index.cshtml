@@ -74,6 +74,46 @@
         </div>
 
         <div class="row">
+            <h1>Contact Infomation</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-12 wrapper-custom" style="margin: 0px">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>You are @Model.Customer.Type</td>
+                        </tr>
+                        <tr>
+                            @if (Model.Customer.Has_contact_form)
+                            {
+                                <td>You are using contact form for viewer</td>
+                            }
+                            else
+                            {
+                                <td>Your contact information is @Model.Customer.Email</td>
+                            }
+                        </tr>
+                        @if (Model.Customer.Type == "agent")
+                        {
+                            @if (Model.Customer.Has_contact_form)
+                            {
+                                <tr>
+                                    <td>@Html.ActionLink("Use Email for contact", "Profile", "Customer", null, new { @class = "btn btn-primary"})</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>@Html.ActionLink("Enable contact form", "Profile", "Customer", null, new { @class = "btn btn-primary" })</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
             <h1>List Packages</h1>
         </div>
         <div class="row">
@@ -161,37 +201,45 @@
                         @foreach (var item in Model.Properties)
                         {
                             <tr>
+                                <td>
+                                    @item.Title
+                                </td>
+                                <td>
+                                    @item.Created_at
+                                </td>
+                                <td>
+                                    @item.Ended_at
+                                </td>
+                                @if (item.Is_featured)
+                                {
+                                    <td><span class="label label-success">@item.Is_featured</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="label label-danger">@item.Is_featured</span></td>
+                                }
+                                @if (item.Is_active)
+                                {
+                                    <td><span class="label label-success">@item.Is_active</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="label label-danger">@item.Is_active</span></td>
+                                }
                             <td>
-                                @item.Title
+                                <a asp-action="Edit" asp-controller="Customer" class="label label-primary" asp-route-id="@item.Id">Details</a> 
+                                <a asp-action="Gallary" asp-controller="Customer" class="label label-success" asp-route-id="@item.Id">Gallary</a> 
+                                <a asp-action="Delete" asp-controller="Customer" class="label label-danger" onclick="return confirm('Do you really want delete the property ?')" asp-route-id="@item.Id">Delete</a> 
+                                @if (Model.Customer.Has_contact_form)
+                                {
+                                    <a asp-action="Comments" asp-controller="Customer" class="label label-warning" asp-route-id="@item.Id">Comments</a>
+                                }
+                                @if (item.Is_active)
+                                {
+                                    @Html.ActionLink("View", "Property", "Home", new {id = item.Id}, new {@class = "label label-default"})
+                                }
                             </td>
-                            <td>
-                                @item.Created_at
-                            </td>
-                            <td>
-                                @item.Ended_at
-                            </td>
-                            @if (item.Is_featured)
-                            {
-                                <td><span class="label label-success">@item.Is_featured</span></td>
-                            }
-                            else
-                            {
-                                <td><span class="label label-danger">@item.Is_featured</span></td>
-                            }
-                            @if (item.Is_active)
-                            {
-                                <td><span class="label label-success">@item.Is_active</span></td>
-                            }
-                            else
-                            {
-                                <td><span class="label label-danger">@item.Is_active</span></td>
-                            }
-                            <td>
-                                <a asp-action="Edit" asp-controller="Customer" class="label label-primary" asp-route-id="@item.Id">Details</a> |
-                                <a asp-action="Gallary" asp-controller="Customer" class="label label-success" asp-route-id="@item.Id">Gallary</a> |
-                                <a asp-action="Delete" asp-controller="Customer" class="label label-danger" onclick="return confirm('Do you really want delete the property ?')" asp-route-id="@item.Id">Delete</a>
-                            </td>
-                        </tr>
+                            </tr>
                         }
                     </tbody>
                 </table>

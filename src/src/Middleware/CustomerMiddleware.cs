@@ -10,14 +10,6 @@ namespace src.Middleware
     {
         private readonly RequestDelegate _next;
 
-        private readonly string[] listUrl = {
-            "/Customer",
-            "/Customer/Index",
-            "/Customer/Profile",
-            "/Customer/Package",
-            "/Customer/Create"
-        };
-
         public CustomerMiddleware(RequestDelegate next)
         {
             _next = next;
@@ -50,14 +42,7 @@ namespace src.Middleware
 
         private bool CheckUrl(string path)
         {
-            foreach (var item in listUrl)
-            {
-                if (path == item)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return path.Contains("Customer");
         }
     }
 }

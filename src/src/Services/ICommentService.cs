@@ -13,5 +13,6 @@ namespace src.Services
         void addComment(Comment comment);
         void updateComment(Comment comment);
         void deleteComment(int id);
+        List<Comment> FindByPropId(int id);
     }
 }

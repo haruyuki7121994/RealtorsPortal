@@ -70,5 +70,10 @@ namespace src.Services
                 //do nothing
             }
         }
+
+        public List<Comment> FindByPropId(int id)
+        {
+            return context.Comments.Where(c => c.Property_id.Equals(id)).ToList();
+        }
     }
 }

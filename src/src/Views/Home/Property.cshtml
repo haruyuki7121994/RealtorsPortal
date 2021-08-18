@@ -1,4 +1,4 @@
-﻿@model dynamic
+﻿@model src.Models.PropertyPageModel
 @{
     Layout = "~/Views/Shared/_RealtorsPortalLayout.cshtml";
     ViewData["Title"] = "Property Page";
@@ -13,7 +13,7 @@
                     <h2>Details</h2>
                     <ol class="breadcrumb">
                         <li><a href="#">HOME</a></li>
-                        <li class="active">@Model.currentProp.Title</li>
+                        <li class="active">@Model.Property.Title</li>
                     </ol>
                 </div>
             </div>
@@ -29,21 +29,21 @@
                 <div class="aa-properties-content">
                     <!-- Start properties content body -->
                     <div class="aa-properties-details">
-                        @if (Model.images.Count > 0)
+                        @if (Model.Gallary.Count > 0)
                         {
                             <div class="aa-properties-details-img">
-                                @foreach (var item in Model.images)
+                                @foreach (var item in Model.Gallary)
                                 {
                                     <img width="750" height="500" style="height: none; object-fit: cover" src="~/@item.Url" alt="img">
                                 }
                             </div>
                         }
                         <div class="aa-properties-info">
-                            <h2>@Model.currentProp.Title</h2>
-                            <h4>@Model.currentProp.Country.Name, @Model.currentProp.Region.Name, @Model.currentProp.City.Name, @Model.currentProp.Area.Name</h4>
-                            <span class="aa-price">$@Model.currentProp.Price - <span style="text-transform: uppercase">@Model.currentProp.Method</span></span>
+                            <h2>@Model.Property.Title</h2>
+                            <h4>@Model.Property.Country.Name, @Model.Property.Region.Name, @Model.Property.City.Name, @Model.Property.Area.Name</h4>
+                            <span class="aa-price">$@Model.Property.Price - <span style="text-transform: uppercase">@Model.Property.Method</span></span>
                             <div>
-                                @Html.Raw(@Model.currentProp.Description)
+                                @Html.Raw(@Model.Property.Description)
                             </div>
                             <h4>Propery Features</h4>
                             <ul>
@@ -60,7 +60,7 @@
                                 <li>Security System</li>
                             </ul>
                             <h4>Property Thumbnail</h4>
-                            <img src="~/@Model.currentProp.Thumbnail_url" style="width: 100%" alt="Alternate Text" />
+                            <img src="~/@Model.Property.Thumbnail_url" style="width: 100%" alt="Alternate Text" />
                         </div>
                         <!-- Properties social share -->
                         <div class="aa-properties-social">
@@ -80,61 +80,22 @@
                             </div>
                             <div class="aa-nearby-properties-area">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <article class="aa-properties-item">
-                                            <a class="aa-properties-item-img" href="#">
-                                                <img alt="img" src="~/img/item/1.jpg">
-                                            </a>
-                                            <div class="aa-tag for-sale">
-                                                For Sale
+                                    <div class="col-md-12">
+                                        @if (!Model.Property.Customer.Has_contact_form)
+                                        {
+                                            <div class="form-group">
+                                                <label class="control-label">Email</label>
+                                                <input value="@Model.Property.Customer.Email" type="email" class="form-control" />
                                             </div>
-                                            <div class="aa-properties-item-content">
-                                                <div class="aa-properties-info">
-                                                    <span>5 Rooms</span>
-                                                    <span>2 Beds</span>
-                                                    <span>3 Baths</span>
-                                                    <span>1100 SQ FT</span>
-                                                </div>
-                                                <div class="aa-properties-about">
-                                                    <h3><a href="#">Appartment Title</a></h3>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
-                                                </div>
-                                                <div class="aa-properties-detial">
-                                                    <span class="aa-price">
-                                                        $35000
-                                                    </span>
-                                                    <a class="aa-secondary-btn" href="#">View Details</a>
-                                                </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Phone</label>
+                                                <input value="@Model.Property.Customer.Contact" class="form-control" />
                                             </div>
-                                        </article>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <article class="aa-properties-item">
-                                            <a class="aa-properties-item-img" href="#">
-                                                <img alt="img" src="~/img/item/2.jpg">
-                                            </a>
-                                            <div class="aa-tag for-sale">
-                                                For Sale
-                                            </div>
-                                            <div class="aa-properties-item-content">
-                                                <div class="aa-properties-info">
-                                                    <span>5 Rooms</span>
-                                                    <span>2 Beds</span>
-                                                    <span>3 Baths</span>
-                                                    <span>1100 SQ FT</span>
-                                                </div>
-                                                <div class="aa-properties-about">
-                                                    <h3><a href="#">Appartment Title</a></h3>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim molestiae vero ducimus quibusdam odit vitae.</p>
-                                                </div>
-                                                <div class="aa-properties-detial">
-                                                    <span class="aa-price">
-                                                        $35000
-                                                    </span>
-                                                    <a class="aa-secondary-btn" href="#">View Details</a>
-                                                </div>
-                                            </div>
-                                        </article>
+                                        }
+                                        else
+                                        {
+                                            @await Html.PartialAsync("CommentProperty", Model.Comment)
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -150,7 +111,7 @@
                     <!-- Start Single properties sidebar -->
                     <div class="aa-properties-single-sidebar">
                         <h3>Featured Properties</h3>
-                        @foreach (var item in Model.featuredProps)
+                        @foreach (var item in Model.FeaturedProps)
                         {
                             <div class="media">
                                 <div class="media-left">

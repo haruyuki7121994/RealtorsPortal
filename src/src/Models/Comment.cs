@@ -16,7 +16,7 @@ namespace src.Models
         public string Title { get; set; }
         [Required]
         public string Description { get; set; }
-        [EmailAddress]
+        [Required, EmailAddress]
         public string Email { get; set; }
         public int Property_id { get; set; }
     }
