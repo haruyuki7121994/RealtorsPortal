@@ -244,7 +244,30 @@ namespace src.Controllers
         {
             return View();
         }
-     
+        public IActionResult Blog3()
+        {
+            return View();
+        }
+        public IActionResult Blog4()
+        {
+            return View();
+        }
+        public IActionResult Blog5()
+        {
+            return View();
+        }
+        public IActionResult Blog6()
+        {
+            return View();
+        }
+        public IActionResult Blog7()
+        {
+            return View();
+        }
+        public IActionResult Blog8()
+        {
+            return View();
+        }
         public IActionResult Contact()
         {
             return View();
