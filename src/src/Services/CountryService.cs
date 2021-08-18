@@ -34,6 +34,7 @@ namespace src.Services
                 else
                 {
                     c.Name = country.Name;
+                  
                     await _context.SaveChangesAsync();
 
                 }
@@ -71,9 +72,6 @@ namespace src.Services
             }
             return country;
         }
-        public async Task<IEnumerable<Country>> GetCountryByActive(bool active = false)
-        {
-            return await _context.Countries.ToListAsync();
-        }
+     
     }
 }

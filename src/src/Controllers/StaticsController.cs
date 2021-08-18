@@ -25,14 +25,15 @@ namespace src.Controllers
             this.propertyService = propertyService;
             this.paymentPackageService = paymentPackageService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var properties = customerService.findAll();
             var customers = customerService.findAll();
 
             var activeProperties = properties.Where(p => p.Is_active.Equals(true)).Count();
             var inactiveProperties = properties.Where(p => p.Is_active.Equals(false)).Count();
-            var countCategories = categoryService.findAll().Count();
+            var countCategories = (await categoryService.GetCategories()).Count();
+           
             var countSellers = customers.Where(c => c.Type.Equals("private")).Count();
             var countAgents = customers.Where(c => c.Type.Equals("agent")).Count();
 

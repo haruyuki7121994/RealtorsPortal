@@ -33,13 +33,13 @@ namespace src
 
             services.AddOptions();
 
-            string uri = "server=DESKTOP-7UKA67O;database=RealtorsPortalDB;uid=sa;pwd=123456";
+            string uri = "Data Source=MYCOMPUTERABCD\\SQLEXPRESS;Initial Catalog=RealtorsPortalDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<RealtorContext>(options => options.UseSqlServer(uri));
-                
+
             //services.AddDbContext<RealtorContext>(options => {
             //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             //});
-            
+
 
             services.AddSession();
 
@@ -94,6 +94,9 @@ namespace src
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                   name: "Admin",
+                   pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

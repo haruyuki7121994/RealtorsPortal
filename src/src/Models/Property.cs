@@ -49,12 +49,13 @@ namespace src.Models
         [
             Range(0, 100000000000000)
         ]
-        public float Deposit { get; set; }
+        public float? Deposit { get; set; }
         [DisplayName("Featured")]
         public bool Is_featured { get; set; }
+        [DisplayName("Active")]
         public bool Is_active { get; set; }
         public DateTime Created_at { get; set; }
- [DisplayName("End At")]
+        [DisplayName("End At")]
         public DateTime Ended_at { get; set; }
 
         [Required]

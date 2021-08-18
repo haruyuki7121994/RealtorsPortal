@@ -123,7 +123,7 @@ namespace src.Controllers
             if (canCreateAds)
             {
                 //get dependencies
-                ViewBag.Categories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+                ViewBag.Categories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
                 ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
                 return View();
             }
@@ -143,7 +143,7 @@ namespace src.Controllers
             if (canCreateAds)
             {
                 //get dependencies
-                ViewBag.Categories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+                ViewBag.Categories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
                 ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
                 return View();
             }
@@ -194,7 +194,7 @@ namespace src.Controllers
             {
                 ViewBag.error = e.Message;
             }
-            ViewBag.Categories = new SelectList(_categoryService.findAll(), "Id", "Name");
+            ViewBag.Categories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
             ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
             return View("Create");
         }
@@ -205,7 +205,7 @@ namespace src.Controllers
             var cus = GetCustomerFromSession();
             if (property.Customer_id == cus.Id)
             {
-                ViewBag.Categories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+                ViewBag.Categories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
                 ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
                 return View(property);
             }
@@ -254,7 +254,7 @@ namespace src.Controllers
             {
                 ViewBag.error = e.Message;
             }
-            ViewBag.Categories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+            ViewBag.Categories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
             ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
             return View(property);
         }
