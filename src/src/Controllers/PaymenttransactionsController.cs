@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using src.Models;
 
 namespace src.Controllers
 {
@@ -25,6 +26,11 @@ namespace src.Controllers
                 var res = result.Where(e => e.Created_at >= startdate && e.Created_at <= enddate);
                 return View(res);
             }
+        }
+
+        public IActionResult Details(int id)
+        {
+            return View(services.GetDetails(id));
         }
     }
 }

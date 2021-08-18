@@ -134,6 +134,7 @@ namespace src.Services
                         join c in _context.Cities on a.City_id equals c.Id
                         join re in _context.Regions on c.Region_id equals re.Id
                         join cou in _context.Countries on re.Country_id equals cou.Id
+                        join cus in _context.Customers on p.Customer_id equals cus.Id
                         where p.Id == id
                         select new Property
                         {
@@ -157,6 +158,7 @@ namespace src.Services
                             City = c,
                             Country = cou,
                             Area = a,
+                            Customer = cus
                         };
             return query.FirstOrDefault();
         }

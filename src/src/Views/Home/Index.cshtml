@@ -9,50 +9,11 @@
     <div class="aa-slider-area">
         <!-- Top slider -->
         <div class="aa-top-slider">
-            @if (Model.featuredProps.Count > 0)
-            {
-                foreach (var item in Model.featuredProps)
-                {
-                    <!-- Top slider single slide -->
-                    <div class="aa-top-slider-single">
-                        @if (item.Thumbnail_url != null)
-                        {
-                            <img width="1920" height="1080" style="object-fit: cover" src="~/@item.Thumbnail_url" alt="img">
-                        }
-                        else
-                        {
-                            <img src="~/img/property-header-bg.jpg" alt="img">
-                        }
-                        <!-- Top slider content -->
-                        <div class="aa-top-slider-content">
-                            <span class="aa-top-slider-catg">@item.Title</span>
-                            <p class="aa-top-slider-location"><i class="fa fa-map-marker"></i>@item.Country.Name, @item.Region.Name, @item.City.Name, @item.Area.Name</p>
-                            <p class="aa-top-slider-price">$@item.Price</p>
-                            @Html.ActionLink("View Details", "Property", "Home", new { id = item.Id }, new { @class = "aa-secondary-btn" })
-                        </div>
-                        <!-- / Top slider content -->
-                    </div>
-                    <!-- / Top slider single slide -->
-                }
-            }
-            else
-            {
-                <!-- Top slider single slide -->
-                <div class="aa-top-slider-single">
-                    <img src="~/img/slider/3.jpg" alt="img">
-                    <!-- Top slider content -->
-                    <div class="aa-top-slider-content">
-                        <span class="aa-top-slider-catg">Duplex</span>
-                        <h2 class="aa-top-slider-title">1560 Square Feet</h2>
-                        <p class="aa-top-slider-location"><i class="fa fa-map-marker"></i>South Beach, Miami (USA)</p>
-                        <span class="aa-top-slider-off">30% OFF</span>
-                        <p class="aa-top-slider-price">$460,000</p>
-                        <a href="#" class="aa-top-slider-btn">Read More <span class="fa fa-angle-double-right"></span></a>
-                    </div>
-                    <!-- / Top slider content -->
-                </div>
-                <!-- / Top slider single slide -->
-            }
+            <!-- Top slider single slide -->
+            <div class="aa-top-slider-single">
+                <img src="~/img/slider/3.jpg" alt="img">
+            </div>
+            <!-- / Top slider single slide -->
         </div>
     </div>
 </section>
@@ -147,12 +108,12 @@
     <div class="container">
         <div class="aa-latest-property-area">
             <div class="aa-title">
-                <h2>Latest Properties</h2>
+                <h2>Featured Properties</h2>
                 <span></span>
             </div>
             <div class="aa-latest-properties-content">
                 <div class="row">
-                    @foreach (var item in Model.lastestProps)
+                    @foreach (var item in Model.featuredProps)
                     {
                         <div class="col-md-4">
                             <article class="aa-properties-item">

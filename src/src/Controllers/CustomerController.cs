@@ -28,6 +28,7 @@ namespace src.Controllers
         private readonly IPaymentPackageService _paymentPackageService;
         private readonly IPackageService _packageService;
         private readonly IImageService _imageService;
+        private readonly ICommentService _commentService;
         public CustomerController
         (
             ICustomerService customerService,
@@ -39,7 +40,8 @@ namespace src.Controllers
             IAreaService areaService,
             IPaymentPackageService paymentPackageService,
             IPackageService packageService,
-            IImageService imageService
+            IImageService imageService,
+            ICommentService commentService
         )
         {
             this._customerService = customerService;
@@ -52,6 +54,7 @@ namespace src.Controllers
             this._paymentPackageService = paymentPackageService;
             this._packageService = packageService;
             this._imageService = imageService;
+            this._commentService = commentService;
         }
 
         [TempData]
@@ -183,10 +186,8 @@ namespace src.Controllers
                         Message = "Add Property Successful";
                         return RedirectToAction("Index");
                     }
-                    else
-                    {
-                        ViewBag.error = "Fail";
-                    }
+
+                    ViewBag.error = "Fail";
                 }
             }
             catch (Exception e)
@@ -385,6 +386,19 @@ namespace src.Controllers
             return View();
         }
 
+        public IActionResult Comments(int id)
+        {
+            var comments = _commentService.FindByPropId(id);
+            if (comments.Count() > 0)
+            {
+                return View(comments);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
         public Customer GetCustomerFromSession()
         {
             if (HttpContext.Session.GetString("customer") != null)
@@ -393,6 +407,11 @@ namespace src.Controllers
                 return JsonConvert.DeserializeObject<Customer>(jsonCus);
             }
             return null;
+        }
+
+        public void SetCustomerFromSession(Customer customer)
+        {
+            HttpContext.Session.SetString("customer", JsonConvert.SerializeObject(customer));
         }
 
         public async Task<IEnumerable<Country>> GetCountries()

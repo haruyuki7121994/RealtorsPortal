@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using src.Config;
+using src.Models;
 
 namespace src.Services
 {
@@ -25,7 +26,17 @@ namespace src.Services
                 (
                     customerEmail,
                     "[Realtors Portal] Account verification email!",
-                    $"Hello! Thanks for register account!\n Please click below link to complete register account. \n {confirmUrl}"
+                    $"Hello! Thanks for register account!\n Please click below link to complete register account. \n {confirmUrl}\nRealtors Portal."
+                );
+        }
+
+        public bool SendEmailExpiredNotification(Package package, string customerEmail)
+        {
+            return SendEmail
+                (
+                    customerEmail,
+                    "[Realtors Portal] Package Expired!",
+                    $"We would like to inform you that your package [{package.Name}] has expired!\n You can sign up for renewal or buy for a new package. \n Thank you for using our service!\nRealtors Portal."
                 );
         }
 

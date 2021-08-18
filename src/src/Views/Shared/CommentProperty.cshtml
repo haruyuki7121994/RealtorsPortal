@@ -1,0 +1,36 @@
+﻿@model src.Models.Comment
+@{
+    if (ViewBag.Msg != null)
+    {
+        <div class="error-blog">
+            <h1>@ViewBag.Msg</h1>
+        </div>
+    }
+    if (TempData.Peek("Message") != null)
+    {
+        <div class="error-blog">
+            <h3>Message: @TempData.Peek("Message")</h3>
+        </div>
+    }
+}
+<form asp-action="Comment" asp-controller="Home" method="post">
+    <input asp-for="Property_id" value="@ViewBag.Property_id" type="hidden" class="form-control" />
+    <div class="form-group">
+        <label asp-for="Email" class="control-label">Email</label>
+        <input asp-for="Email" type="email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Title" class="control-label">Title</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label">Description</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" name="submit" class="btn btn-primary" value="Send Message">
+    </div>
+</form>

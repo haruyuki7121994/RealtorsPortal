@@ -22,6 +22,7 @@ namespace src.Controllers
         private readonly ICityService _cityService;
         private readonly IAreaService _areaService;
         private readonly IImageService _imageService;
+        private readonly ICommentService _commentService;
 
         public HomeController
         (
@@ -32,7 +33,8 @@ namespace src.Controllers
             IRegionService regionService,
             ICityService cityService,
             IAreaService areaService,
-            IImageService imageService
+            IImageService imageService,
+            ICommentService commentService
         )
         {
             _logger = logger;
@@ -43,6 +45,7 @@ namespace src.Controllers
             this._cityService = cityService;
             this._areaService = areaService;
             this._imageService = imageService;
+            this._commentService = commentService;
         }
 
         public async Task<IActionResult>Index()
@@ -50,18 +53,12 @@ namespace src.Controllers
             var cagetories = new SelectList(_categoryService.findAll(true), "Id", "Name");
             var properties = _propertyService.FindAllWithRelation();
 
-            var lastestProps = properties.Where(p => p.Is_active.Equals(true))
-                .OrderByDescending(p => p.Created_at)
-                .Take(6)
-                .ToList();
-
             var featuredProps = properties.Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true))
                 .OrderByDescending(p => p.Created_at)
-                .Take(6)
+                .Take(9)
                 .ToList();
 
             dynamic model = new ExpandoObject();
-            model.lastestProps = lastestProps;
             model.featuredProps = featuredProps;
             model.categories = cagetories;
             return View(model);
@@ -210,27 +207,47 @@ namespace src.Controllers
             var prop = _propertyService.FindOneWithRelation(id);
             if (prop != null)
             {
-                var featuredProps = _propertyService.FindAllWithRelation();
-                featuredProps.Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true))
-                .OrderByDescending(p => p.Created_at)
-                .Take(10)
-                .ToList();
+                if (prop.Is_active.Equals(true))
+                {
+                    var properties = _propertyService.FindAllWithRelation().Where(p => p.Is_active.Equals(true));
 
-                var images = _imageService.FindByPropertyId(id);
+                    var featuredProps = properties.Where(p => p.Is_featured.Equals(true))
+                        .OrderByDescending(p => p.Created_at)
+                        .Take(10)
+                        .ToList();
 
-                dynamic model = new ExpandoObject();
-                model.currentProp = prop;
-                model.featuredProps = featuredProps;
-                model.images = images;
+                    var images = _imageService.FindByPropertyId(id);
 
-                return View(model);
+                    var model = new PropertyPageModel
+                    {
+                        Property = prop,
+                        FeaturedProps = featuredProps,
+                        Gallary = images
+                    };
+
+                    ViewBag.Property_id = prop.Id;
+
+                    return View(model);
+                }
             }
-            else
-            {
-                return RedirectToAction("Index");
-            }
+            return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public IActionResult Comment(Comment comment)
+        {
+            try
+            {
+                _commentService.addComment(comment);
+                Message = "Send Message Successful!";
+                return RedirectToAction("Property", new { id = comment.Property_id });
+            }
+            catch (Exception e)
+            {
+                ViewBag.Msg = e.Message;
+            }
+            return View();
+        }
         public IActionResult Blogs()
         {
             return View();
@@ -283,5 +300,8 @@ namespace src.Controllers
         {
             return await _countryService.GetCountries();
         }
+
+        [TempData]
+        public string Message { get; set; }
     }
 }
