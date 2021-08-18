@@ -50,7 +50,7 @@ namespace src.Controllers
 
         public async Task<IActionResult>Index()
         {
-            var cagetories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+            var cagetories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
             var properties = _propertyService.FindAllWithRelation();
 
             var featuredProps = properties.Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true))
@@ -88,7 +88,7 @@ namespace src.Controllers
                 .Take(3)
                 .ToList();
 
-            var cagetories = new SelectList(_categoryService.findAll(true), "Id", "Name");
+            var cagetories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
             var countries = new SelectList(await _countryService.GetCountries(), "Id", "Name") ;
 
             //filer method

@@ -31,7 +31,7 @@ namespace src.Controllers
        
         public async Task<IActionResult> Create()
         {
-            ViewData["Cities"] = new SelectList(await _cityService.GetCityByActive(true), "Id", "Name");
+            ViewData["Cities"] = new SelectList(await _cityService.GetCities(), "Id", "Name");
             return View();
         }
 
@@ -45,7 +45,7 @@ namespace src.Controllers
                 if (areRepo == null) return NotFound();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Cities"] = new SelectList(await _cityService.GetCityByActive(true), "Id", "Name", area.City_id);
+            ViewData["Cities"] = new SelectList(await _cityService.GetCities(), "Id", "Name", area.City_id);
             return View(area);
         }
 
@@ -59,7 +59,7 @@ namespace src.Controllers
             {
                 return NotFound();
             }
-            ViewData["Cities"] = new SelectList(await _cityService.GetCityByActive(true), "Id", "Name",area.City_id);
+            ViewData["Cities"] = new SelectList(await _cityService.GetCities(), "Id", "Name",area.City_id);
             return View(area);
         }
 
@@ -79,7 +79,7 @@ namespace src.Controllers
                 if (areRepo == null) return NotFound();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Cities"] = new SelectList(await _cityService.GetCityByActive(true), "Id", "Name", area.City_id);
+            ViewData["Cities"] = new SelectList(await _cityService.GetCities(), "Id", "Name", area.City_id);
             return View(area);
         }
         public async Task<IActionResult> Delete(int id)

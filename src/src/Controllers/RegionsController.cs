@@ -40,7 +40,7 @@ namespace src.Controllers
         public async Task<IActionResult> Create()
         {
 
-            IEnumerable<Country> cate = await _countryService.GetCountryByActive(true);
+            IEnumerable<Country> cate = await _countryService.GetCountries();
             SelectList cateList = new SelectList(cate,"Id","Name");
 
             ViewBag.Countries = cateList;
@@ -56,7 +56,7 @@ namespace src.Controllers
                 if (r == null) return NotFound();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Country_id"] = new SelectList(await _countryService.GetCountryByActive(true), "Id", "Id", region.Country_id);
+            ViewData["Country_id"] = new SelectList(await _countryService.GetCountries(), "Id", "Id", region.Country_id);
             return View(region);
         }
 
@@ -66,7 +66,7 @@ namespace src.Controllers
 
             var region = await _regionService.GetRegionById(id);
             if (region == null) return NotFound();
-            ViewData["Country_id"] = new SelectList(await _countryService.GetCountryByActive(true), "Id", "Name", region.Country_id);
+            ViewData["Country_id"] = new SelectList(await _countryService.GetCountries(), "Id", "Name", region.Country_id);
             return View(region);
         }
 
@@ -82,7 +82,7 @@ namespace src.Controllers
                 if (r == null) return NotFound();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Country_id"] = new SelectList(await _countryService.GetCountryByActive(true), "Id", "Id", region.Country_id);
+            ViewData["Country_id"] = new SelectList(await _countryService.GetCountries(), "Id", "Id", region.Country_id);
             return View(region);
         }
 
