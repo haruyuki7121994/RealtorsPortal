@@ -33,7 +33,7 @@ namespace src
 
             services.AddOptions();
 
-            string uri = "Data Source=MYCOMPUTERABCD\\SQLEXPRESS;Initial Catalog=RealtorsPortalDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            string uri = "server=.;database=RealtorsPortal;uid=sa;pwd=123";
             services.AddDbContext<RealtorContext>(options => options.UseSqlServer(uri));
 
             //services.AddDbContext<RealtorContext>(options => {
@@ -58,7 +58,7 @@ namespace src
             services.AddScoped<IConfigurationService, ConfigurationService>();
             services.AddScoped<IStaticService, StaticService>();
             services.AddScoped<ICommentService, CommentService>();
-
+            services.AddScoped<INotificationService, NotificationService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddControllersWithViews().AddJsonOptions(x =>

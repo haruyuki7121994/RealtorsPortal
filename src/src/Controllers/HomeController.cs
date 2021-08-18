@@ -24,6 +24,7 @@ namespace src.Controllers
         private readonly IImageService _imageService;
         private readonly ICommentService _commentService;
         private readonly IConfigurationService _configurationService;
+        private readonly INotificationService _noti_services;
 
         public HomeController
         (
@@ -37,6 +38,7 @@ namespace src.Controllers
             IImageService imageService,
             ICommentService commentService,
             IConfigurationService configurationService
+            INotificationService notificationService
         )
         {
             _logger = logger;
@@ -49,6 +51,7 @@ namespace src.Controllers
             this._imageService = imageService;
             this._commentService = commentService;
             this._configurationService = configurationService;
+            this._noti_services = notificationService;
         }
 
         public async Task<IActionResult>Index()
@@ -285,9 +288,58 @@ namespace src.Controllers
         {
             return View();
         }
-     
+        public IActionResult Blog3()
+        {
+            return View();
+        }
+        public IActionResult Blog4()
+        {
+            return View();
+        }
+        public IActionResult Blog5()
+        {
+            return View();
+        }
+        public IActionResult Blog6()
+        {
+            return View();
+        }
+        public IActionResult Blog7()
+        {
+            return View();
+        }
+        public IActionResult Blog8()
+        {
+            return View();
+        }
+        
+        
+        [HttpGet]
         public IActionResult Contact()
         {
+            return View();
+        }
+        [HttpPost]
+        [ActionName("Contact")]
+        public IActionResult addContact(Notification noti)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _noti_services.addNoti(noti);
+                    Message = "Success";
+                    return RedirectToAction("Contact");
+                }
+                else
+                {
+                    Message = "Fail";
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.Msg = e.Message;
+            }
             return View();
         }
 

@@ -16,9 +16,9 @@ namespace src.Models
         public string FromEmail { get; set; }
         [EmailAddress]
         public string ToEmail { get; set; }
-        [Required]
+        
         public string Reason { get; set; }
-        [Required]
+        
         public string Description { get; set; }
 
     }
