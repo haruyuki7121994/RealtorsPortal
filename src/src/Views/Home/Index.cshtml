@@ -104,7 +104,9 @@
 </section>
 <!-- / About us -->
 <!-- Latest property -->
-<section id="aa-latest-property">
+@if (Model.switchFeaturedAds == "enabled")
+{
+<div id="aa-lastest-property">
     <div class="container">
         <div class="aa-latest-property-area">
             <div class="aa-title">
@@ -152,9 +154,9 @@
                                     </div>
                                     <div class="aa-properties-detial">
                                         <span class="aa-price">
-                                            $ @item.Price
+                                            @Model.currency @item.Price
                                         </span>
-                                        @Html.ActionLink("View Details", "Property", "Home", new { id=item.Id }, new { @class = "aa-secondary-btn" })
+                                        @Html.ActionLink("View Details", "Property", "Home", new { id = item.Id }, new { @class = "aa-secondary-btn" })
                                     </div>
                                 </div>
                             </article>
@@ -164,7 +166,9 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+}
+
 <!-- / Latest property -->
 <!-- Service section -->
 <section id="aa-service">

@@ -40,7 +40,7 @@
                         </div>
                         <div class="aa-properties-detial">
                             <span class="aa-price">
-                                $ @item.Price
+                                @ViewBag.currency @item.Price
                             </span>
                             @Html.ActionLink("View Details", "Property", "Home", new { id = item.Id }, new { @class = "aa-secondary-btn" })
                         </div>
