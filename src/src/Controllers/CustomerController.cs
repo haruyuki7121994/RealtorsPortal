@@ -29,6 +29,7 @@ namespace src.Controllers
         private readonly IPackageService _packageService;
         private readonly IImageService _imageService;
         private readonly ICommentService _commentService;
+        private readonly IConfigurationService _configurationService;
         public CustomerController
         (
             ICustomerService customerService,
@@ -41,7 +42,8 @@ namespace src.Controllers
             IPaymentPackageService paymentPackageService,
             IPackageService packageService,
             IImageService imageService,
-            ICommentService commentService
+            ICommentService commentService,
+            IConfigurationService configurationService
         )
         {
             this._customerService = customerService;
@@ -55,6 +57,7 @@ namespace src.Controllers
             this._packageService = packageService;
             this._imageService = imageService;
             this._commentService = commentService;
+            this._configurationService = configurationService;
         }
 
         [TempData]
@@ -285,11 +288,13 @@ namespace src.Controllers
             return View(packages);
         }
 
-        public IActionResult Payment(string name)
+        public async Task<IActionResult> Payment(string name)
         {
             var package = _packageService.fineOne(name);
             if (package != null)
             {
+                var paypalKey = await _configurationService.GetConfigurationByObj("Paypal key");
+                ViewBag.paypalKey = paypalKey.Val;
                 return View(package);
             }
             Message = "Package Not Found!";

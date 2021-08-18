@@ -41,7 +41,7 @@
                         <div class="aa-properties-info">
                             <h2>@Model.Property.Title</h2>
                             <h4>@Model.Property.Country.Name, @Model.Property.Region.Name, @Model.Property.City.Name, @Model.Property.Area.Name</h4>
-                            <span class="aa-price">$@Model.Property.Price - <span style="text-transform: uppercase">@Model.Property.Method</span></span>
+                            <span class="aa-price">@ViewBag.currency @Model.Property.Price - <span style="text-transform: uppercase">@Model.Property.Method</span></span>
                             <div>
                                 @Html.Raw(@Model.Property.Description)
                             </div>
@@ -107,34 +107,38 @@
             </div>
             <!-- Start properties sidebar -->
             <div class="col-md-4">
-                <aside class="aa-properties-sidebar">
-                    <!-- Start Single properties sidebar -->
-                    <div class="aa-properties-single-sidebar">
-                        <h3>Featured Properties</h3>
-                        @foreach (var item in Model.FeaturedProps)
-                        {
-                            <div class="media">
-                                <div class="media-left">
-                                    <a href="/Home/Property/@item.Id">
-                                        @if (item.Thumbnail_url != null)
-                                        {
-                                            <img class="media-object" width="370" height="220" src="~/@item.Thumbnail_url" alt="img">
-                                        }
-                                        else
-                                        {
-                                            <img class="media-object" src="~/img/item/1.jpg" alt="img">
-                                        }
-                                    </a>
+                @if (ViewBag.switchFeaturedAds == "enabled")
+                {
+                    <aside class="aa-properties-sidebar">
+                        <!-- Start Single properties sidebar -->
+                        <div class="aa-properties-single-sidebar">
+                            <h3>Featured Properties</h3>
+                            @foreach (var item in Model.FeaturedProps)
+                            {
+                                <div class="media">
+                                    <div class="media-left">
+                                        <a href="/Home/Property/@item.Id">
+                                            @if (item.Thumbnail_url != null)
+                                            {
+                                                <img class="media-object" width="370" height="220" src="~/@item.Thumbnail_url" alt="img">
+                                            }
+                                            else
+                                            {
+                                                <img class="media-object" src="~/img/item/1.jpg" alt="img">
+                                            }
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 style="height: 20px; overflow: hidden" class="media-heading"><a href="#">@item.Title</a></h4>
+                                        <p style="height: 34px; overflow: hidden">@item.Description</p>
+                                        <span>$@item.Price</span>
+                                    </div>
                                 </div>
-                                <div class="media-body">
-                                    <h4 style="height: 20px; overflow: hidden" class="media-heading"><a href="#">@item.Title</a></h4>
-                                    <p style="height: 34px; overflow: hidden">@item.Description</p>
-                                    <span>$@item.Price</span>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </aside>
+                            }
+                        </div>
+                    </aside>
+                }
+
             </div>
         </div>
     </div>

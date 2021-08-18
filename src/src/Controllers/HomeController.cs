@@ -23,6 +23,7 @@ namespace src.Controllers
         private readonly IAreaService _areaService;
         private readonly IImageService _imageService;
         private readonly ICommentService _commentService;
+        private readonly IConfigurationService _configurationService;
 
         public HomeController
         (
@@ -34,7 +35,8 @@ namespace src.Controllers
             ICityService cityService,
             IAreaService areaService,
             IImageService imageService,
-            ICommentService commentService
+            ICommentService commentService,
+            IConfigurationService configurationService
         )
         {
             _logger = logger;
@@ -46,21 +48,29 @@ namespace src.Controllers
             this._areaService = areaService;
             this._imageService = imageService;
             this._commentService = commentService;
+            this._configurationService = configurationService;
         }
 
         public async Task<IActionResult>Index()
         {
+            var numberAdsPerPage = await _configurationService.GetConfigurationByObj("Number of ads per page");
+            var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Enable/Disable featured ads");
+            var currency = await _configurationService.GetConfigurationByObj("Currency symbol");
+
             var cagetories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
             var properties = _propertyService.FindAllWithRelation();
 
             var featuredProps = properties.Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true))
                 .OrderByDescending(p => p.Created_at)
-                .Take(9)
+                .Take(Int32.Parse(numberAdsPerPage.Val))
                 .ToList();
 
             dynamic model = new ExpandoObject();
             model.featuredProps = featuredProps;
             model.categories = cagetories;
+            model.currency = currency.Val;
+            model.switchFeaturedAds = switchFeaturedAds.Val;
+
             return View(model);
         }
 
@@ -81,11 +91,18 @@ namespace src.Controllers
             int? page
         )
         {
+            var numberAdsPerPage = await _configurationService.GetConfigurationByObj("Number of ads per page");
+            var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Enable/Disable featured ads");
+            var currency = await _configurationService.GetConfigurationByObj("Currency symbol");
+
+            ViewBag.currency = currency.Val;
+            ViewBag.switchFeaturedAds = switchFeaturedAds.Val;
+
             var properties = _propertyService.FindAllWithRelation().Where(p => p.Is_active.Equals(true));
 
             var featuredProps = properties.Where(p => p.Is_featured.Equals(true))
                 .OrderByDescending(p => p.Created_at)
-                .Take(3)
+                .Take(Int32.Parse(numberAdsPerPage.Val))
                 .ToList();
 
             var cagetories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
@@ -209,11 +226,18 @@ namespace src.Controllers
             {
                 if (prop.Is_active.Equals(true))
                 {
+                    var numberAdsPerPage = await _configurationService.GetConfigurationByObj("Number of ads per page");
+                    var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Enable/Disable featured ads");
+                    var currency = await _configurationService.GetConfigurationByObj("Currency symbol");
+
+                    ViewBag.currency = currency.Val;
+                    ViewBag.switchFeaturedAds = switchFeaturedAds.Val;
+
                     var properties = _propertyService.FindAllWithRelation().Where(p => p.Is_active.Equals(true));
 
                     var featuredProps = properties.Where(p => p.Is_featured.Equals(true))
                         .OrderByDescending(p => p.Created_at)
-                        .Take(10)
+                        .Take(Int32.Parse(numberAdsPerPage.Val))
                         .ToList();
 
                     var images = _imageService.FindByPropertyId(id);

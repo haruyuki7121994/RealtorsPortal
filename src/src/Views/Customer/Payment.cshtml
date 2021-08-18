@@ -4,8 +4,6 @@
     ViewData["Title"] = "Payment Package Page";
 }
 }
-<style>
-</style>
 <!-- Start Proerty header  -->
 <section id="aa-property-header">
     <div class="container">
@@ -118,7 +116,7 @@
             },
 
             client: {
-                sandbox: 'AUELQQJ1ve7xZFKkNyWutZIKUOZsMpBlF5C-XFje2XDMYuZs5yymnA5WYbLw8V7OYPws5wMUBIW0ogLW',
+                sandbox: @ViewBag.paypalKey,
                 production: '<insert production client id>'
             },
 
