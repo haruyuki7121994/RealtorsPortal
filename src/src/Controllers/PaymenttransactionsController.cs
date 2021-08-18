@@ -30,7 +30,7 @@ namespace src.Controllers
 
         public IActionResult Details(int id)
         {
-            return View(services.GetDetails(id));
+            return View(services.fineOne(id));
         }
     }
 }
