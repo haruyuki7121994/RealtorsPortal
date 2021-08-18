@@ -37,7 +37,7 @@ namespace src.Controllers
             IAreaService areaService,
             IImageService imageService,
             ICommentService commentService,
-            IConfigurationService configurationService
+            IConfigurationService configurationService,
             INotificationService notificationService
         )
         {
