@@ -47,7 +47,23 @@ namespace src.Services
 
         public List<PaymentPackage> findAll()
         {
-            return context.PaymentPackage.ToList();
+            return (from pp in context.PaymentPackage
+                   join p in context.Packages on pp.Package_id equals p.Id
+                   join cus in context.Customers on pp.Customer_id equals cus.Id
+                   select new PaymentPackage
+                   {
+                       Id = pp.Id,
+                       Limit_ads = pp.Limit_ads,
+                       Limit_featured_ads = pp.Limit_featured_ads,
+                       Used_ads = pp.Used_ads,
+                       Used_featured_ads = pp.Used_featured_ads,
+                       PackageName = p.Name,
+                       Status = pp.Status,
+                       Package_id = pp.Package_id,
+                       Created_at = pp.Created_at,
+                       Package = p,
+                       Customer = cus
+                   }).ToList();
         }
 
         public PaymentPackage GetDetails(int id)
@@ -120,7 +136,9 @@ namespace src.Services
                             Used_ads = pp.Used_ads,
                             Used_featured_ads = pp.Used_featured_ads,
                             PackageName = p.Name,
-                            Status =  pp.Status
+                            Status =  pp.Status,
+                            Package_id = pp.Package_id,
+                            Created_at = pp.Created_at
                         };
             return query.ToList();
                    
@@ -164,7 +182,7 @@ namespace src.Services
                     Transaction_id = $"Trial{timestamp}",
                     Limit_ads = trialPackage.Limit_ads,
                     Limit_featured_ads = trialPackage.Limit_featured_ads,
-                    Status = PaymentPackage.APPROVED_STATUS,
+                    Status = PaymentPackage.PENDING_STATUS,
                     Payment_price = trialPackage.Price,
                     Created_at = current,
                     Updated_at = current

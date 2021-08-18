@@ -10,7 +10,7 @@ namespace src.Services
     {
         Task<IEnumerable<Region>> GetRegions();
         Task<IEnumerable<Region>> GetRegionsByCountryId(int id);
-        Task<IEnumerable<Region>> GetRegionByActive(bool active = false);
+       
         Task<Region> GetRegionById(int id);
         Task<Region> CreateEditRegion(Region region);
         Task<bool> DeleteRegion(int id);

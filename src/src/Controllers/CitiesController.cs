@@ -31,7 +31,7 @@ namespace src.Controllers
         
         public async Task<IActionResult> Create()
         {
-            ViewData["Regions"] = new SelectList(await _regionService.GetRegionByActive(true), "Id", "Name"); ;
+            ViewData["Regions"] = new SelectList(await _regionService.GetRegions(), "Id", "Name"); ;
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace src.Controllers
             {
                 return NotFound();
             }
-            ViewData["Regions"] = new SelectList(await _regionService.GetRegionByActive(true), "Id", "Name", city.Region_id);
+            ViewData["Regions"] = new SelectList(await _regionService.GetRegions(), "Id", "Name", city.Region_id);
             return View(city);
         }
 
@@ -84,8 +84,9 @@ namespace src.Controllers
         public async Task<IActionResult> Delete(int id)
         {
 
-            var c = await _cityService.GetCityById(id);
-            if (c == null) return NotFound();
+            var c = await _cityService.DeleteCity(id);
+            
+            if (c == false) return NotFound();
 
             return RedirectToAction(nameof(Index));
         }

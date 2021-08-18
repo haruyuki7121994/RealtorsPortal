@@ -39,8 +39,8 @@ namespace src.Controllers
        
         public async Task<IActionResult> Create()
         {
-            ViewData["Areas"] = new SelectList(await _areaService.GetAreaByActive(true), "Id", "Name");
-            ViewData["Categories"] = new SelectList( _categoryService.findAll(), "Id", "Name");
+            ViewData["Areas"] = new SelectList(await _areaService.GetAreas(), "Id", "Name");
+            ViewData["Categories"] = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
             ViewData["Customers"] = new SelectList( _customerService.findAll(), "Id", "Name");
             return View();
         }
@@ -68,8 +68,8 @@ namespace src.Controllers
             {
                 return NotFound();
             }
-            ViewData["Areas"] = new SelectList(await _areaService.GetAreaByActive(true), "Id", "Name", property.Area_id);
-            ViewData["Categories"] = new SelectList(_categoryService.findAll(), "Id", "Name", property.Category_id);
+            ViewData["Areas"] = new SelectList(await _areaService.GetAreas(), "Id", "Name", property.Area_id);
+            ViewData["Categories"] = new SelectList(await _categoryService.GetCategories(), "Id", "Name", property.Category_id);
             ViewData["Customers"] = new SelectList(_customerService.findAll(), "Id", "Name", property.Customer_id);
             return View(property);
         }

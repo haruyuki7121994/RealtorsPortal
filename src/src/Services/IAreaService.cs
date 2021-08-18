@@ -10,7 +10,7 @@ namespace src.Services
     {
         Task<IEnumerable<Area>> GetAreas();
         Task<IEnumerable<Area>> GetAreasByCityId(int Id);
-        Task<IEnumerable<Area>> GetAreaByActive(bool active = false);
+       
 
         Task<Area> GetAreaById(int areaId);
         Task<Area> CreateEditArea(Area area);

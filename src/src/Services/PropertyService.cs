@@ -38,7 +38,7 @@ namespace src.Services
                 propertyRepo.Category_id = property.Category_id;
                 propertyRepo.Area_id = property.Area_id;
                 propertyRepo.Ended_at = property.Ended_at;
-
+                propertyRepo.Is_active = property.Is_active;
 
             }
             await _context.SaveChangesAsync();

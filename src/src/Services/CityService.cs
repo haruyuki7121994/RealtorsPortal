@@ -27,6 +27,7 @@ namespace src.Services
                 if (c == null) return null;
                 c.Name = city.Name;
                 c.Region_id = city.Region_id;
+              
                 
             }
           await  _context.SaveChangesAsync();
@@ -46,10 +47,7 @@ namespace src.Services
         {
             return await _context.Cities.Include(x => x.region).ToListAsync();
         }
-        public async Task<IEnumerable<City>> GetCityByActive(bool active = false)
-        {
-            return await _context.Cities.ToListAsync();
-        }
+      
         public async Task<City> GetCityById(int id)
         {
             var city = await _context.Cities.FirstOrDefaultAsync(x => x.Id == id);

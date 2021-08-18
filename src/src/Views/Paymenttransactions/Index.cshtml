@@ -5,16 +5,16 @@
 }
 
 <h1>
-    Notification Email
+    Payment Transaction History
 </h1>
 @using (Html.BeginForm())
 {
     <div class="row">
         <div class="col-md-5">
-            <input type="datetime" value="yyyy-mm-dd" name="startdate" class="form-control" placeholder="Start Date">
+            <input type="datetime-local" name="startdate" class="form-control" placeholder="Start Date">
         </div>
         <div class="col-md-5">
-            <input type="datetime" value="yyyy-mm-dd" name="enddate" class="form-control" placeholder="End Date">
+            <input type="datetime-local" name="enddate" class="form-control" placeholder="End Date">
         </div>
         <div class="col-md-2">
             <input type="submit" value="Filter" class="form-control" style="background-color: lightgreen;">
@@ -27,25 +27,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                Package
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Transaction_id)
+                Customer
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Payment_price)
+                Price
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Used_ads)
+                Used ads
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Package_id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customer_id)
+                Used featured ads
             </th>
             <th>
                 Actions
@@ -55,33 +52,41 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Transaction_id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Payment_price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Used_ads)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Package_id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Customer_id)
-                </td>
-                <td>
-                    @Html.ActionLink("Details", "Details", new {id=item.Id})
+        <tr>
+            <td>
+                @item.Package.Name
+            </td>
+            <td>
+                @item.Customer.Email
+            </td>
+            <td>
+                @item.Package.Price
+            </td>
+            <td>
+                @if (item.Status == PaymentPackage.APPROVED_STATUS)
+                {
+                    <span>Approved</span>
+                }
+                @if (item.Status == PaymentPackage.EXPIRED_STATUS)
+                {
+                    <span>Expired</span>
+                }
+                @if (item.Status == PaymentPackage.PENDING_STATUS)
+                {
+                    <span>Pending</span>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Used_ads)/@Html.DisplayFor(modelItem => item.Limit_ads)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Used_featured_ads)/@Html.DisplayFor(modelItem => item.Limit_featured_ads)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
 
-                </td>
-            </tr>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

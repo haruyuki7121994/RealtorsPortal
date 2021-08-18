@@ -7,16 +7,13 @@
 <h1>
     Notification Email
 </h1>
-@if (ViewBag.Msg)
+@if (ViewBag.Msg != null)
 {
-    <h3>@ViewBag.Msg</h3>
+<h3>@ViewBag.Msg</h3>
 }
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Transaction_id)
             </th>
@@ -47,9 +44,6 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Transaction_id)
             </td>
             <td>
@@ -74,7 +68,7 @@
                 @item.Customer.Email
             </td>
             <td>
-                @Html.ActionLink("Send Email", "Send", "Notifications", new { id = item.Id })
+                @Html.ActionLink("Send", "Send", "Notifications", new { id = item.Id }, new { @class = "btn btn-danger"})
             </td>
         </tr>
 }
