@@ -37,11 +37,11 @@ namespace src.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Is_active,City_id")] Area area)
+        public async Task<IActionResult> Create([Bind("Id,Name,Is_active,City_id")] Models.Area area)
         {
             if (ModelState.IsValid)
             {
-               Area areRepo = await  _areaService.CreateEditArea(area);
+                Models.Area areRepo = await  _areaService.CreateEditArea(area);
                 if (areRepo == null) return NotFound();
                 return RedirectToAction(nameof(Index));
             }
@@ -54,7 +54,7 @@ namespace src.Controllers
         {
 
 
-            Area area = await _areaService.GetAreaById(id);
+            Models.Area area = await _areaService.GetAreaById(id);
             if (area == null)
             {
                 return NotFound();
@@ -66,7 +66,7 @@ namespace src.Controllers
       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Is_active,City_id")] Area area)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Is_active,City_id")] Models.Area area)
         {
             if (id != area.Id)
             {
@@ -75,7 +75,7 @@ namespace src.Controllers
 
             if (ModelState.IsValid)
             {
-                Area areRepo = await _areaService.CreateEditArea(area);
+                Models.Area areRepo = await _areaService.CreateEditArea(area);
                 if (areRepo == null) return NotFound();
                 return RedirectToAction(nameof(Index));
             }

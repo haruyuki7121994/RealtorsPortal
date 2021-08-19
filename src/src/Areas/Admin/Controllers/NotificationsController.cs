@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace src.Controllers
+namespace src.Area.Admin.Controllers
 {
+    [Area("Admin")]
     public class NotificationsController : Controller
     {
         private readonly Services.IPaymentPackageService services;

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace src.Controllers
+namespace src.Area.Admin.Controllers
 {
+    [Area("Admin")]
     public class SellersController : Controller
     {
         private readonly Services.ICustomerService services;
@@ -28,7 +29,6 @@ namespace src.Controllers
             return View();
         }
         [HttpPost]
-        [ActionName("Create")]
         public IActionResult Create(Models.Customer customers, IFormFile file)
         {
             try
@@ -41,7 +41,10 @@ namespace src.Controllers
                         var stream = new FileStream(filepath, FileMode.Create);
                         file.CopyToAsync(stream);
                         customers.Image = "images/" + file.FileName; //ex: images/b1.gif
-                        services.addCustomer(customers);
+                    }
+                    var result = services.addCustomer(customers);
+                    if (result)
+                    {
                         return RedirectToAction("Index");
                     }
                     else

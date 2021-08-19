@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using src.Models;
 
-namespace src.Controllers
+namespace src.Area.Admin.Controllers
 {
+    [Area("Admin")]
     public class PaymenttransactionsController : Controller
     {
         private readonly Services.IPaymentPackageService services;

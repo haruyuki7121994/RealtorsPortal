@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace src.Controllers
+namespace src.Area.Admin.Controllers
 {
+    [Area("Admin")]
     public class AgentsController : Controller
     {
         private readonly Services.ICustomerService services;
@@ -65,7 +66,7 @@ namespace src.Controllers
             return View(customers);
         }
         [HttpPost]
-        public IActionResult editagents(Models.Customer customers, IFormFile file)
+        public IActionResult Edit(Models.Customer customers, IFormFile file)
         {
             try
             {

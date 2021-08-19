@@ -8,12 +8,12 @@ namespace src.Services
 {
     public interface IAreaService
     {
-        Task<IEnumerable<Area>> GetAreas();
-        Task<IEnumerable<Area>> GetAreasByCityId(int Id);
+        Task<IEnumerable<Models.Area>> GetAreas();
+        Task<IEnumerable<Models.Area>> GetAreasByCityId(int Id);
        
 
-        Task<Area> GetAreaById(int areaId);
-        Task<Area> CreateEditArea(Area area);
+        Task<Models.Area> GetAreaById(int areaId);
+        Task<Models.Area> CreateEditArea(Models.Area area);
         Task<bool> deleteArea(int id);
     }
 }

@@ -89,17 +89,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <!--//skycons-icons-->
 </head>
 <body>
-    
     <div id="wrapper">
-        @RenderBody()
-      
+        @await Html.PartialAsync("_Menu")
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+            <div class="content-main">
+                @RenderBody()
+                <!---->
+                <div class="copy">
+                    <p> &copy; 2021 Minimal. All Rights Reserved | Design by <a href="http://w3layouts.com/" target="_blank">Realtors Portal</a> </p>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
     </div>
-    <!---->
     <!--scrolling js-->
     <script src="~/admin/js/jquery.nicescroll.js"></script>
     <script src="~/admin/js/scripts.js"></script>
     <!--//scrolling js-->
     <script src="~/admin/js/bootstrap.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
 

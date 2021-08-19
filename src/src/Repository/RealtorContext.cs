@@ -11,7 +11,7 @@ namespace src.Repository
     {
         public RealtorContext(DbContextOptions<RealtorContext> options) : base(options) { }
         public DbSet<Admin> Admins { get; set; }
-        public DbSet<Area> Areas { get; set; }
+        public DbSet<Models.Area> Areas { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Comment> Comments { get; set; }
