@@ -182,7 +182,7 @@ namespace src.Services
                     Transaction_id = $"Trial{timestamp}",
                     Limit_ads = trialPackage.Limit_ads,
                     Limit_featured_ads = trialPackage.Limit_featured_ads,
-                    Status = PaymentPackage.PENDING_STATUS,
+                    Status = PaymentPackage.APPROVED_STATUS,
                     Payment_price = trialPackage.Price,
                     Created_at = current,
                     Updated_at = current
