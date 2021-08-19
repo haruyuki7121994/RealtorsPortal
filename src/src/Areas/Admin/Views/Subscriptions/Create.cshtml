@@ -1,6 +1,7 @@
-﻿@model src.Models.PaymentPackage
+﻿@model src.Models.Package
 
 @{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Package";
 }
 
@@ -12,37 +13,34 @@
                 <div class="row">
                     <div class="col-md-6">
                         <br />
-                        <form asp-action="Create">
+                        <form asp-action="Create" asp-controller="Subscriptions">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
-                                <label asp-for="Transaction_id" class="control-label"></label>
-                                <input asp-for="Transaction_id" class="form-control" />
-                                <span asp-validation-for="Transaction_id" class="text-danger"></span>
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Payment_price" class="control-label"></label>
-                                <input asp-for="Payment_price" class="form-control" />
-                                <span asp-validation-for="Payment_price" class="text-danger"></span>
+                                <label asp-for="Price" class="control-label"></label>
+                                <input asp-for="Price" class="form-control" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Created_at" class="control-label"></label>
-                                <input asp-for="Created_at" class="form-control" />
-                                <span asp-validation-for="Created_at" class="text-danger"></span>
+                                <label asp-for="Limit_ads" class="control-label"></label>
+                                <input asp-for="Limit_ads" class="form-control" />
+                                <span asp-validation-for="Limit_ads" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Updated_at" class="control-label"></label>
-                                <input asp-for="Updated_at" class="form-control" />
-                                <span asp-validation-for="Updated_at" class="text-danger"></span>
+                                <label asp-for="Limit_featured_ads" class="control-label"></label>
+                                <input asp-for="Limit_featured_ads" class="form-control" />
+                                <span asp-validation-for="Limit_featured_ads" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Package_id" class="control-label"></label>
-                                <input asp-for="Package_id" class="form-control" />
-                                <span asp-validation-for="Package_id" class="text-danger"></span>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="Customer_id" class="control-label"></label>
-                                <input asp-for="Customer_id" class="form-control" />
-                                <span asp-validation-for="Customer_id" class="text-danger"></span>
+                                <div class="checkbox">
+                                    <label>
+                                        <input asp-for="Is_active" /> @Html.DisplayNameFor(model => model.Is_active)
+                                    </label>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <input type="submit" value="Create" class="btn btn-primary" />
