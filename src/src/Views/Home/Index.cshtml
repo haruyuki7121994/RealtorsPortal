@@ -11,7 +11,7 @@
         <div class="aa-top-slider">
             <!-- Top slider single slide -->
             <div class="aa-top-slider-single">
-                <img src="~/img/Homebanner3.jpg" alt="img">
+                <img style="object-fit: cover; width: 100%" src="~/img/Homebanner3.jpg" alt="img">
             </div>
             <!-- / Top slider single slide -->
         </div>
@@ -106,7 +106,7 @@
 <!-- Latest property -->
 @if (Model.switchFeaturedAds == "enabled")
 {
-<div id="aa-lastest-property">
+<div id="aa-lastest-property" style="background-color: #f8f8f8; display: inline; float: left; width: 100%; padding: 100px 0;">
     <div class="container">
         <div class="aa-latest-property-area">
             <div class="aa-title">
@@ -244,7 +244,7 @@
                 <div class="aa-promo-banner-area">
                     <h3>Find Your Best Property</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus, ex illum corporis quibusdam numquam quisquam optio explicabo. Officiis odit quia odio dignissimos eius repellat id!</p>
-                    <a href="#" class="aa-view-btn">View Details</a>
+                    @Html.ActionLink("View Properties", "Properties", "Home", new { /* id=item.PrimaryKey */ }, new { @class = "aa-view-btn" })
                 </div>
             </div>
         </div>

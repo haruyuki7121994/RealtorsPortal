@@ -219,12 +219,12 @@ img {
   padding: 0;
 }
 #aa-menu-area .main-navbar .navbar-header .aa-logo {
-  border: 2px solid #fff;
-  color: #fff;
-  font-family: "Poppins", sans-serif;
-  font-size: 30px;
-  padding: 15px;
-  line-height: 13px;
+    border: 2px solid #fff;
+    color: #59abe3;
+    font-family: "Poppins", sans-serif;
+    font-size: 30px;
+    padding: 15px;
+    line-height: 13px;
 }
 #aa-menu-area .main-navbar .navbar-header .aa-logo-img {
   border: none;
@@ -1329,7 +1329,7 @@ img {
 ====================*/
 
 #aa-property-header {
-    background-image: url("../../img/property-header-bg.jpg");
+    background-color: black;
     background-attachment: fixed;
     background-position: center center;
     background-size: cover;

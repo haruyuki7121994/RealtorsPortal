@@ -20,7 +20,7 @@
     <link id="switcher" href="~/css/RealtorsPortal/theme-color/default-theme.css" rel="stylesheet">
 
     <!-- Main style sheet -->
-    <link href="~/css/RealtorsPortal/style.css?version=2.2" rel="stylesheet">
+    <link href="~/css/RealtorsPortal/style.css?version=2.5" rel="stylesheet">
 
     <!-- Google Font -->
     <link href='https://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
@@ -46,10 +46,10 @@
                                 <div class="aa-header-left">
                                     <div class="aa-telephone-no">
                                         <span class="fa fa-phone"></span>
-                                        1-900-523-3564
+                                        1-999-333-6666
                                     </div>
                                     <div class="aa-email hidden-xs">
-                                        <span class="fa fa-envelope-o"></span> info@markups.com
+                                        <span class="fa fa-envelope-o"></span> realtors-portal@gmail.com
                                     </div>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                     </button>
                     <!-- LOGO -->
                     <!-- Text based logo -->
-                    <a class="navbar-brand aa-logo" href="index.html"> Home <span>Property</span></a>
+                    @Html.ActionLink("Realtors Portal", "Index", "Home", new { }, new { @class = "navbar-brand aa-logo" })
                     <!-- Image based logo -->
                     <!-- <a class="navbar-brand aa-logo-img" href="index.html"><img src="img/logo.png" alt="logo"></a> -->
                 </div>
@@ -118,7 +118,7 @@
                         <div class="row">
                             <div class="col-md-3 col-sm-6 col-xs-12">
                                 <div class="aa-footer-left">
-                                    <p>Designed by <a rel="nofollow" href="http://www.markups.io/">MarkUps.io</a></p>
+                                    <p>Designed by <a rel="nofollow" href="http://www.markups.io/">Realtors Portal</a></p>
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-6 col-xs-12">
@@ -131,11 +131,10 @@
                             </div>
                             <div class="col-md-6 col-sm-12 col-xs-12">
                                 <div class="aa-footer-right">
-                                    <a href="#">Home</a>
-                                    <a href="#">Support</a>
-                                    <a href="#">License</a>
-                                    <a href="#">FAQ</a>
-                                    <a href="#">Privacy & Term</a>
+                                    @Html.ActionLink("Home", "Index", "Home", new { /* id=item.PrimaryKey */ })
+                                    @Html.ActionLink("Properties", "Properties", "Home", new { /* id=item.PrimaryKey */ })
+                                    @Html.ActionLink("News", "Blogs", "Home", new { /* id=item.PrimaryKey */ })
+                                    @Html.ActionLink("Contact", "Contact", "Home", new { /* id=item.PrimaryKey */ })
                                 </div>
                             </div>
                         </div>
