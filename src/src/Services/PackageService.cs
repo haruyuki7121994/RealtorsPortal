@@ -61,6 +61,18 @@ namespace src.Services
             }
         }
 
+        public Package findOne(int id)
+        {
+            Package packages = context.Packages.SingleOrDefault(a => a.Id.Equals(id));
+            if (packages != null)
+            {
+                return packages;
+            }
+            else
+            {
+                return null;
+            }
+        }
         public void updatePackage(Package packages)
         {
             Package editpackages = context.Packages.SingleOrDefault(a => a.Id.Equals(packages.Id));
