@@ -10,6 +10,7 @@ namespace src.Services
     {
         List<Package> findAll();
         Package fineOne(string name);
+        Package findOne(int id);
         void addPackage(Package packages);
         void updatePackage(Package packages);
         void deletepackage(int id);
