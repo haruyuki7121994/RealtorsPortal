@@ -9,8 +9,8 @@ namespace src.Area.Admin.Controllers
     [Area("Admin")]
     public class SubscriptionsController : Controller
     {
-        private readonly Services.IPaymentPackageService services;
-        public SubscriptionsController(Services.IPaymentPackageService services)
+        private readonly Services.IPackageService services;
+        public SubscriptionsController(Services.IPackageService services)
         {
             this.services = services;
         }
@@ -26,13 +26,13 @@ namespace src.Area.Admin.Controllers
         }
         [HttpPost]
         [ActionName("Create")]
-        public IActionResult Create(Models.PaymentPackage payment_Package)
+        public IActionResult Create(Models.Package package)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    services.addPaymentPackage(payment_Package);
+                    services.addPackage(package);
                     return RedirectToAction("Index");
                 }
 
@@ -48,18 +48,18 @@ namespace src.Area.Admin.Controllers
         public IActionResult edit(int id)
         {
 
-            Models.PaymentPackage payment_Package = services.fineOne(id);
-            return View(payment_Package);
+            Models.Package package = services.findOne(id);
+            return View(package);
         }
         [HttpPost]
-        public IActionResult edit(Models.PaymentPackage payment_Package)
+        public IActionResult edit(Models.Package package)
         {
             try
             {
-                
+
                 if (ModelState.IsValid)
                 {
-                    services.updatePaymentPackage(payment_Package);
+                    services.updatePackage(package);
                     return RedirectToAction("Index");
                 }
 
@@ -70,14 +70,14 @@ namespace src.Area.Admin.Controllers
             }
             return View();
         }
-        
-       
+
+
         public IActionResult Delete(int id)
         {
-        
+
             try
             {
-                services.deletePaymentPackage(id);
+                services.deletepackage(id);
                 return RedirectToAction("Index");
             }
             catch (Exception e)
