@@ -2,12 +2,10 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
 
-<h4>Configuration</h4>
-<hr />
 <div class="row">
     <div class="col-md-12">
         <form asp-action="Edit">
@@ -22,7 +20,7 @@
                     <input asp-for="Val" class="form-control" />
                     <span asp-validation-for="Val" class="text-danger"></span>
                 </div>
-               
+
             </div>
             <div class="form-row">
                 <div class="form-group col-md-2">
@@ -36,9 +34,6 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

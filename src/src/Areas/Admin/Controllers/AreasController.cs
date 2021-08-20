@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using src.Models;
 using src.Repository;
 using src.Services;
 
 namespace src.Controllers
 {
+    [Area("Admin")]
     public class AreasController : Controller
     {
         private readonly IAreaService _areaService;
@@ -25,12 +28,26 @@ namespace src.Controllers
        
         public async Task<IActionResult> Index()
         {
+            var json = HttpContext.Session.GetString("user");
+            if (json == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            Models.Admin user = JsonConvert.DeserializeObject<Models.Admin>(json);
+            ViewBag.Username = user.Username;
             return View(await _areaService.GetAreas());
         }
 
        
         public async Task<IActionResult> Create()
         {
+            var json = HttpContext.Session.GetString("user");
+            if (json == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            Models.Admin user = JsonConvert.DeserializeObject<Models.Admin>(json);
+            ViewBag.Username = user.Username;
             ViewData["Cities"] = new SelectList(await _cityService.GetCities(), "Id", "Name");
             return View();
         }
@@ -52,7 +69,13 @@ namespace src.Controllers
         // GET: Areas/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-
+            var json = HttpContext.Session.GetString("user");
+            if (json == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            Models.Admin user = JsonConvert.DeserializeObject<Models.Admin>(json);
+            ViewBag.Username = user.Username;
 
             Models.Area area = await _areaService.GetAreaById(id);
             if (area == null)

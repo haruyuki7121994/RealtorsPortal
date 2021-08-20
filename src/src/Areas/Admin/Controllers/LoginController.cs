@@ -2,153 +2,62 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using src.Models;
 using src.Repository;
+using src.Services;
 
 namespace src.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class LoginController : Controller
     {
-        private readonly RealtorContext _context;
+        private readonly IAdminService _adminService;
 
-        public LoginController(RealtorContext context)
+        public LoginController(IAdminService adminService)
         {
-            _context = context;
+            _adminService = adminService;
         }
 
-        // GET: Admin/Login
-        public async Task<IActionResult> Index()
+       
+        public IActionResult Index()
         {
-            return View(await _context.Admins.ToListAsync());
-        }
-
-        // GET: Admin/Login/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var admin = await _context.Admins
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (admin == null)
-            {
-                return NotFound();
-            }
-
-            return View(admin);
-        }
-
-        // GET: Admin/Login/Create
-        public IActionResult Create()
-        {
+            
             return View();
         }
-
-        // POST: Admin/Login/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Email,Username,Password,Is_verified,Is_active,Role")] Models.Admin admin)
+        public  IActionResult Index(Models.Admin admin)
         {
-            if (ModelState.IsValid)
+            Models.Admin adminRepo =  _adminService.checkLogin(admin.Username, admin.Password);
+            if (adminRepo == null)
             {
-                _context.Add(admin);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewBag.messLogin = "Username or Password is incorrect";
+                return View();
             }
-            return View(admin);
-        }
-
-        // GET: Admin/Login/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
+            else
             {
-                return NotFound();
-            }
-
-            var admin = await _context.Admins.FindAsync(id);
-            if (admin == null)
-            {
-                return NotFound();
-            }
-            return View(admin);
-        }
-
-        // POST: Admin/Login/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Email,Username,Password,Is_verified,Is_active,Role")] Models.Admin admin)
-        {
-            if (id != admin.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if(adminRepo.Is_active==false)
                 {
-                    _context.Update(admin);
-                    await _context.SaveChangesAsync();
+                    ViewBag.messLogin = "Account not active";
+                    return View();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AdminExists(admin.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(admin);
+                HttpContext.Session.SetString("user", JsonConvert.SerializeObject(adminRepo));
+
+                return RedirectToAction("Index","Home");
+            }    
+                
+           
         }
 
-        // GET: Admin/Login/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Logout()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var admin = await _context.Admins
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (admin == null)
-            {
-                return NotFound();
-            }
-
-            return View(admin);
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Login");
         }
 
-        // POST: Admin/Login/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var admin = await _context.Admins.FindAsync(id);
-            _context.Admins.Remove(admin);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool AdminExists(int id)
-        {
-            return _context.Admins.Any(e => e.Id == id);
-        }
     }
 }

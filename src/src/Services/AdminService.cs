@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using src.Helper;
 using src.Models;
 using src.Repository;
 
@@ -20,6 +21,7 @@ namespace src.Services
             Admin acc = context.Admins.SingleOrDefault(a => a.Username.Equals(admin.Username));
             if (acc == null)
             {
+                admin.Password = Md5Hash.getMd5Hash(admin.Password);
                 context.Admins.Add(admin);
                 context.SaveChanges();
             }
@@ -32,21 +34,17 @@ namespace src.Services
         public Admin checkLogin(string uname, string pass)
         {
             Admin admin = context.Admins.SingleOrDefault(a => a.Username.Equals(uname));
-            if (admin == null)
+            if (admin == null) return null;
+            if(Md5Hash.verifyMd5Hash(pass,admin.Password))
             {
-                if (admin.Password.Equals(pass))
-                {
-                    return admin;
-                }
-                else
-                {
-                    return null;
-                }
+                admin.Password = null;
+                return admin;
             }
             else
             {
                 return null;
             }
+              
         }
 
         public void deleteAdmin(int id)

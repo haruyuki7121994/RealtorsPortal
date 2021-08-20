@@ -418,7 +418,8 @@ i.fa.fa-globe {
 }
 .dropdown, .dropup {
     display: inline-block;
-	padding:0;
+    padding: 20px;
+    margin-right: 76px;
 }
 .at-drop {
    padding:0 1em ;

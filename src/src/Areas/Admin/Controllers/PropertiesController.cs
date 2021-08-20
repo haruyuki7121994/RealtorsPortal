@@ -11,6 +11,7 @@ using src.Services;
 
 namespace src.Controllers
 {
+    [Area("Admin")]
     public class PropertiesController : Controller
     {
         private readonly IPropertyService _propertyservice;

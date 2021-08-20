@@ -33,7 +33,7 @@ namespace src
 
             services.AddOptions();
 
-            string uri = "server=.;database=RealtorsPortal;uid=sa;pwd=123";
+            string uri = "Data Source=MYCOMPUTERABCD\\SQLEXPRESS;Initial Catalog=RealtorsPortalDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<RealtorContext>(options => options.UseSqlServer(uri));
 
             //services.AddDbContext<RealtorContext>(options => {
