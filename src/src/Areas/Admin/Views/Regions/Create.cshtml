@@ -1,35 +1,38 @@
 ﻿@model src.Models.Region
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Region";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-<h1>Create</h1>
-
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+@await Html.PartialAsync("_Banner")
+<div class="content-top">
+    <div class="col-md-12">
+        <div style="background: #fff">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <br />
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Country_id" class="control-label"></label>
+                                @Html.DropDownListFor(m => m.Country_id, (IEnumerable<SelectListItem>)ViewBag.Countries, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Country_id" class="control-label"></label>
-                @Html.DropDownListFor(m => m.Country_id, (IEnumerable<SelectListItem>)ViewBag.Countries, new { @class = "form-control" })
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div class="clearfix"> </div>
 </div>
 
 @section Scripts {

@@ -78,10 +78,8 @@ namespace src.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Introduction,Description,Features,Method,Price,Deposit,Is_featured,Ended_at,Area_id,Category_id,Customer_id")] Property @property)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Introduction,Description,Features,Method,Price,Deposit,Is_featured,Ended_at,Area_id,Category_id,Customer_id,Is_active")] Property @property)
         {
-           
-
             if (ModelState.IsValid)
             {
                 var pro = await _propertyservice.CreateEditProperty(property);

@@ -1,88 +1,97 @@
 ﻿@model src.Models.Property
 
 @{
-    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Property";
 }
 
-<h1>Edit</h1>
+@await Html.PartialAsync("_Banner")
 
-<h4>Property</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Introduction" class="control-label"></label>
-                <input asp-for="Introduction" class="form-control" />
-                <span asp-validation-for="Introduction" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Features" class="control-label"></label>
-                <input asp-for="Features" class="form-control" />
-                <span asp-validation-for="Features" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <p class="control-label">Method </p>
-                @Html.RadioButtonFor(m => m.Method, "rent") Rent
-                @Html.RadioButtonFor(m => m.Method, "buy")  Buy
-                @Html.RadioButtonFor(m => m.Method, "sell")  Sell
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Deposit" class="control-label"></label>
-                <input asp-for="Deposit" class="form-control" />
-                <span asp-validation-for="Deposit" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Is_featured" /> @Html.DisplayNameFor(model => model.Is_featured)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ended_at" class="control-label"></label>
-                <input asp-for="Ended_at" class="form-control" />
-                <span asp-validation-for="Ended_at" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="Area_id" class="control-label">Area Name</label>
-                @Html.DropDownListFor(m => m.Area_id, (IEnumerable<SelectListItem>)ViewBag.Areas, new { @class = "form-control" })
+<div class="content-top">
+    <div class="col-md-12">
+        <div style="background: #fff">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <br />
+                        <form asp-action="Edit">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="Is_active" /> @Html.DisplayNameFor(model => model.Is_active)
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Title" class="control-label"></label>
+                                <input asp-for="Title" class="form-control" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Introduction" class="control-label"></label>
+                                <input asp-for="Introduction" class="form-control" />
+                                <span asp-validation-for="Introduction" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Description" class="control-label"></label>
+                                <input asp-for="Description" class="form-control" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Features" class="control-label"></label>
+                                <input asp-for="Features" class="form-control" />
+                                <span asp-validation-for="Features" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <p class="control-label">Method </p>
+                                @Html.RadioButtonFor(m => m.Method, "rent") Rent
+                                @Html.RadioButtonFor(m => m.Method, "buy")  Buy
+                                @Html.RadioButtonFor(m => m.Method, "sell")  Sell
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Price" class="control-label"></label>
+                                <input asp-for="Price" class="form-control" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Deposit" class="control-label"></label>
+                                <input asp-for="Deposit" class="form-control" />
+                                <span asp-validation-for="Deposit" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="Is_featured" /> @Html.DisplayNameFor(model => model.Is_featured)
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Ended_at" class="control-label"></label>
+                                <input asp-for="Ended_at" class="form-control" />
+                                <span asp-validation-for="Ended_at" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="Area_id" class="control-label">Area Name</label>
+                                @Html.DropDownListFor(m => m.Area_id, (IEnumerable<SelectListItem>)ViewBag.Areas, new { @class = "form-control" })
 
+                            </div>
+                            <div class="form-group">
+                                <label for="Category_id" class="control-label">Category Name</label>
+                                @Html.DropDownListFor(m => m.Category_id, (IEnumerable<SelectListItem>)ViewBag.Categories, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="Customer_id" class="control-label">Customer Name</label>
+                                @Html.DropDownListFor(m => m.Customer_id, (IEnumerable<SelectListItem>)ViewBag.Customers, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="Category_id" class="control-label">Category Name</label>
-                @Html.DropDownListFor(m => m.Category_id, (IEnumerable<SelectListItem>)ViewBag.Categories, new { @class = "form-control" })
-            </div>
-            <div class="form-group">
-                <label for="Customer_id" class="control-label">Customer Name</label>
-                @Html.DropDownListFor(m => m.Customer_id, (IEnumerable<SelectListItem>)ViewBag.Customers, new { @class = "form-control" })
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
+    <div class="clearfix"> </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

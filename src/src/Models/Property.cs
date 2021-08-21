@@ -16,19 +16,19 @@ namespace src.Models
 
         [
             Required(ErrorMessage = "Title cannot empty"),
-            StringLength(30, MinimumLength = 3, ErrorMessage = "MinimumLength = 3; MaximumLength = 20")
+            StringLength(100, MinimumLength = 3, ErrorMessage = "MinimumLength = 3; MaximumLength = 100")
         ]
 
         public string Title { get; set; }
         [
             Required(ErrorMessage = "Introduction cannot empty"),
-            StringLength(255, MinimumLength = 10, ErrorMessage = "MinimumLength = 10; MaximumLength = 255")
+            StringLength(255, MinimumLength = 2, ErrorMessage = "MinimumLength = 2; MaximumLength = 255")
         ]
         public string Introduction { get; set; }
 
         [
             Required(ErrorMessage = "Description cannot empty"),
-            StringLength(255, MinimumLength = 10, ErrorMessage = "MinimumLength = 10; MaximumLength = 255")
+            StringLength(255, MinimumLength = 2, ErrorMessage = "MinimumLength = 2; MaximumLength = 255")
         ]
         public string Description { get; set; }
         public string Features { get; set; }

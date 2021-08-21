@@ -68,6 +68,7 @@ namespace src.Services
                                                 Category = p.Category,
                                                 Customer = p.Customer,
                                                 Is_featured = p.Is_featured,
+                                                Is_active = p.Is_active,
                                                 Method = p.Method,
                                                 Thumbnail_url = p.Thumbnail_url
                                             } )

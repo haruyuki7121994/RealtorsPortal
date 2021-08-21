@@ -11,7 +11,7 @@ using src.Models;
 using src.Repository;
 using src.Services;
 
-namespace src.Controllers
+namespace src.Area.Admin.Controllers
 {
     [Area("Admin")]
     public class AreasController : Controller
@@ -54,16 +54,16 @@ namespace src.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Is_active,City_id")] Models.Area area)
+        public async Task<IActionResult> Create([Bind("Id,Name,Is_active,City_id")] Models.Area are)
         {
             if (ModelState.IsValid)
             {
-                Models.Area areRepo = await  _areaService.CreateEditArea(area);
+                Models.Area areRepo = await  _areaService.CreateEditArea(are);
                 if (areRepo == null) return NotFound();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Cities"] = new SelectList(await _cityService.GetCities(), "Id", "Name", area.City_id);
-            return View(area);
+            ViewData["Cities"] = new SelectList(await _cityService.GetCities(), "Id", "Name", are.City_id);
+            return View(are);
         }
 
         // GET: Areas/Edit/5
@@ -89,21 +89,21 @@ namespace src.Controllers
       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Is_active,City_id")] Models.Area area)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,City_id")] Models.Area are)
         {
-            if (id != area.Id)
+            if (id != are.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                Models.Area areRepo = await _areaService.CreateEditArea(area);
+                Models.Area areRepo = await _areaService.CreateEditArea(are);
                 if (areRepo == null) return NotFound();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Cities"] = new SelectList(await _cityService.GetCities(), "Id", "Name", area.City_id);
-            return View(area);
+            ViewData["Cities"] = new SelectList(await _cityService.GetCities(), "Id", "Name", are.City_id);
+            return View(are);
         }
         public async Task<IActionResult> Delete(int id)
         {
