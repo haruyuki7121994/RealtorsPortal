@@ -89,7 +89,7 @@ namespace src.Services
                 
                 editAdmin.Email = admin.Email;
                 editAdmin.Username = admin.Username;
-                editAdmin.Password = admin.Password;
+                editAdmin.Password = Md5Hash.getMd5Hash(admin.Password);
                 editAdmin.Is_active = admin.Is_active;
                 editAdmin.Is_verified = admin.Is_verified;
                 context.SaveChanges();
