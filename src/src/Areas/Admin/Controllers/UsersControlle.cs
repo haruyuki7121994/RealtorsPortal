@@ -2,25 +2,44 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using src.Models;
 
 namespace src.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class AdminsController : Controller
+    public class UsersController : Controller
     {
         private readonly Services.IAdminService services;
-        public AdminsController(Services.IAdminService services)
+        public UsersController(Services.IAdminService services)
         {
             this.services = services;
         }
-        public IActionResult Index()
+
+        [TempData]
+        public string Message { get; set; }
+
+        public IActionResult Index(int? page)
         {
-            return View(services.findAll());
+            if (!CheckRoleUserFromSession())
+            {
+                Message = "Invalid Role";
+                return RedirectToAction("Index", "Reports");
+            }
+            var users = services.findAll().Where(a => a.Role != "superadmin").ToList();
+            users = PaginatedList<Models.Admin>.CreateAsnyc(users.ToList(), page ?? 1, 10);
+            return View(users);
         }
         [HttpGet]
         public IActionResult Create()
         {
+            if (!CheckRoleUserFromSession())
+            {
+                Message = "Invalid Role";
+                return RedirectToAction("Index", "Reports");
+            }
             return View();
         }
         [HttpPost]
@@ -42,10 +61,15 @@ namespace src.Areas.Admin.Controllers
             }
             return View();
         }
+
         [HttpGet]
         public IActionResult Edit(int id)
         {
-
+            if (!CheckRoleUserFromSession())
+            {
+                Message = "Invalid Role";
+                return RedirectToAction("Index", "Reports");
+            }
             Models.Admin admins = services.fineOne(id);
             return View(admins);
         }
@@ -66,6 +90,7 @@ namespace src.Areas.Admin.Controllers
                         }
                     }
                     services.updateAdmin(admins);
+                    Message = "Update Successfull";
                     return RedirectToAction("Index");
                 }
                 else
@@ -84,7 +109,6 @@ namespace src.Areas.Admin.Controllers
 
         public IActionResult Delete(int id)
         {
-
             try
             {
                 services.deleteAdmin(id);
@@ -95,6 +119,21 @@ namespace src.Areas.Admin.Controllers
                 ViewBag.Msg = e.Message;
             }
             return View();
+        }
+
+        public bool CheckRoleUserFromSession()
+        {
+            var json = HttpContext.Session.GetString("user");
+            if (json == null)
+            {
+                return false;
+            }
+            var user = JsonConvert.DeserializeObject<Models.Admin>(json);
+            if (user.Role.Equals("superadmin"))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

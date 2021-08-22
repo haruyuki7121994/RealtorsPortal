@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using src.Models;
 
 namespace src.Area.Admin.Controllers
 {
@@ -10,13 +11,21 @@ namespace src.Area.Admin.Controllers
     public class SubscriptionsController : Controller
     {
         private readonly Services.IPackageService services;
-        public SubscriptionsController(Services.IPackageService services)
+        private readonly Services.IPaymentPackageService _paymentPackageService;
+        public SubscriptionsController(Services.IPackageService services, Services.IPaymentPackageService paymentPackageService)
         {
             this.services = services;
+            this._paymentPackageService = paymentPackageService;
         }
-        public IActionResult Index()
+
+        [TempData]
+        public string Message { get; set; }
+
+        public IActionResult Index(int? page)
         {
-            return View(services.findAll());
+            var package = services.findAll().Where(p => p.Name != "Trial").ToList();
+            package = PaginatedList<Package>.CreateAsnyc(package.ToList(), page ?? 1, 10);
+            return View(package);
         }
 
         [HttpGet]
@@ -72,11 +81,16 @@ namespace src.Area.Admin.Controllers
         }
 
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-
             try
             {
+                var payments = await _paymentPackageService.GetPaymentsByPackageId(id);
+                if (payments.Count() > 0)
+                {
+                    Message = "Cannot delete this package";
+                    return RedirectToAction("Index");
+                }
                 services.deletepackage(id);
                 return RedirectToAction("Index");
             }

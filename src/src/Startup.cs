@@ -84,6 +84,7 @@ namespace src
             app.UseSession();
 
             app.UseMiddleware<Middleware.CustomerMiddleware>();
+            app.UseMiddleware<Middleware.AdminMiddleware>();
 
             app.UseRouting();
 
