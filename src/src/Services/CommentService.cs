@@ -39,7 +39,7 @@ namespace src.Services
 
         public List<Comment> findAll()
         {
-            return context.Comments.ToList();
+            return context.Comments.OrderByDescending(x => x.Id).ToList();
         }
 
         public Comment fineOne(int id)
@@ -73,7 +73,7 @@ namespace src.Services
 
         public List<Comment> FindByPropId(int id)
         {
-            return context.Comments.Where(c => c.Property_id.Equals(id)).ToList();
+            return context.Comments.Where(c => c.Property_id.Equals(id)).OrderByDescending(x => x.Id).ToList();
         }
     }
 }

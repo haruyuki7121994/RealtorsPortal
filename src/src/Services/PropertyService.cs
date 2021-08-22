@@ -48,7 +48,7 @@ namespace src.Services
         public async Task<bool> DeleteProperty(int id)
         {
             var property = await _context.Properties.FirstOrDefaultAsync(x => x.Id == id);
-            if (property == null) return false; ;
+            if (property == null) return false;
             _context.Remove<Property>(property);
             await _context.SaveChangesAsync();
             return true;
@@ -56,7 +56,7 @@ namespace src.Services
 
         public async Task<IEnumerable<Property>> GetProperties()
         {
-           return await _context.Properties.Include(x=>x.Area).Include(c=>c.Customer).Include(d=>d.Category).Select(p => new Property {
+           return await _context.Properties.Include(x=>x.Area).Include(c=>c.Customer).Include(d=>d.Category).OrderByDescending(x => x.Created_at).Select(p => new Property {
                                                 Id = p.Id,
                                                 Title = p.Title,
                                                 Introduction = p.Introduction,
@@ -70,7 +70,8 @@ namespace src.Services
                                                 Is_featured = p.Is_featured,
                                                 Is_active = p.Is_active,
                                                 Method = p.Method,
-                                                Thumbnail_url = p.Thumbnail_url
+                                                Thumbnail_url = p.Thumbnail_url,
+                                                Price = p.Price
                                             } )
                                             .ToListAsync();
         }
@@ -190,6 +191,8 @@ namespace src.Services
 
         public bool addProperty(Property property)
         {
+            var expireAdsConfig = _context.Configurations.Where(c => c.Obj.Equals("Expiration of ads")).FirstOrDefault();
+            var expireDays = expireAdsConfig != null ? Int32.Parse(expireAdsConfig.Val) : 30; 
             var newProp = new Property
             {
                 Title = property.Title,
@@ -201,8 +204,9 @@ namespace src.Services
                 Thumbnail_url = property.Thumbnail_url,
                 Is_featured = property.Is_featured,
                 Is_active = property.Is_active,
+                Features = property.Features,
                 Created_at = DateTime.Now,
-                Ended_at = DateTime.Now,
+                Ended_at = DateTime.Now.AddDays(expireDays),
                 Area_id = property.Area_id,
                 Category_id = property.Category_id,
                 Customer_id = property.Customer_id,
@@ -211,7 +215,15 @@ namespace src.Services
             _context.SaveChanges();
             return true;
         }
-    }
 
-    
+        public async Task<IEnumerable<Property>> GetPropertiesByAreaId(int id)
+        {
+            return await _context.Properties.Where(x => x.Area_id == id).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Property>> GetPropertiesByCategoryId(int id)
+        {
+            return await _context.Properties.Where(x => x.Category_id == id).ToListAsync();
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<src.Models.Admin>
+﻿@model PaginatedList<src.Models.Admin>
 
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
@@ -10,28 +10,25 @@
     <div class="col-md-12">
         <div style="background: #fff">
             <p>
-                @Html.ActionLink("Create", "Create", "Admins", null, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Create", "Create", "Users", null, new { @class = "btn btn-primary" })
             </p>
             <table class="table">
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.Id)
+                            Email
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Email)
+                            Username
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Username)
+                            Verified
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Is_verified)
+                            Active
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Is_active)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Role)
+                            Role
                         </th>
                         <th>
                             Action
@@ -42,9 +39,6 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Id)
-                            </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Email)
                             </td>
@@ -61,13 +55,14 @@
                                 @Html.DisplayFor(modelItem => item.Role)
                             </td>
                             <td>
-                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+            @await Html.PartialAsync("_PagingSection", Model)
         </div>
     </div>
     <div class="clearfix"> </div>

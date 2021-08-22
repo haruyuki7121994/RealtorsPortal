@@ -105,7 +105,7 @@ namespace src.Services
 
         public List<Customer> findAll()
         {
-            return context.Customers.ToList();
+            return context.Customers.OrderByDescending(x => x.Id).ToList();
         }
 
 

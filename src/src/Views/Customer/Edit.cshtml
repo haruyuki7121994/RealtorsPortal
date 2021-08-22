@@ -136,6 +136,22 @@
                         <span asp-validation-for="Area_id" class="text-danger"></span>
                     </div>
                     <div class="form-group">
+                        <label asp-for="Features" class="control-label">Features</label>
+                        <div class="aa-properties-details">
+                            <div class="aa-properties-info">
+                                <ul id="feature-list">
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <input class="form-control" id="feature-val" />
+                            <span class="input-group-addon" id="btn-add-features" style="cursor: pointer">Add</span>
+                        </div>
+                        <input asp-for="Features" id="features-in" type="hidden" class="form-control" />
+                        <span asp-validation-for="Features" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
                         @if (Model.Is_featured)
                         {
                             <label class="control-label">This property is featured</label>
@@ -161,6 +177,32 @@
 @section scripts {
     <script>
         $(document).ready(function () {
+            let featuresJson = $("#features-in").val();
+            let features = [];
+            console.log(featuresJson)
+            if (featuresJson !== "") {
+                features = JSON.parse(featuresJson);
+                appendFeatures(features)
+            }
+
+            $(document).on('click', "#btn-delete-feature", function () {
+                const idx = $(this).data('id')
+                if (idx >= 0) {
+                    features.splice(idx, 1)
+                    appendFeatures(features)
+                }
+                console.log(features)
+            })
+            
+            $("#btn-add-features").click(function (event) {
+                let val = $("#feature-val").val();
+                if (val !== "") {
+                    features.push(val);
+                    $("#feature-val").val("");
+                    appendFeatures(features)
+                }
+                console.log(features)
+            })
             CKEDITOR.replace(@Html.IdFor(model => model.Description));
             $("#CountryId").change(function () {
                 var countryId = $(this).val();
@@ -207,6 +249,16 @@
             $("#AreaId").change(function () {
                 $("#areaHidden").remove();
             })
+
+            function appendFeatures(features) {
+                let list = '';
+                for (var i = 0; i < features.length; i++) {
+                    list += "<li>" + features[i] + " <span class='label label-danger' data-id='" + i + "' id='btn-delete-feature' style='cursor: pointer'>x</span></li>"
+                }
+                $("#feature-list").html(list)
+                const featuresJson = JSON.stringify(features);
+                $("#features-in").val(featuresJson);
+            }
         })
     </script>
 }

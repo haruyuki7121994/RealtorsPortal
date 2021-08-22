@@ -23,6 +23,9 @@ namespace src.Areas.Admin.Controllers
             _configurationService = configurationService;
         }
 
+        [TempData]
+        public string Message { get; set; }
+
         // GET: Configurations
         public async Task<IActionResult> Index()
         {

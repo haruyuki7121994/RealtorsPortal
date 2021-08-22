@@ -33,7 +33,7 @@ namespace src.Services
 
         public Admin checkLogin(string uname, string pass)
         {
-            Admin admin = context.Admins.SingleOrDefault(a => a.Username.Equals(uname));
+            Admin admin = context.Admins.SingleOrDefault(a => a.Username.Equals(uname) && a.Is_active.Equals(true) && a.Is_verified.Equals(true));
             if (admin == null) return null;
             if(Md5Hash.verifyMd5Hash(pass,admin.Password))
             {
@@ -64,7 +64,7 @@ namespace src.Services
 
         public List<Admin> findAll()
         {
-            return context.Admins.ToList();
+            return context.Admins.OrderByDescending(a => a.Id).ToList();
         }
 
 

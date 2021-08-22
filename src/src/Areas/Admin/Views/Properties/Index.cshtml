@@ -1,4 +1,4 @@
-﻿@model IEnumerable<src.Models.Property>
+﻿@model PaginatedList<src.Models.Property>
 
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
@@ -16,28 +16,21 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.Title)
+                            Title
+                        <th>
+                            Method
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Features)
+                            Price
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Method)
+                            Featured
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Price)
+                            Active
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Deposit)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Is_featured)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Is_active)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Ended_at)
+                            Ended At
                         </th>
                         <th>
                             Area Name
@@ -54,49 +47,44 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Title)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Features)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Method)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Price)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Deposit)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Is_featured)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Is_active)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Ended_at)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Area.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Category.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Customer.Name)
-                        </td>
-                        <td>
-                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Method)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Is_featured)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Is_active)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Ended_at)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Area.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Category.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Customer.Name)
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
 
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                        </td>
-                    </tr>
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
+            @await Html.PartialAsync("_PagingSection", Model)
         </div>
     </div>
     <div class="clearfix"> </div>

@@ -18,15 +18,19 @@ namespace src.Controllers
     {
         private readonly ICityService _cityService;
         private readonly IRegionService _regionService;
+        private readonly IAreaService _areaService;
 
-        public CitiesController(ICityService cityService, IRegionService regionService)
+        public CitiesController(ICityService cityService, IRegionService regionService, IAreaService areaService)
         {
             _cityService = cityService;
-            _regionService = regionService; 
+            _regionService = regionService;
+            _areaService = areaService; 
         }
 
-       
-        public async Task<IActionResult> Index()
+        [TempData]
+        public string Message { get; set; }
+
+        public async Task<IActionResult> Index(int? page)
         {
             var json = HttpContext.Session.GetString("user");
             if (json == null)
@@ -35,7 +39,9 @@ namespace src.Controllers
             }
             Models.Admin user = JsonConvert.DeserializeObject<Models.Admin>(json);
             ViewBag.Username = user.Username;
-            return View(await _cityService.GetCities());
+            var cities = await _cityService.GetCities();
+            cities = PaginatedList<City>.CreateAsnyc(cities.ToList(), page ?? 1, 10);
+            return View(cities);
         }
 
         
@@ -113,6 +119,12 @@ namespace src.Controllers
             }
             Models.Admin user = JsonConvert.DeserializeObject<Models.Admin>(json);
             ViewBag.Username = user.Username;
+            var areas = await _areaService.GetAreasByCityId(id);
+            if (areas.Count() > 0)
+            {
+                Message = "Cannot delete this city!";
+                return RedirectToAction("Index");
+            }
             var c = await _cityService.DeleteCity(id);
             
             if (c == false) return NotFound();

@@ -1,0 +1,24 @@
+﻿<nav aria-label="Page navigation example" style="margin-left: 10px">
+    <ul class="pagination">
+        @if (Model.PreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(Model.PageIndex - 1)">
+                    Previous
+                </a>
+            </li>
+        }
+        @if (Model.NextPage)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(Model.PageIndex + 1)">
+                    Next
+                </a>
+            </li>
+        }
+    </ul>
+</nav>

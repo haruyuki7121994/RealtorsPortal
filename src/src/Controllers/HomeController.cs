@@ -57,13 +57,13 @@ namespace src.Controllers
         public async Task<IActionResult>Index()
         {
             var numberAdsPerPage = await _configurationService.GetConfigurationByObj("Number of ads per page");
-            var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Enable/Disable featured ads");
+            var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Trigger featured ads");
             var currency = await _configurationService.GetConfigurationByObj("Currency symbol");
 
             var cagetories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
             var properties = _propertyService.FindAllWithRelation();
 
-            var featuredProps = properties.Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true))
+            var featuredProps = properties.Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true) && p.Ended_at >= DateTime.Now)
                 .OrderByDescending(p => p.Created_at)
                 .Take(Int32.Parse(numberAdsPerPage.Val))
                 .ToList();
@@ -95,13 +95,13 @@ namespace src.Controllers
         )
         {
             var numberAdsPerPage = await _configurationService.GetConfigurationByObj("Number of ads per page");
-            var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Enable/Disable featured ads");
+            var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Trigger featured ads");
             var currency = await _configurationService.GetConfigurationByObj("Currency symbol");
 
             ViewBag.currency = currency.Val;
             ViewBag.switchFeaturedAds = switchFeaturedAds.Val;
 
-            var properties = _propertyService.FindAllWithRelation().Where(p => p.Is_active.Equals(true));
+            var properties = _propertyService.FindAllWithRelation().Where(p => p.Is_active.Equals(true) && p.Ended_at >= DateTime.Now);
 
             var featuredProps = properties.Where(p => p.Is_featured.Equals(true))
                 .OrderByDescending(p => p.Created_at)
@@ -230,7 +230,7 @@ namespace src.Controllers
                 if (prop.Is_active.Equals(true))
                 {
                     var numberAdsPerPage = await _configurationService.GetConfigurationByObj("Number of ads per page");
-                    var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Enable/Disable featured ads");
+                    var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Trigger featured ads");
                     var currency = await _configurationService.GetConfigurationByObj("Currency symbol");
 
                     ViewBag.currency = currency.Val;
@@ -312,8 +312,12 @@ namespace src.Controllers
         {
             return View();
         }
-        
-        
+
+        public IActionResult MontageCalculator()
+        {
+            return View();
+        }
+
         [HttpGet]
         public IActionResult Contact()
         {
@@ -356,5 +360,24 @@ namespace src.Controllers
 
         [TempData]
         public string Message { get; set; }
+
+        public async Task<ActionResult> GetRegions(int id)
+        {
+
+            ViewBag.Regions = new SelectList(await _regionService.GetRegionsByCountryId(id), "Id", "Name");
+            return PartialView("DisplayRegions");
+        }
+
+        public async Task<ActionResult> GetCities(int id)
+        {
+            ViewBag.Cities = new SelectList(await _cityService.GetCitiesByRegionId(id), "Id", "Name");
+            return PartialView("DisplayCities");
+        }
+
+        public async Task<ActionResult> GetAreas(int id)
+        {
+            ViewBag.Areas = new SelectList(await _areaService.GetAreasByCityId(id), "Id", "Name");
+            return PartialView("DisplayAreas");
+        }
     }
 }

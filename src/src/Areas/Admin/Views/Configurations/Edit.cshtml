@@ -23,7 +23,21 @@
                                 </div>
                                 <div class="form-group col-md-5">
                                     <label asp-for="Val" class="control-label"></label>
-                                    <input asp-for="Val" class="form-control" />
+                                    @if (Model.Obj == "Expiration of ads" || Model.Obj == "Number of ads per page" || Model.Obj == "Subscription price")
+                                    {
+                                        <input asp-for="Val" type="number" value="@Int32.Parse(Model.Val)" class="form-control" />
+                                    }
+                                    else if(Model.Obj == "Payment Subscription" || Model.Obj == "Trigger featured ads")
+                                    {
+                                        <select class="form-control" asp-for="Val">
+                                            <option value="disabled">Disabled</option>
+                                            <option value="enabled">Enabled</option>
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="Val" type="text" class="form-control" />
+                                    }
                                     <span asp-validation-for="Val" class="text-danger"></span>
                                 </div>
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using src.Models;
 
 namespace src.Area.Admin.Controllers
 {
@@ -12,16 +13,22 @@ namespace src.Area.Admin.Controllers
     public class AgentsController : Controller
     {
         private readonly Services.ICustomerService services;
-        public AgentsController(Services.ICustomerService services)
+        private readonly Services.IPropertyService _propertyServices;
+        public AgentsController(Services.ICustomerService services, Services.IPropertyService propertyServices)
         {
             this.services = services;
+            this._propertyServices = propertyServices;
         }
-        public IActionResult Index()
+
+        [TempData]
+        public string Message { get; set; }
+
+        public IActionResult Index(int? page)
         {
             var result = services.findAll();
             var res = result.Where(e => e.Type == "agent");
-                return View(res);
-          
+            res = PaginatedList<Customer>.CreateAsnyc(res.ToList(), page ?? 1, 10);
+            return View(res);
         }
 
         [HttpGet]
@@ -42,19 +49,25 @@ namespace src.Area.Admin.Controllers
                         var filepath = Path.Combine("wwwroot/images", file.FileName);
                         var stream = new FileStream(filepath, FileMode.Create);
                         file.CopyToAsync(stream);
-                        customers.Image = "images/" + file.FileName; //ex: images/b1.gif
-                        services.addCustomer(customers);
-                        return RedirectToAction("Index");
+                        customers.Image = "images/" + file.FileName;
+                    }
+
+                    var result = services.addCustomer(customers);
+                    if (!result)
+                    {
+                        ViewBag.error = "Email or Username is exist!";
+                        return View();
                     }
                     else
                     {
-                        ViewBag.Msg = "Fail";
+                        Message = "Add Successfull";
+                        return RedirectToAction("Index");
                     }
                 }
             }
             catch (Exception e)
             {
-                ViewBag.Msg = e.Message;
+                ViewBag.error = e.Message;
             }
             return View();
         }
@@ -66,25 +79,31 @@ namespace src.Area.Admin.Controllers
             return View(customers);
         }
         [HttpPost]
-        public IActionResult Edit(Models.Customer customers, IFormFile file)
+        public IActionResult Edit(Models.Customer customers, IFormFile? file)
         {
             try
             {
                 Models.Customer cus = services.fineOne(customers.Username);
                 if (ModelState.IsValid)
                 {
-                    if (file.Length > 0)
+                    if (file != null)
                     {
                         var path = Path.Combine("wwwroot/images", file.FileName);
                         var stream = new FileStream(path, FileMode.Create);
                         file.CopyToAsync(stream);
                         cus.Image = "images/" + file.FileName;
-                        services.updateCustomer(customers);
-                        return RedirectToAction("Index");
+                    }
+
+                    var result = services.updateCustomer(customers);
+                    if (!result)
+                    {
+                        ViewBag.error = "Cannot update customer";
+                        return View();
                     }
                     else
                     {
-                        ViewBag.Msg = "Fail";
+                        Message = "Edit Successfull";
+                        return RedirectToAction("Index");
                     }
 
                 }
@@ -95,11 +114,16 @@ namespace src.Area.Admin.Controllers
             }
             return View();
         }
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-
             try
             {
+                var properties = await _propertyServices.GetPropertiesByCustomerId(id);
+                if (properties.Count() > 0)
+                {
+                    Message = "Cannot delete customer!";
+                    return RedirectToAction("Index");
+                }
                 services.deleteCustomer(id);
                 return RedirectToAction("Index");
             }

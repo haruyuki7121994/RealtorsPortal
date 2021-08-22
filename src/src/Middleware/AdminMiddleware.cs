@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace src.Middleware
 {
-    public class CustomerMiddleware
+    public class AdminMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public CustomerMiddleware(RequestDelegate next)
+        public AdminMiddleware(RequestDelegate next)
         {
             _next = next;
         }
@@ -21,10 +21,10 @@ namespace src.Middleware
             var method = context.Request.Method;
             if (CheckUrl(path) && method.Equals("GET"))
             {
-                var session = context.Session.GetString("customer");
+                var session = context.Session.GetString("user");
                 if (session is null)
                 {
-                    context.Request.Path = "/Auth/Login";
+                    context.Request.Path = "/Admin/Login";
                 }
                 else
                 {
@@ -36,7 +36,7 @@ namespace src.Middleware
 
         private bool CheckUrl(string path)
         {
-            return path.Contains("/Customer") && !path.Contains("/Delete/");
+            return path.Contains("/Admin") && !path.Contains("/Delete/");
         }
     }
 }

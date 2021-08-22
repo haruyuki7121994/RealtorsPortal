@@ -1,4 +1,4 @@
-﻿@model IEnumerable<src.Models.PaymentPackage>
+﻿@model PaginatedList<src.Models.PaymentPackage>
 
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
@@ -18,13 +18,13 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.Transaction_id)
+                            Transaction_id
                         </th>
                         <th>
                             Payment Price
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Status)
+                            Status
                         </th>
                         <th>
                             Used Ads
@@ -78,9 +78,9 @@
                     }
                 </tbody>
             </table>
+            @await Html.PartialAsync("_PagingSection", Model)
         </div>
     </div>
     <div class="clearfix"> </div>
 </div>
 <!---->
-

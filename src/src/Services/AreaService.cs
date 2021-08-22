@@ -53,7 +53,7 @@ namespace src.Services
 
         public async Task<IEnumerable<Models.Area>> GetAreas()
         {
-            return await _context.Areas.Include(x => x.city).ToListAsync();
+            return await _context.Areas.Include(x => x.city).OrderByDescending(x => x.Id).ToListAsync();
         }
        
         public async Task<IEnumerable<Models.Area>> GetAreasByCityId(int Id)

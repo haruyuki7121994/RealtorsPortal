@@ -15,18 +15,19 @@ namespace src.Area.Admin.Controllers
         {
             this.services = services;
         }
-        public IActionResult Index(DateTime startdate,DateTime enddate)
+
+        [TempData]
+        public string Message { get; set; }
+
+        public IActionResult Index(DateTime startdate,DateTime enddate, int? page)
         {
             var result = services.findAll();
-            if (startdate == enddate)
+            if (startdate != enddate)
             {
-                return View(result);
+                result = result.Where(e => e.Created_at >= startdate && e.Created_at <= enddate).ToList();
             }
-            else
-            {
-                var res = result.Where(e => e.Created_at >= startdate && e.Created_at <= enddate);
-                return View(res);
-            }
+            result = PaginatedList<PaymentPackage>.CreateAsnyc(result.ToList(), page ?? 1, 10);
+            return View(result);
         }
 
         public IActionResult Details(int id)

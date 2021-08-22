@@ -1,4 +1,5 @@
-﻿<!--
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+<!--
 Author: W3layouts
 Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
@@ -90,7 +91,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </head>
 <body>
     <div id="wrapper">
-        
         @await Html.PartialAsync("_Menu")
         <div id="page-wrapper" class="gray-bg dashbard-1">
             <div class="content-main">
@@ -108,6 +108,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script src="~/admin/js/scripts.js"></script>
     <!--//scrolling js-->
     <script src="~/admin/js/bootstrap.min.js"></script>
+    <!-- CKeditor -->
+    <script type="text/javascript" src="~/lib/ckeditor/ckeditor.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

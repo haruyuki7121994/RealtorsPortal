@@ -45,7 +45,7 @@ namespace src.Services
 
         public List<Package> findAll()
         {
-            return context.Packages.ToList();
+            return context.Packages.OrderByDescending(x => x.Id).ToList();
         }
 
         public Package fineOne(string name)

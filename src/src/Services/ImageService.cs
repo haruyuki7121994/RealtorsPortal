@@ -37,7 +37,7 @@ namespace src.Services
 
         public List<Image> findAll()
         {
-            return context.Images.ToList();
+            return context.Images.OrderByDescending(x => x.Id).ToList();
         }
 
         public Image fineOne(int id)

@@ -45,7 +45,7 @@ namespace src.Services
 
         public List<PaymentSubscription> findAll()
         {
-            return context.PaymentSubscription.ToList();
+            return context.PaymentSubscription.OrderByDescending(x => x.Create_at).ToList();
         }
 
         public PaymentSubscription fineOne(int id)

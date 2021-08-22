@@ -34,7 +34,7 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="Description" class="control-label"></label>
-                                <input asp-for="Description" class="form-control" />
+                                @Html.TextAreaFor(model => model.Description)
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -94,4 +94,9 @@
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            CKEDITOR.replace(@Html.IdFor(model => model.Description));
+        })
+    </script>
 }

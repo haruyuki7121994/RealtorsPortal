@@ -18,15 +18,19 @@ namespace src.Area.Admin.Controllers
     {
         private readonly IAreaService _areaService;
         private readonly ICityService _cityService;
+        private readonly IPropertyService _propertyService;
 
-        public AreasController(IAreaService areaService, ICityService cityService)
+        public AreasController(IAreaService areaService, ICityService cityService, IPropertyService propertyService)
         {
             _areaService = areaService;
             _cityService = cityService;
-    }
+            _propertyService = propertyService;
+        }
 
-       
-        public async Task<IActionResult> Index()
+        [TempData]
+        public string Message { get; set; }
+
+        public async Task<IActionResult> Index(int? page)
         {
             var json = HttpContext.Session.GetString("user");
             if (json == null)
@@ -35,7 +39,9 @@ namespace src.Area.Admin.Controllers
             }
             Models.Admin user = JsonConvert.DeserializeObject<Models.Admin>(json);
             ViewBag.Username = user.Username;
-            return View(await _areaService.GetAreas());
+            var areas = await _areaService.GetAreas();
+            areas = PaginatedList<Models.Area>.CreateAsnyc(areas.ToList(), page ?? 1, 10);
+            return View(areas);
         }
 
        
@@ -107,6 +113,12 @@ namespace src.Area.Admin.Controllers
         }
         public async Task<IActionResult> Delete(int id)
         {
+            var properties = await _propertyService.GetPropertiesByAreaId(id);
+            if (properties.Count() > 0)
+            {
+                Message = "Cannot delete this property!";
+                return RedirectToAction("Index");
+            }
             var deleted = await _areaService.deleteArea(id);
             if (deleted == false) return NotFound();
             return RedirectToAction(nameof(Index));

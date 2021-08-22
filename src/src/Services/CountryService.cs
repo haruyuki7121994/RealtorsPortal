@@ -60,7 +60,7 @@ namespace src.Services
 
         public async Task<IEnumerable<Country>> GetCountries()
         {
-            return await _context.Countries.ToListAsync();
+            return await _context.Countries.OrderByDescending(x => x.Id).ToListAsync();
         }
 
         public async Task<Country> GetCountryById(int id)

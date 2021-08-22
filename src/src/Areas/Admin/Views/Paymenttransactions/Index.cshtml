@@ -1,4 +1,4 @@
-﻿@model IEnumerable<src.Models.PaymentPackage>
+﻿@model PaginatedList<src.Models.PaymentPackage>
 
 @{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
@@ -41,7 +41,10 @@
                             Price
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Status)
+                            Status
+                        </th>
+                        <th>
+                            Created At
                         </th>
                         <th>
                             Used ads
@@ -68,18 +71,21 @@
                                 @item.Package.Price
                             </td>
                             <td>
-                                @if (item.Status == src.Models.PaymentPackage.APPROVED_STATUS)
+                                @if (item.Status == PaymentPackage.APPROVED_STATUS)
                                 {
-                                    <span>Approved</span>
+                                    <div>Approved</div>
                                 }
-                                @if (item.Status == src.Models.PaymentPackage.EXPIRED_STATUS)
+                                @if (item.Status == PaymentPackage.EXPIRED_STATUS)
                                 {
-                                    <span>Expired</span>
+                                    <div>Expired</div>
                                 }
-                                @if (item.Status == src.Models.PaymentPackage.PENDING_STATUS)
+                                @if (item.Status == PaymentPackage.PENDING_STATUS)
                                 {
-                                    <span>Pending</span>
+                                    <div>Pending</div>
                                 }
+                            </td>
+                            <td>
+                                @item.Created_at
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Used_ads)/@Html.DisplayFor(modelItem => item.Limit_ads)
@@ -88,13 +94,14 @@
                                 @Html.DisplayFor(modelItem => item.Used_featured_ads)/@Html.DisplayFor(modelItem => item.Limit_featured_ads)
                             </td>
                             <td>
-                                @Html.ActionLink("Details", "Details", "Paymenttransactions", new { area = "Admin", id = item.Id })
+                                @Html.ActionLink("Details", "Details", "Paymenttransactions", new { area = "Admin", id = item.Id }, new { @class = "btn btn-primary" })
 
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+            @await Html.PartialAsync("_PagingSection", Model)
         </div>
     </div>
     <div class="clearfix"> </div>

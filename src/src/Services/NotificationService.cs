@@ -37,7 +37,7 @@ namespace src.Services
 
         public List<Notification> findAll()
         {
-            return context.Notifications.ToList();
+            return context.Notifications.OrderByDescending(x => x.Id).ToList();
         }
 
         public Notification fineOne(int id)

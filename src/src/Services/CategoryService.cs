@@ -46,12 +46,12 @@ namespace src.Services
 
         public async Task<IEnumerable<Category>> GetCategoriesByActive(bool active)
         {
-            return await _context.Categories.Where(x=>x.Is_active == active).ToListAsync();
+            return await _context.Categories.Where(x=>x.Is_active == active).OrderByDescending(x => x.Id).ToListAsync();
         }
 
         public async Task<IEnumerable<Category>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories.OrderByDescending(x => x.Id).ToListAsync();
         }
         
         public async Task<Category> GetCategoryById(int id)

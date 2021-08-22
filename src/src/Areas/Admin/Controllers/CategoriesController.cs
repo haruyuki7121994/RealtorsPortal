@@ -17,15 +17,19 @@ namespace src.Controllers
     public class CategoriesController : Controller
     {
         private readonly ICategoryService _categoryService;
+        private readonly IPropertyService _propertyService;
 
-        public CategoriesController(ICategoryService categoryService)
+        public CategoriesController(ICategoryService categoryService, IPropertyService propertyService)
         {
            
-            _categoryService =  categoryService;
+            _categoryService = categoryService;
+            _propertyService = propertyService;
         }
 
-      
-        public async Task<IActionResult> Index()
+        [TempData]
+        public string Message { get; set; }
+
+        public async Task<IActionResult> Index(int? page)
         {
             var json = HttpContext.Session.GetString("user");
             if (json == null)
@@ -34,7 +38,9 @@ namespace src.Controllers
             }
             Models.Admin user = JsonConvert.DeserializeObject<Models.Admin>(json);
             ViewBag.Username = user.Username;
-            return View(await _categoryService.GetCategories());
+            var categories = await _categoryService.GetCategories();
+            categories = PaginatedList<Category>.CreateAsnyc(categories.ToList(), page ?? 1, 10);
+            return View(categories);
         }
 
         public IActionResult Create()
@@ -108,11 +114,15 @@ namespace src.Controllers
             }
             Models.Admin user = JsonConvert.DeserializeObject<Models.Admin>(json);
             ViewBag.Username = user.Username;
+            var properties = await _propertyService.GetPropertiesByCategoryId(id);
+            if (properties.Count() > 0)
+            {
+                Message = "Cannot delete this category";
+                return RedirectToAction("Index");
+            }
             var categoryRepo = await _categoryService.DeleteCategory(id);
             if (categoryRepo == false) return NotFound();
             return RedirectToAction(nameof(Index));
         }
-
-        
     }
 }

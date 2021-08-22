@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using src.Models;
 
 namespace src.Area.Admin.Controllers
 {
@@ -23,9 +24,15 @@ namespace src.Area.Admin.Controllers
             this.emailService = emailService;
             this.packageService = packageService;
         }
-        public IActionResult Index()
+
+        [TempData]
+        public string Message { get; set; }
+
+        public IActionResult Index(int? page)
         {
-            return View(services.FindByStatus(Models.PaymentPackage.EXPIRED_STATUS));
+            var notify = services.FindByStatus(Models.PaymentPackage.EXPIRED_STATUS);
+            notify = PaginatedList<PaymentPackage>.CreateAsnyc(notify.ToList(), page ?? 1, 10);
+            return View(notify);
         }
 
         public IActionResult Send(int id)

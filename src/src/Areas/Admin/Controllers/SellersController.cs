@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using src.Models;
 
 namespace src.Area.Admin.Controllers
 {
@@ -12,14 +13,21 @@ namespace src.Area.Admin.Controllers
     public class SellersController : Controller
     {
         private readonly Services.ICustomerService services;
-        public SellersController(Services.ICustomerService services)
+        private readonly Services.IPropertyService _propertyServices;
+        public SellersController(Services.ICustomerService services, Services.IPropertyService propertyServices)
         {
             this.services = services;
+            this._propertyServices = propertyServices;
         }
-        public IActionResult Index()
+
+        [TempData]
+        public string Message { get; set; }
+
+        public IActionResult Index(int? page)
         {
             var result = services.findAll();
             var res = result.Where(e => e.Type == "private");
+            res = PaginatedList<Customer>.CreateAsnyc(res.ToList(), page ?? 1, 10);
             return View(res);
         }
 
@@ -43,13 +51,15 @@ namespace src.Area.Admin.Controllers
                         customers.Image = "images/" + file.FileName; //ex: images/b1.gif
                     }
                     var result = services.addCustomer(customers);
-                    if (result)
+                    if (!result)
                     {
-                        return RedirectToAction("Index");
+                        ViewBag.error = "Email or Username is exist!";
+                        return View();
                     }
                     else
                     {
-                        ViewBag.Msg = "Fail";
+                        Message = "Add Successfull";
+                        return RedirectToAction("Index");
                     }
                 }
             }
@@ -80,8 +90,17 @@ namespace src.Area.Admin.Controllers
                         file.CopyToAsync(stream);
                         customers.Image = "images/avatars/" + file.FileName;
                     }
-                    services.updateCustomer(customers);
-                    return RedirectToAction("Index");
+                    var result = services.updateCustomer(customers);
+                    if (!result)
+                    {
+                        ViewBag.error = "Cannot update customer";
+                        return View();
+                    }
+                    else
+                    {
+                        Message = "Edit Successfull";
+                        return RedirectToAction("Index");
+                    }
                 }
             }
             catch (Exception e)
@@ -90,11 +109,16 @@ namespace src.Area.Admin.Controllers
             }
             return View();
         }
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-
             try
             {
+                var properties = await _propertyServices.GetPropertiesByCustomerId(id);
+                if (properties.Count() > 0)
+                {
+                    Message = "Cannot delete customer!";
+                    return RedirectToAction("Index");
+                }
                 services.deleteCustomer(id);
                 return RedirectToAction("Index");
             }

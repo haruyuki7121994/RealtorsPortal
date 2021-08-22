@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using src.Models;
 using src.Repository;
 
@@ -62,8 +63,9 @@ namespace src.Services
                        Package_id = pp.Package_id,
                        Created_at = pp.Created_at,
                        Package = p,
-                       Customer = cus
-                   }).ToList();
+                       Customer = cus,
+                       Payment_price = pp.Payment_price
+                   }).OrderByDescending(x => x.Created_at).ToList();
         }
 
         public PaymentPackage GetDetails(int id)
@@ -91,6 +93,8 @@ namespace src.Services
                             Package = p,
                             Payment_price = pp.Payment_price,
                             Transaction_id = pp.Transaction_id,
+                            Created_at = pp.Created_at,
+                            Updated_at = pp.Updated_at
                         }).SingleOrDefault();
             if (Payment_package != null)
             {
@@ -140,7 +144,7 @@ namespace src.Services
                             Package_id = pp.Package_id,
                             Created_at = pp.Created_at
                         };
-            return query.ToList();
+            return query.OrderByDescending(x => x.Created_at).ToList();
                    
         }
 
@@ -165,7 +169,7 @@ namespace src.Services
                         Transaction_id = pp.Transaction_id,
                         Created_at = pp.Created_at,
                         Updated_at = pp.Updated_at
-                    }).OrderByDescending(p => p.Id).ToList();
+                    }).OrderByDescending(p => p.Created_at).ToList();
         }
 
         public PaymentPackage AddTrialPaymentPackageForCustomer(int customerId)
@@ -302,6 +306,11 @@ namespace src.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<IEnumerable<PaymentPackage>> GetPaymentsByPackageId(int id)
+        {
+            return await context.PaymentPackage.Where(x => x.Package_id == id).ToListAsync();
         }
     }
 }

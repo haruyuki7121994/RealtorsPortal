@@ -21,5 +21,8 @@ namespace src.Services
 
         bool updateProperty(Property property);
         bool addProperty(Property property);
+
+        Task<IEnumerable<Property>> GetPropertiesByAreaId(int id);
+        Task<IEnumerable<Property>> GetPropertiesByCategoryId(int id);
     }
 }

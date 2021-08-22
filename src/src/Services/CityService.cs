@@ -45,7 +45,7 @@ namespace src.Services
 
         public async Task<IEnumerable<City>> GetCities()
         {
-            return await _context.Cities.Include(x => x.region).ToListAsync();
+            return await _context.Cities.Include(x => x.region).OrderByDescending(x => x.Id).ToListAsync();
         }
       
         public async Task<City> GetCityById(int id)

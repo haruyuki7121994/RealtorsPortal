@@ -272,12 +272,8 @@ namespace src.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var deleteSuccess = await _propertyService.DeleteProperty(id);
-            if(deleteSuccess)
-            {
-                return RedirectToAction("Index");
-            }
-            return NotFound();
-          
+            return RedirectToAction("Index");
+
         }
 
         public IActionResult Package()
@@ -439,8 +435,6 @@ namespace src.Controllers
 
         public async Task<ActionResult> GetAreas(int id)
         {
-            
-            
             ViewBag.Areas = new SelectList(await _areaService.GetAreasByCityId(id), "Id", "Name");
             return PartialView("DisplayAreas");
         }

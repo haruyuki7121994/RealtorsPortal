@@ -183,9 +183,10 @@
                 var countryId = $(this).val();
                 $.ajax({
                     type: "POST",
-                    url: "/Customer/GetRegions?id=" + countryId,
+                    url: "/Home/GetRegions?id=" + countryId,
                     contentType: "html",
                     success: function (res) {
+                        console.log(res)
                         $("#RegionId").empty();
                         $("#CityId").empty();
                         $("#AreaId").empty();
@@ -198,7 +199,7 @@
                 var regionId = $(this).val();
                 $.ajax({
                     type: "POST",
-                    url: "/Customer/GetCities?id=" + regionId,
+                    url: "/Home/GetCities?id=" + regionId,
                     contentType: "html",
                     success: function (res) {
                         $("#CityId").empty();
@@ -212,7 +213,7 @@
                 var cityId = $(this).val();
                 $.ajax({
                     type: "POST",
-                    url: "/Customer/GetAreas?id=" + cityId,
+                    url: "/Home/GetAreas?id=" + cityId,
                     contentType: "html",
                     success: function (res) {
                         $("#AreaId").empty();

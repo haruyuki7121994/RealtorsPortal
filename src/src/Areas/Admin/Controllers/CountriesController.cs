@@ -17,13 +17,18 @@ namespace src.Controllers
     public class CountriesController : Controller
     {
         private readonly ICountryService _countryService;
+        private readonly IRegionService _regionService;
 
-        public CountriesController(ICountryService countryService)
+        public CountriesController(ICountryService countryService, IRegionService regionService)
         {
             _countryService = countryService;
+            _regionService = regionService;
         }
 
-        public async Task<IActionResult> Index()
+        [TempData]
+        public string Message { get; set; }
+
+        public async Task<IActionResult> Index(int? page)
         {
             var json = HttpContext.Session.GetString("user");
             if (json == null)
@@ -32,7 +37,9 @@ namespace src.Controllers
             }
             Models.Admin user = JsonConvert.DeserializeObject<Models.Admin>(json);
             ViewBag.Username = user.Username;
-            return View(await _countryService.GetCountries());
+            var countries = await _countryService.GetCountries();
+            countries = PaginatedList<Country>.CreateAsnyc(countries.ToList(), page ?? 1, 10);
+            return View(countries);
         }
         public async Task<IActionResult> Details(int id)
         {
@@ -118,6 +125,12 @@ namespace src.Controllers
             }
             Models.Admin user = JsonConvert.DeserializeObject<Models.Admin>(json);
             ViewBag.Username = user.Username;
+            var regions = await _regionService.GetRegionsByCountryId(id);
+            if (regions.Count() > 0)
+            {
+                Message = "Cannot delete this country!";
+                return RedirectToAction(nameof(Index));
+            }
             var deleteSuccess = await _countryService.DeleteCountry(id);
             if (!deleteSuccess)
             {

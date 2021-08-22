@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using src.Models;
 
 namespace src.Area.Admin.Controllers
 {
@@ -29,10 +30,11 @@ namespace src.Area.Admin.Controllers
         [TempData]
         public string Message { get; set; }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
             var cus = _customerService.findAll();
             cus = cus.Where(c => c.Is_verified.Equals(false) && c.Is_active.Equals(false)).ToList();
+            cus = PaginatedList<Customer>.CreateAsnyc(cus.ToList(), page ?? 1, 10);
             return View(cus);
         }
 

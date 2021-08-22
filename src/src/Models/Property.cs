@@ -27,8 +27,7 @@ namespace src.Models
         public string Introduction { get; set; }
 
         [
-            Required(ErrorMessage = "Description cannot empty"),
-            StringLength(255, MinimumLength = 2, ErrorMessage = "MinimumLength = 2; MaximumLength = 255")
+            Required(ErrorMessage = "Description cannot empty")
         ]
         public string Description { get; set; }
         public string Features { get; set; }

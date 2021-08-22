@@ -21,5 +21,6 @@ namespace src.Services
         PaymentPackage CheckPaymentCode(string code);
         bool CheckCanCreateAds(int customerId, bool featuredAds = false);
         bool UpdateUsedAdsForCustomer(int customerId, bool featuredAds = false);
+        Task<IEnumerable<PaymentPackage>> GetPaymentsByPackageId(int id);
     }
 }

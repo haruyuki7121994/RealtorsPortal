@@ -38,30 +38,27 @@
                                 }
                             </div>
                         }
-                        <div class="aa-properties-info">
-                            <h2>@Model.Property.Title</h2>
-                            <h4>@Model.Property.Country.Name, @Model.Property.Region.Name, @Model.Property.City.Name, @Model.Property.Area.Name</h4>
-                            <span class="aa-price">@ViewBag.currency @Model.Property.Price - <span style="text-transform: uppercase">@Model.Property.Method</span></span>
-                            <div>
-                                @Html.Raw(@Model.Property.Description)
-                            </div>
-                            <h4>Propery Features</h4>
-                            <ul>
-                                <li>4 Bedroom</li>
-                                <li>3 Baths</li>
-                                <li>Kitchen</li>
-                                <li>Air Condition</li>
-                                <li>Belcony</li>
-                                <li>Gym</li>
-                                <li>Garden</li>
-                                <li>CCTV</li>
-                                <li>Children Play Ground</li>
-                                <li>Comunity Center</li>
-                                <li>Security System</li>
-                            </ul>
-                            <h4>Property Thumbnail</h4>
-                            <img src="~/@Model.Property.Thumbnail_url" style="width: 100%" alt="Alternate Text" />
+                    <div class="aa-properties-info">
+                        <h2>@Model.Property.Title</h2>
+                        <h4>@Model.Property.Country.Name, @Model.Property.Region.Name, @Model.Property.City.Name, @Model.Property.Area.Name</h4>
+                        <span class="aa-price">@ViewBag.currency @Model.Property.Price - <span style="text-transform: uppercase">@Model.Property.Method</span></span>
+                        @if (Model.Property.Deposit > 0)
+                        {
+                            <span class="aa-price">@ViewBag.currency @Model.Property.Deposit</span>
+                        }
+                        <div>
+                            @Html.Raw(@Model.Property.Description)
                         </div>
+                        <input type="hidden" id="features-json" value="@Model.Property.Features" />
+                        @if (Model.Property.Features != null)
+                        {
+                            <h4>Propery Features</h4>
+                            <ul id="feature-list"></ul>
+                        }
+
+                        <h4>Property Thumbnail</h4>
+                        <img src="~/@Model.Property.Thumbnail_url" style="width: 100%" alt="Alternate Text" />
+                    </div>
                         <!-- Properties social share -->
                         <div class="aa-properties-social">
                             <ul>
@@ -144,3 +141,19 @@
     </div>
 </section>
 <!-- / Properties  -->
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            let featuresJson = $("#features-json").val();
+            console.log(featuresJson)
+            if (featuresJson !== "") {
+                const features = JSON.parse(featuresJson);
+                console.log(features)
+                for (var i = 0; i < features.length; i++) {
+                    $("#feature-list").append("<li>" + features[i] + "</li>")
+                }
+                console.log($("#feature-list").html())
+            }
+        })
+    </script>
+}

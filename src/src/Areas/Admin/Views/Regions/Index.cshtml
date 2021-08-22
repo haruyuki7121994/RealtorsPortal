@@ -1,4 +1,4 @@
-﻿@model IEnumerable<src.Models.Region>
+﻿@model PaginatedList<src.Models.Region>
 
 @{
     ViewData["Title"] = "Region";
@@ -16,13 +16,13 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.Name)
+                            Name
+                        </th>
+                        <th>
+                            Country
                         </th>
                         <th>
                             Active
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Country)
                         </th>
                         <th></th>
                     </tr>
@@ -46,6 +46,7 @@
                     }
                 </tbody>
             </table>
+            @await Html.PartialAsync("_PagingSection", Model)
         </div>
     </div>
     <div class="clearfix"> </div>

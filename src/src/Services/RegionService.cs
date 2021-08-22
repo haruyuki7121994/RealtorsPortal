@@ -59,7 +59,7 @@ namespace src.Services
 
         public async Task<IEnumerable<Region>> GetRegions()
         {
-            return await _context.Regions.Include(x => x.Country).ToListAsync();
+            return await _context.Regions.Include(x => x.Country).OrderByDescending(x => x.Id).ToListAsync();
         }
 
         public async Task<Region> GetRegionById(int id)

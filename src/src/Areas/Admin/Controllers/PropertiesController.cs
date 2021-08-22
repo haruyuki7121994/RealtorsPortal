@@ -31,12 +31,16 @@ namespace src.Controllers
             _categoryService = categoryService;
         }
 
-        // GET: Properties
-        public async Task<IActionResult> Index()
-        {
-            return View(await _propertyservice.GetProperties());
-        }
+        [TempData]
+        public string Message { get; set; }
 
+        // GET: Properties
+        public async Task<IActionResult> Index(int? page)
+        {
+            var properties = await _propertyservice.GetProperties();
+            properties = PaginatedList<Property>.CreateAsnyc(properties, page ?? 1, 10);
+            return View(properties);
+        }
        
         public async Task<IActionResult> Create()
         {
@@ -45,7 +49,6 @@ namespace src.Controllers
             ViewData["Customers"] = new SelectList( _customerService.findAll(), "Id", "Name");
             return View();
         }
-
      
         [HttpPost]
         [ValidateAntiForgeryToken]
