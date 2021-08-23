@@ -27,7 +27,7 @@
                                     {
                                         <input asp-for="Val" type="number" value="@Int32.Parse(Model.Val)" class="form-control" />
                                     }
-                                    else if(Model.Obj == "Payment Subscription" || Model.Obj == "Trigger featured ads")
+                                    else if(Model.Obj == "Payment Subscription" || Model.Obj == "Toggle featured ads")
                                     {
                                         <select class="form-control" asp-for="Val">
                                             <option value="disabled">Disabled</option>

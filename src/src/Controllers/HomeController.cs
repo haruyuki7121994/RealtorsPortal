@@ -57,7 +57,7 @@ namespace src.Controllers
         public async Task<IActionResult>Index()
         {
             var numberAdsPerPage = await _configurationService.GetConfigurationByObj("Number of ads per page");
-            var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Trigger featured ads");
+            var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Toggle featured ads");
             var currency = await _configurationService.GetConfigurationByObj("Currency symbol");
 
             var cagetories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
@@ -95,7 +95,7 @@ namespace src.Controllers
         )
         {
             var numberAdsPerPage = await _configurationService.GetConfigurationByObj("Number of ads per page");
-            var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Trigger featured ads");
+            var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Toggle featured ads");
             var currency = await _configurationService.GetConfigurationByObj("Currency symbol");
 
             ViewBag.currency = currency.Val;
@@ -230,7 +230,7 @@ namespace src.Controllers
                 if (prop.Is_active.Equals(true))
                 {
                     var numberAdsPerPage = await _configurationService.GetConfigurationByObj("Number of ads per page");
-                    var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Trigger featured ads");
+                    var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Toggle featured ads");
                     var currency = await _configurationService.GetConfigurationByObj("Currency symbol");
 
                     ViewBag.currency = currency.Val;
