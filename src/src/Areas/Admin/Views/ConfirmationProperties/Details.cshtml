@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <br />
-                        <form asp-action="Edit">
+                        <form asp-action="Approve" asp-controller="ConfirmationProperties">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input type="hidden" asp-for="Id" />
                             <input class="form-check-input" type="hidden" asp-for="Is_active" />
@@ -25,8 +25,7 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="Introduction" class="control-label"></label>
-                                <input asp-for="Introduction" class="form-control" />
-                                <span asp-validation-for="Introduction" class="text-danger"></span>
+                                <textarea asp-for="Introduction" class="form-control"></textarea>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Description" class="control-label"></label>
@@ -34,9 +33,10 @@
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Features" class="control-label"></label>
-                                <input asp-for="Features" class="form-control" />
-                                <span asp-validation-for="Features" class="text-danger"></span>
+                                <label asp-for="Features" class="control-label">Features</label>
+                                <ul id="feature-list" class="list-group">
+                                </ul>
+                                <input asp-for="Features" id="features-in" type="hidden" class="form-control" />
                             </div>
                             <div class="form-group">
                                 <p class="control-label">Method </p>
@@ -66,19 +66,24 @@
                             </div>
                             <div class="form-group">
                                 <label for="Area_id" class="control-label">Area Name</label>
-                                @Html.DropDownListFor(m => m.Area_id, (IEnumerable<SelectListItem>)ViewBag.Areas, new { @class = "form-control" })
+                                <input value="@Model.Area?.Name" class="form-control" />
 
                             </div>
                             <div class="form-group">
                                 <label for="Category_id" class="control-label">Category Name</label>
-                                @Html.DropDownListFor(m => m.Category_id, (IEnumerable<SelectListItem>)ViewBag.Categories, new { @class = "form-control" })
+                                <input value="@Model.Category?.Name" class="form-control" />
                             </div>
                             <div class="form-group">
                                 <label for="Customer_id" class="control-label">Customer Name</label>
-                                @Html.DropDownListFor(m => m.Customer_id, (IEnumerable<SelectListItem>)ViewBag.Customers, new { @class = "form-control" })
+                                <input value="@Model.Customer?.Name" class="form-control" />
                             </div>
                             <div class="form-group">
-                                <input type="submit" value="Save" class="btn btn-primary" />
+                                <label asp-for="Thumbnail_url" class="control-label">Thumbnail</label>
+                                <img width="370" height="220" style="object-fit: cover; height: 100%" class="form-control" src="~/@Model.Thumbnail_url" alt="Alternate Text" />
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Approve" name="type" class="btn btn-success" />
+                                <input type="submit" value="Reject" name="type" class="btn btn-danger" />
                             </div>
                         </form>
                     </div>
@@ -93,6 +98,21 @@
     <script>
         $(document).ready(function () {
             CKEDITOR.replace(@Html.IdFor(model => model.Description));
+            let featuresJson = $("#features-in").val();
+            let features = [];
+            console.log(featuresJson)
+            if (featuresJson !== "") {
+                features = JSON.parse(featuresJson);
+                appendFeatures(features)
+            }
+
+            function appendFeatures(features) {
+                let list = '';
+                for (var i = 0; i < features.length; i++) {
+                    list += "<li class='list-group-item'>" + features[i] + "</li>"
+                }
+                $("#feature-list").html(list)
+            }
         })
     </script>
 }

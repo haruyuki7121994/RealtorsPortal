@@ -1,0 +1,87 @@
+﻿@model PaginatedList<src.Models.Property>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Confirm Property";
+}
+
+@await Html.PartialAsync("_Banner")
+<div class="content-top">
+    <div class="col-md-12">
+        <div style="background: #fff">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Title
+                        <th>
+                            Method
+                        </th>
+                        <th>
+                            Price
+                        </th>
+                        <th>
+                            Featured
+                        </th>
+                        <th>
+                            Active
+                        </th>
+                        <th>
+                            Ended At
+                        </th>
+                        <th>
+                            Area Name
+                        </th>
+                        <th>
+                            Category Name
+                        </th>
+                        <th>
+                            Customer Name
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Method)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Is_featured)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Is_active)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Ended_at)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Area.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Category.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Customer.Name)
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @await Html.PartialAsync("_PagingSection", Model)
+        </div>
+    </div>
+    <div class="clearfix"> </div>
+</div>
+

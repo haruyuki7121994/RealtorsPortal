@@ -171,8 +171,8 @@ namespace src.Controllers
                         using (var image = SixLabors.ImageSharp.Image.Load(file.OpenReadStream()))
                         {
                             string systemFileExtenstion = fileName.Substring(fileName.LastIndexOf('.'));
-                            int scaleWidth = property.Is_featured ? 750 : 370;
-                            int scaleHeight = property.Is_featured ? 500 : 220;
+                            int scaleWidth = 370;
+                            int scaleHeight = 220;
                             image.Mutate(x => x.Resize(scaleWidth, scaleHeight));
                             var newfileNameScale = GenerateFileName("scale_", systemFileExtenstion);
                             var filepath160 = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "properties")).Root + $@"\{newfileNameScale}";
@@ -229,8 +229,8 @@ namespace src.Controllers
                         using (var image = SixLabors.ImageSharp.Image.Load(file.OpenReadStream()))
                         {
                             string systemFileExtenstion = fileName.Substring(fileName.LastIndexOf('.'));
-                            int scaleWidth = property.Is_featured ? 750 : 370;
-                            int scaleHeight = property.Is_featured ? 500 : 220;
+                            int scaleWidth = 370;
+                            int scaleHeight = 220;
                             image.Mutate(x => x.Resize(scaleWidth, scaleHeight));
                             var newfileNameScale = GenerateFileName("scale_", systemFileExtenstion);
                             var filepath160 = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "properties")).Root + $@"\{newfileNameScale}";
