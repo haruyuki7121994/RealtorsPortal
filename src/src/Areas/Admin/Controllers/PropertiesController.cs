@@ -35,9 +35,39 @@ namespace src.Controllers
         public string Message { get; set; }
 
         // GET: Properties
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index
+        (
+            int? page,
+            string keywords,
+            int? categry_id,
+            Boolean? status,
+            int? area_id
+        )
         {
+            ViewBag.Areas = new SelectList(await _areaService.GetAreas(), "Id", "Name");
+            ViewBag.Categories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
             var properties = await _propertyservice.GetProperties();
+
+            if (!string.IsNullOrEmpty(keywords))
+            {
+                properties = properties.Where(p => p.Title.ToLower().Contains(keywords.ToLower()));
+                ViewBag.keywords = keywords;
+            }
+            if (categry_id > 0)
+            {
+                properties = properties.Where(p => p.Category_id.Equals(categry_id));
+                ViewBag.categryId = categry_id;
+            }
+            if (area_id > 0)
+            {
+                properties = properties.Where(p => p.Area_id.Equals(area_id));
+                ViewBag.areaId = area_id;
+            }
+            if (status == true || status == false)
+            {
+                properties = properties.Where(p => p.Is_active.Equals(status));
+                ViewBag.status = status;
+            }
             properties = PaginatedList<Property>.CreateAsnyc(properties, page ?? 1, 10);
             return View(properties);
         }
