@@ -209,7 +209,7 @@ namespace src.Services
             return context.PaymentPackage.SingleOrDefault(pp => pp.Id.Equals(id) && pp.Transaction_id.Equals(transaction));
         }
 
-        public bool CheckCanCreateAds(int customerId, bool featuredAds = false)
+        public bool CheckCanCreateAds(int customerId, bool featuredAds = false, bool withProperties = false)
         {
             int count = 0;
             int limit = 0;
@@ -232,7 +232,21 @@ namespace src.Services
                 }
             }
 
-            return count < limit;
+            var countProps = 0;
+            if (withProperties)
+            {
+                if (featuredAds)
+                {
+                    countProps = context.Properties.Where(p => p.Customer_id.Equals(customerId) && p.Is_featured.Equals(true)).Count();
+                }
+                else
+                {
+                    countProps = context.Properties.Where(p => p.Customer_id.Equals(customerId) && p.Is_featured.Equals(false)).Count();
+                }
+                
+            }
+
+            return (count < limit) && (limit >= countProps);
         }
 
         public bool UpdateUsedAdsForCustomer(int customerId, bool featuredAds = false)

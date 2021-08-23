@@ -19,7 +19,7 @@ namespace src.Services
         List<PaymentPackage> FindPackagesByCustomerId(int customerId);
         PaymentPackage AddTrialPaymentPackageForCustomer(int customerId);
         PaymentPackage CheckPaymentCode(string code);
-        bool CheckCanCreateAds(int customerId, bool featuredAds = false);
+        bool CheckCanCreateAds(int customerId, bool featuredAds = false, bool withProperties = false);
         bool UpdateUsedAdsForCustomer(int customerId, bool featuredAds = false);
         Task<IEnumerable<PaymentPackage>> GetPaymentsByPackageId(int id);
     }

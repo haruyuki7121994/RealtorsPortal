@@ -121,7 +121,7 @@ namespace src.Controllers
         {
             //check can or not create new ads
             var cus = GetCustomerFromSession();
-            bool canCreateAds = _paymentPackageService.CheckCanCreateAds(cus.Id, false);
+            bool canCreateAds = _paymentPackageService.CheckCanCreateAds(cus.Id, false, true);
 
             if (canCreateAds)
             {
@@ -141,7 +141,7 @@ namespace src.Controllers
         {
             //check can or not create new ads
             var cus = GetCustomerFromSession();
-            bool canCreateAds = _paymentPackageService.CheckCanCreateAds(cus.Id, true);
+            bool canCreateAds = _paymentPackageService.CheckCanCreateAds(cus.Id, true, true);
 
             if (canCreateAds)
             {
