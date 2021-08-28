@@ -57,6 +57,9 @@ namespace src.Models
         [Required(ErrorMessage = "Type cannot empty")]
         public string Type { get; set; }
 
+        [NotMapped]
+        public bool isPaymentSubscription { get; set; }
+
         public ICollection<Property> Properties { get; set; }
         
     }

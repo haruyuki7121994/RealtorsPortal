@@ -40,6 +40,26 @@ namespace src.Services
                 );
         }
 
+        public bool SendEmailPaymentPackage(PaymentPackage paymentPackage)
+        {
+            return SendEmail
+                (
+                    paymentPackage.Customer.Name,
+                    "[Realtors Portal] Payment Package!",
+                    $"Thank you for purchasing the package [{paymentPackage.Package.Name}]!\n Price: {paymentPackage.Package.Price} \n Limit Ads: {paymentPackage.Limit_ads} \n Limit featured ads: {paymentPackage.Limit_featured_ads} \n Your package will be confirmed by us within 4 hours.\n Thank you for using our service!\nRealtors Portal."
+                );
+        }
+
+        public bool SendEmailPaymentSubscription(PaymentSubscription paymentSubscription)
+        {
+            return SendEmail
+                (
+                    paymentSubscription.Customer.Name,
+                    "[Realtors Portal] Payment Subscription!",
+                    $"Thank you for paid subscription!\n Price: {paymentSubscription.Payment_price} \n Thank you for using our service!\nRealtors Portal."
+                );
+        }
+
         private bool SendEmail(string receiver, string subject, string message)
         {
             try

@@ -16,11 +16,22 @@ namespace src.Controllers
         private readonly ICustomerService services;
         private readonly IEmailService emailService;
         private readonly IPaymentPackageService paymentPackageService;
-        public AuthController(ICustomerService services, IEmailService emailService, IPaymentPackageService paymentPackageService)
+        private readonly IConfigurationService configurationService;
+        private readonly IPaymentSubscriptionService paymentSubscriptionService;
+        public AuthController
+        (
+            ICustomerService services, 
+            IEmailService emailService, 
+            IPaymentPackageService paymentPackageService,
+            IConfigurationService configurationService,
+            IPaymentSubscriptionService paymentSubscriptionService
+        )
         {
             this.services = services;
             this.emailService = emailService;
             this.paymentPackageService = paymentPackageService;
+            this.configurationService = configurationService;
+            this.paymentSubscriptionService = paymentSubscriptionService;
         }
 
         [TempData]
@@ -54,6 +65,10 @@ namespace src.Controllers
                         return View();
                     }
 
+                    //check enable payment subscription
+                    cus.isPaymentSubscription = services.checkPaymentSubscription(cus);
+
+                    //store session
                     HttpContext.Session.SetString("customer", JsonConvert.SerializeObject(cus));
                     return RedirectToAction("Index", "Customer");
                 }
@@ -162,6 +177,79 @@ namespace src.Controllers
                 Message = "Invalid code";
             }
             return RedirectToAction("Login");
+        }
+
+        public async Task<IActionResult> PaymentSubscription()
+        {
+            //check session customer
+            if (GetCustomerFromSession() == null)
+            {
+                return NotFound();
+            }
+
+            var enabledConfig = await configurationService.GetConfigurationByObj("Payment Subscription");
+            var enabled = enabledConfig != null ? enabledConfig.Val.ToLower().Equals("enabled") : false;
+            if (enabled)
+            {
+                //get price
+                var priceConfig = await configurationService.GetConfigurationByObj("Subscription price");
+                var price = priceConfig != null ? Int32.Parse(priceConfig.Val) : 0;
+                if (price <= 0)
+                {
+                    return NotFound();
+                }
+                ViewBag.price = price;
+
+                //get paypal key
+                var paypalConfig = await configurationService.GetConfigurationByObj("Paypal key");
+                ViewBag.paypalKey = paypalConfig != null ? paypalConfig.Val : "abc";
+                return View();
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult SuccessPayment(PaymentSubscription paymentSubscription)
+        {
+            //check session customer
+            var cus = GetCustomerFromSession();
+            if (cus == null)
+            {
+                return NotFound();
+            }
+
+            //add payment subscription
+            DateTime now = DateTime.Now;
+            paymentSubscription.Customer_id = cus.Id;
+            paymentSubscription.Created_at = now;
+            paymentSubscription.Updated_at = now;
+            paymentSubscription.Transaction_id = $"{paymentSubscription.Type}{now:yyyyMMddHHmmssfff}";
+            bool result = paymentSubscriptionService.addPaymentSubscription(paymentSubscription);
+            if (!result)
+            {
+                Message = "Cannot Payment Subscription! Please contact admin for help!";
+                return RedirectToAction("Login");
+            }
+
+            //send email
+            paymentSubscription.Customer = cus;
+            emailService.SendEmailPaymentSubscription(paymentSubscription);
+
+            cus.isPaymentSubscription = result;
+            HttpContext.Session.SetString("customer", JsonConvert.SerializeObject(cus));
+            Message = "Payment Subscription Successfull! Please check email confirmation! We thank you for your support!";
+
+            return RedirectToAction("Index", "Customer");
+        }
+
+        private Customer GetCustomerFromSession()
+        {
+            var session = HttpContext.Session.GetString("customer");
+            if (session != null)
+            {
+                return JsonConvert.DeserializeObject<Customer>(session);
+            }
+            return null;
         }
     }
 }

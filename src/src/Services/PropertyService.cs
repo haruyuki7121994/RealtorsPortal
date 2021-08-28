@@ -39,6 +39,7 @@ namespace src.Services
                 propertyRepo.Area_id = property.Area_id;
                 propertyRepo.Ended_at = property.Ended_at;
                 propertyRepo.Is_active = property.Is_active;
+                propertyRepo.Thumbnail_url = property.Thumbnail_url;
 
             }
             await _context.SaveChangesAsync();
@@ -193,8 +194,6 @@ namespace src.Services
 
         public bool addProperty(Property property)
         {
-            var expireAdsConfig = _context.Configurations.Where(c => c.Obj.Equals("Expiration of ads")).FirstOrDefault();
-            var expireDays = expireAdsConfig != null ? Int32.Parse(expireAdsConfig.Val) : 30; 
             var newProp = new Property
             {
                 Title = property.Title,
@@ -208,7 +207,7 @@ namespace src.Services
                 Is_active = property.Is_active,
                 Features = property.Features,
                 Created_at = DateTime.Now,
-                Ended_at = DateTime.Now.AddDays(expireDays),
+                Ended_at = DateTime.Now,
                 Area_id = property.Area_id,
                 Category_id = property.Category_id,
                 Customer_id = property.Customer_id,

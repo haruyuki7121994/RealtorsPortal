@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -45,7 +47,7 @@ namespace src.Controllers
         )
         {
             ViewBag.Areas = new SelectList(await _areaService.GetAreas(), "Id", "Name");
-            ViewBag.Categories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
+            ViewBag.Categories = new SelectList(await _categoryService.GetCategories(true), "Id", "Name");
             var properties = await _propertyservice.GetProperties();
 
             if (!string.IsNullOrEmpty(keywords))
@@ -75,19 +77,28 @@ namespace src.Controllers
         public async Task<IActionResult> Create()
         {
             ViewData["Areas"] = new SelectList(await _areaService.GetAreas(), "Id", "Name");
-            ViewData["Categories"] = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
-            ViewData["Customers"] = new SelectList( _customerService.findAll(), "Id", "Name");
+            ViewData["Categories"] = new SelectList(await _categoryService.GetCategories(true), "Id", "Name");
+            ViewData["Customers"] = new SelectList( _customerService.findAll(), "Id", "Email");
             return View();
         }
      
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Introduction,Description,Features,Method,Price,Deposit,Is_featured,Ended_at,Area_id,Category_id,Customer_id")] Property property)
+        public async Task<IActionResult> Create([Bind("Id,Title,Introduction,Description,Features,Method,Price,Deposit,Is_featured,Ended_at,Area_id,Category_id,Customer_id,Is_active")] Property property, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
+                if (file != null)
+                {
+                    var filepath = Path.Combine("wwwroot/images/properties", file.FileName);
+                    var stream = new FileStream(filepath, FileMode.Create);
+                    await file.CopyToAsync(stream);
+                    property.Thumbnail_url = "images/properties/" + file.FileName;
+                }
+                property.Created_at = DateTime.Now;
                 var pro = await _propertyservice.CreateEditProperty(property);
                 if (pro == null) return NotFound();
+                Message = "Create Successfull";
                 return RedirectToAction(nameof(Index));
             }
             return View(@property);
@@ -103,20 +114,28 @@ namespace src.Controllers
                 return NotFound();
             }
             ViewData["Areas"] = new SelectList(await _areaService.GetAreas(), "Id", "Name", property.Area_id);
-            ViewData["Categories"] = new SelectList(await _categoryService.GetCategories(), "Id", "Name", property.Category_id);
-            ViewData["Customers"] = new SelectList(_customerService.findAll(), "Id", "Name", property.Customer_id);
+            ViewData["Categories"] = new SelectList(await _categoryService.GetCategories(true), "Id", "Name", property.Category_id);
+            ViewData["Customers"] = new SelectList(_customerService.findAll(), "Id", "Email", property.Customer_id);
             return View(property);
         }
 
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Introduction,Description,Features,Method,Price,Deposit,Is_featured,Ended_at,Area_id,Category_id,Customer_id,Is_active")] Property @property)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Introduction,Description,Features,Method,Price,Deposit,Is_featured,Ended_at,Area_id,Category_id,Customer_id,Is_active,Thumbnail_url")] Property @property, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
+                if (file != null)
+                {
+                    var filepath = Path.Combine("wwwroot/images/properties", file.FileName);
+                    var stream = new FileStream(filepath, FileMode.Create);
+                    await file.CopyToAsync(stream);
+                    property.Thumbnail_url = "images/properties/" + file.FileName;
+                }
                 var pro = await _propertyservice.CreateEditProperty(property);
                 if (pro == null) return NotFound();
+                Message = "Edit Successfull";
                 return RedirectToAction(nameof(Index));
             }
             return View(@property);
@@ -127,7 +146,7 @@ namespace src.Controllers
         {
             var deleted = await _propertyservice.DeleteProperty(id);
             if (deleted == false) return NotFound();
-
+            Message = "Delete Successfull!";
             return RedirectToAction(nameof(Index));
         }
 

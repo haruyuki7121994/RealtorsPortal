@@ -10,5 +10,7 @@ namespace src.Services
     {
         bool SendEmailRegisterAccount(string confirmUrl, string customerEmail);
         bool SendEmailExpiredNotification(Package package, string customerEmail);
+        bool SendEmailPaymentPackage(PaymentPackage paymentPackage);
+        bool SendEmailPaymentSubscription(PaymentSubscription paymentSubscription);
     }
 }

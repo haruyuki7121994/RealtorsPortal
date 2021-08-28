@@ -8,7 +8,7 @@ namespace src.Services
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<Category>> GetCategories();
+        Task<IEnumerable<Category>> GetCategories(bool checkActive = false);
         Task<IEnumerable<Category>> GetCategoriesByActive(bool active = false);
         Task<Category> GetCategoryById(int id);
  

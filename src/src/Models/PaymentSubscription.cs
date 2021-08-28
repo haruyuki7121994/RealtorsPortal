@@ -10,6 +10,9 @@ namespace src.Models
     [Table("Payment_subscription")]
     public class PaymentSubscription
     {
+        [NotMapped]
+        public static int APPROVED_STATUS = 1;
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -17,10 +20,13 @@ namespace src.Models
         public int Status { get; set; }
         public string Transaction_id { get; set; }
         public float Payment_price { get; set; }
-        public DateTime Create_at { get; set; }
-        public DateTime Update_at { get; set; }
+        public DateTime Created_at { get; set; }
+        public DateTime Updated_at { get; set; }
 
         public int Customer_id { get; set; }
+
+        [NotMapped]
+        public Customer Customer { get; set; }
 
     }
 }

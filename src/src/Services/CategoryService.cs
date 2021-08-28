@@ -49,8 +49,15 @@ namespace src.Services
             return await _context.Categories.Where(x=>x.Is_active == active).OrderByDescending(x => x.Id).ToListAsync();
         }
 
-        public async Task<IEnumerable<Category>> GetCategories()
+        public async Task<IEnumerable<Category>> GetCategories(bool checkActive = false)
         {
+            if (checkActive)
+            {
+                return await _context.Categories
+                    .Where(c => c.Is_active.Equals(true))
+                    .OrderByDescending(x => x.Id)
+                    .ToListAsync();
+            }
             return await _context.Categories.OrderByDescending(x => x.Id).ToListAsync();
         }
         

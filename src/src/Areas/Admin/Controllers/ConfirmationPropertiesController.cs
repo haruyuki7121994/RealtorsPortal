@@ -13,14 +13,17 @@ namespace src.Areas.Admin.Controllers
     {
         private readonly IPropertyService _propertyservice;
         private readonly IPaymentPackageService _paymentPackageService;
+        private readonly IConfigurationService _configurationService;
 
         public ConfirmationPropertiesController(
             IPropertyService propertyservice,
-            IPaymentPackageService paymentPackageService
+            IPaymentPackageService paymentPackageService,
+            IConfigurationService configurationService
         )
         {
             _propertyservice = propertyservice;
             _paymentPackageService = paymentPackageService;
+            _configurationService = configurationService;
         }
 
         [TempData]
@@ -51,11 +54,18 @@ namespace src.Areas.Admin.Controllers
                     var result = _paymentPackageService.CheckCanCreateAds(pro.Customer_id, pro.Is_featured);
                     if (result)
                     {
+                        var expireAdsConfig = await _configurationService.GetConfigurationByObj("Expiration of ads");
+                        var expireDays = expireAdsConfig != null ? Int32.Parse(expireAdsConfig.Val) : 30;
+                        pro.Ended_at = DateTime.Now.AddDays(expireDays);
                         pro.Is_active = true;
                         var updatedPro = await _propertyservice.CreateEditProperty(pro);
                         if (updatedPro == null) return NotFound();
                         _paymentPackageService.UpdateUsedAdsForCustomer(updatedPro.Customer_id, updatedPro.Is_featured);
                         Message = "Approve Successfull";
+                    }
+                    else
+                    {
+                        Message = "Can't confirm because the customer has no more limit ads!";
                     }
                 }
                 if (type == "Reject")

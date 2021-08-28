@@ -30,6 +30,7 @@ namespace src.Controllers
         private readonly IImageService _imageService;
         private readonly ICommentService _commentService;
         private readonly IConfigurationService _configurationService;
+        private readonly IEmailService _emailService;
         public CustomerController
         (
             ICustomerService customerService,
@@ -43,7 +44,8 @@ namespace src.Controllers
             IPackageService packageService,
             IImageService imageService,
             ICommentService commentService,
-            IConfigurationService configurationService
+            IConfigurationService configurationService,
+            IEmailService emailService
         )
         {
             this._customerService = customerService;
@@ -58,6 +60,7 @@ namespace src.Controllers
             this._imageService = imageService;
             this._commentService = commentService;
             this._configurationService = configurationService;
+            this._emailService = emailService;
         }
 
         [TempData]
@@ -126,7 +129,7 @@ namespace src.Controllers
             if (canCreateAds)
             {
                 //get dependencies
-                ViewBag.Categories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
+                ViewBag.Categories = new SelectList(await _categoryService.GetCategories(true), "Id", "Name");
                 ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
                 return View();
             }
@@ -146,7 +149,7 @@ namespace src.Controllers
             if (canCreateAds)
             {
                 //get dependencies
-                ViewBag.Categories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
+                ViewBag.Categories = new SelectList(await _categoryService.GetCategories(true), "Id", "Name");
                 ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
                 return View();
             }
@@ -197,7 +200,7 @@ namespace src.Controllers
             {
                 ViewBag.error = e.Message;
             }
-            ViewBag.Categories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
+            ViewBag.Categories = new SelectList(await _categoryService.GetCategories(true), "Id", "Name");
             ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
             return View("Create");
         }
@@ -208,7 +211,7 @@ namespace src.Controllers
             var cus = GetCustomerFromSession();
             if (property.Customer_id == cus.Id)
             {
-                ViewBag.Categories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
+                ViewBag.Categories = new SelectList(await _categoryService.GetCategories(true), "Id", "Name");
                 ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
                 return View(property);
             }
@@ -257,7 +260,7 @@ namespace src.Controllers
             {
                 ViewBag.error = e.Message;
             }
-            ViewBag.Categories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
+            ViewBag.Categories = new SelectList(await _categoryService.GetCategories(true), "Id", "Name");
             ViewBag.Countries = new SelectList(await _countryService.GetCountries(), "Id", "Name");
             return View(property);
         }
@@ -317,7 +320,12 @@ namespace src.Controllers
                     Qrcode = $"{cus.Email}-{package.Name}-{now:yyyyMMddHHmmssfff}"
                 };
                 _paymentPackageService.addPaymentPackage(newPayment);
-                Message = "Payment Successful!";
+
+                //send email confirm
+                newPayment.Customer = cus;
+                newPayment.Package = package;
+                _emailService.SendEmailPaymentPackage(newPayment);
+                Message = "Payment Package Successfull! Please check email confirmation! We thank you for using our service!";
             }
             catch (Exception e)
             {

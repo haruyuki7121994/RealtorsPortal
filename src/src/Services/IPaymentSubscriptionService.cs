@@ -10,7 +10,7 @@ namespace src.Services
     {
         List<PaymentSubscription> findAll();
         PaymentSubscription fineOne(int id);
-        void addPaymentSubscription(PaymentSubscription payment_subscription);
+        bool addPaymentSubscription(PaymentSubscription payment_subscription);
         void updatePaymentSubscription(PaymentSubscription payment_subscription);
         void deletePaymentSubscription(int id);
     }

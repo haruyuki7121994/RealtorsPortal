@@ -14,18 +14,16 @@ namespace src.Services
         {
             this.context = context;
         }
-        public void addPaymentSubscription(PaymentSubscription payment_subscription)
+        public bool addPaymentSubscription(PaymentSubscription payment_subscription)
         {
             PaymentSubscription newPayment_subscription = context.PaymentSubscription.SingleOrDefault(a => a.Id.Equals(payment_subscription.Id));
             if (newPayment_subscription == null)
             {
                 context.PaymentSubscription.Add(payment_subscription);
                 context.SaveChanges();
+                return true;
             }
-            else
-            {
-                //do nothing
-            }
+            return false;
         }
 
         public void deletePaymentSubscription(int id)
@@ -45,7 +43,7 @@ namespace src.Services
 
         public List<PaymentSubscription> findAll()
         {
-            return context.PaymentSubscription.OrderByDescending(x => x.Create_at).ToList();
+            return context.PaymentSubscription.OrderByDescending(x => x.Created_at).ToList();
         }
 
         public PaymentSubscription fineOne(int id)

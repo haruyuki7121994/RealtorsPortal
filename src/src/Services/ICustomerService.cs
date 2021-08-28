@@ -15,5 +15,6 @@ namespace src.Services
         bool updateCustomer(Customer customer);
         void deleteCustomer(int id);
         bool updateStatus(int customerId, bool isActive, bool isVerified);
+        bool checkPaymentSubscription(Customer customer);
     }
 }

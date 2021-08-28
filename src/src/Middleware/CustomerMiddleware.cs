@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using src.Models;
 
 namespace src.Middleware
 {
@@ -28,7 +30,17 @@ namespace src.Middleware
                 }
                 else
                 {
-                    await _next(context);
+                    var cus = JsonConvert.DeserializeObject<Customer>(session);
+                    if (cus.isPaymentSubscription)
+                    {
+                        await _next(context);
+                        return;
+                    }
+                    else
+                    {
+                        context.Request.Path = "/Auth/PaymentSubscription";
+                    }
+                    
                 }
             }
             await _next(context);

@@ -60,7 +60,7 @@ namespace src.Controllers
             var switchFeaturedAds = await _configurationService.GetConfigurationByObj("Toggle featured ads");
             var currency = await _configurationService.GetConfigurationByObj("Currency symbol");
 
-            var cagetories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
+            var cagetories = new SelectList(await _categoryService.GetCategories(true), "Id", "Name");
             var properties = _propertyService.FindAllWithRelation();
 
             var featuredProps = properties.Where(p => p.Is_active.Equals(true) && p.Is_featured.Equals(true) && p.Ended_at >= DateTime.Now)
@@ -108,7 +108,7 @@ namespace src.Controllers
                 .Take(Int32.Parse(numberAdsPerPage.Val))
                 .ToList();
 
-            var cagetories = new SelectList(await _categoryService.GetCategories(), "Id", "Name");
+            var cagetories = new SelectList(await _categoryService.GetCategories(true), "Id", "Name");
             var countries = new SelectList(await _countryService.GetCountries(), "Id", "Name") ;
 
             //filer method
@@ -332,7 +332,7 @@ namespace src.Controllers
                 if (ModelState.IsValid)
                 {
                     _noti_services.addNoti(noti);
-                    Message = "Success";
+                    Message = "We've received your message. Thank you and we will reply you as soon as possible!";
                     return RedirectToAction("Contact");
                 }
                 else

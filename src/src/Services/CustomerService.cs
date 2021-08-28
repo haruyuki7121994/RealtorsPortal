@@ -162,5 +162,33 @@ namespace src.Services
                 return false;
             }
         }
+
+        public bool checkPaymentSubscription(Customer customer)
+        {
+            //check enable
+            var paymentSubscriptionConfig = context.Configurations.Where(c => c.Obj.Equals("Payment Subscription")).SingleOrDefault();
+            bool enable = paymentSubscriptionConfig.Val.Equals("enabled");
+            if (!enable)
+            {
+                return true;
+            }
+
+            //check price
+            var priceSubscriptionConfig = context.Configurations.Where(c => c.Obj.Equals("Subscription price")).SingleOrDefault();
+            var priceSub = priceSubscriptionConfig != null ? Int32.Parse(priceSubscriptionConfig.Val) : 0;
+            if (priceSub <= 0)
+            {
+                return false;
+            }
+
+            //check has payment subscription
+            var paymentSubscription = context.PaymentSubscription.Where(ps => ps.Customer_id == customer.Id).SingleOrDefault();
+            if (paymentSubscription == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

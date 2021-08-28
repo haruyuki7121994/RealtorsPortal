@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <br />
-                        <form asp-action="Create">
+                        <form asp-action="Create" method="post" enctype="multipart/form-data">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
                                 <label asp-for="Title" class="control-label"></label>
@@ -31,8 +31,15 @@
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Features" class="control-label"></label>
-                                <input asp-for="Features" class="form-control" />
+                                <label asp-for="Features" class="control-label">Features</label>
+                                <ul id="feature-list" class="list-group">
+                                </ul>
+
+                                <div class="input-group">
+                                    <input class="form-control" id="feature-val" />
+                                    <span class="input-group-addon" id="btn-add-features" style="cursor: pointer">Add</span>
+                                </div>
+                                <input asp-for="Features" id="features-in" type="hidden" class="form-control" />
                                 <span asp-validation-for="Features" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -67,6 +74,10 @@
                                 <span asp-validation-for="Ended_at" class="text-danger"></span>
                             </div>
                             <div class="form-group">
+                                <label asp-for="Thumbnail_url" class="control-label"></label>
+                                <input asp-for="Thumbnail_url" class="form-control" type="file" name="file"/>
+                            </div>
+                            <div class="form-group">
                                 <label for="Area_id" class="control-label">Area Name</label>
 
                                 @Html.DropDownListFor(m => m.Area_id, (IEnumerable<SelectListItem>)ViewBag.Areas, new { @class = "form-control" })
@@ -94,9 +105,39 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
+<script>
         $(document).ready(function () {
             CKEDITOR.replace(@Html.IdFor(model => model.Description));
+
+            let features = [];
+            $(document).on('click', "#btn-delete-feature", function () {
+                const idx = $(this).data('id')
+                if (idx >= 0) {
+                    features.splice(idx, 1)
+                    appendFeatures(features)
+                }
+                console.log(features)
+            })
+
+            $("#btn-add-features").click(function (event) {
+                let val = $("#feature-val").val();
+                if (val !== "") {
+                    features.push(val);
+                    $("#feature-val").val("");
+                    appendFeatures(features)
+                }
+                console.log(features)
+            })
+
+            function appendFeatures(features) {
+                let list = '';
+                for (var i = 0; i < features.length; i++) {
+                    list += "<li class='list-group-item'>" + features[i] + " <span class='label label-danger' data-id='" + i + "' id='btn-delete-feature' style='cursor: pointer'>x</span></li>"
+                }
+                $("#feature-list").html(list)
+                const featuresJson = JSON.stringify(features);
+                $("#features-in").val(featuresJson);
+            }
         })
-    </script>
+</script>
 }

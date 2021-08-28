@@ -29,6 +29,7 @@ namespace src.Middleware
                 else
                 {
                     await _next(context);
+                    return;
                 }
             }
             await _next(context);

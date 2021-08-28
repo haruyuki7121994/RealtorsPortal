@@ -83,17 +83,15 @@ namespace src.Area.Admin.Controllers
         {
             try
             {
-                Models.Customer cus = services.fineOne(customers.Username);
                 if (ModelState.IsValid)
                 {
                     if (file != null)
                     {
-                        var path = Path.Combine("wwwroot/images", file.FileName);
+                        var path = Path.Combine("wwwroot/images/avatars", file.FileName);
                         var stream = new FileStream(path, FileMode.Create);
                         file.CopyToAsync(stream);
-                        cus.Image = "images/" + file.FileName;
+                        customers.Image = "images/avatars/" + file.FileName;
                     }
-
                     var result = services.updateCustomer(customers);
                     if (!result)
                     {
@@ -105,7 +103,6 @@ namespace src.Area.Admin.Controllers
                         Message = "Edit Successfull";
                         return RedirectToAction("Index");
                     }
-
                 }
             }
             catch (Exception e)
