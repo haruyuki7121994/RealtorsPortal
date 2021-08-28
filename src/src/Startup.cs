@@ -54,6 +54,7 @@ namespace src
             services.AddScoped<IConfigurationService, ConfigurationService>();
             services.AddScoped<IStaticService, StaticService>();
             services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IPaymentSubscriptionService, PaymentSubscriptionService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
