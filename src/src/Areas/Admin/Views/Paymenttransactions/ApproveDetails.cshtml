@@ -1,0 +1,100 @@
+﻿@model src.Models.PaymentPackage
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper*, src
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Approve Details";
+}
+
+@await Html.PartialAsync("_Banner")
+<div class="content-top">
+    <div class="col-md-12">
+        <div style="background: #fff">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <br />
+                        <form asp-action="SubmitApprove" asp-controller="Paymenttransactions" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+                            <div class="form-group">
+                                <label asp-for="Status" class="control-label"></label>
+                                @if (Model.Status == src.Models.PaymentPackage.APPROVED_STATUS)
+                                {
+                                    <span>: Approved</span>
+                                }
+                                @if (Model.Status == src.Models.PaymentPackage.EXPIRED_STATUS)
+                                {
+                                    <span>: Expired</span>
+                                }
+                                @if (Model.Status == src.Models.PaymentPackage.PENDING_STATUS)
+                                {
+                                    <span>: Pending</span>
+                                }
+                                <span asp-validation-for="Status" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Transaction_id" class="control-label"></label>
+                                <input asp-for="Transaction_id" class="form-control" />
+                                <span asp-validation-for="Transaction_id" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Payment_price" class="control-label"></label>
+                                <input asp-for="Payment_price" class="form-control" />
+                                <span asp-validation-for="Payment_price" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Limit_ads" class="control-label"></label>
+                                <input asp-for="Limit_ads" class="form-control" />
+                                <span asp-validation-for="Limit_ads" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Limit_featured_ads" class="control-label"></label>
+                                <input asp-for="Limit_featured_ads" class="form-control" />
+                                <span asp-validation-for="Limit_featured_ads" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Used_ads" class="control-label"></label>
+                                <input asp-for="Used_ads" class="form-control" />
+                                <span asp-validation-for="Used_ads" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Used_featured_ads" class="control-label"></label>
+                                <input asp-for="Used_featured_ads" class="form-control" />
+                                <span asp-validation-for="Used_featured_ads" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Created_at" class="control-label"></label>
+                                <input asp-for="Created_at" class="form-control" />
+                                <span asp-validation-for="Created_at" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Updated_at" class="control-label"></label>
+                                <input asp-for="Updated_at" class="form-control" />
+                                <span asp-validation-for="Updated_at" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Qrcode" class="control-label"></label>
+                                <input asp-for="Qrcode" type="hidden" class="form-control" />
+                                @if (Model.Qrcode != null)
+                                {
+                                    <qrcode content=@Model.Qrcode width="100" height="100" />
+                                }
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Approve" name="type" class="btn btn-success" />
+                                <input type="submit" value="Reject" name="type" class="btn btn-danger" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"> </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

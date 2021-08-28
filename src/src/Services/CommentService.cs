@@ -16,10 +16,8 @@ namespace src.Services
         }
         public void addComment(Comment comment)
         {
-            
-                context.Comments.Add(comment);
-                context.SaveChanges();
-            
+            context.Comments.Add(comment);
+            context.SaveChanges();
         }
 
         public void deleteComment(int id)

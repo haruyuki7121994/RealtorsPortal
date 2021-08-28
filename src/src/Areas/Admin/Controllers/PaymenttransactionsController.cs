@@ -32,7 +32,54 @@ namespace src.Area.Admin.Controllers
 
         public IActionResult Details(int id)
         {
-            return View(services.fineOne(id));
+            var pp = services.fineOne(id);
+            return View(pp);
+        }
+
+        public IActionResult Approve(int? page)
+        {
+            var result = services.findAll();
+            result = result.Where(r => r.Status == PaymentPackage.PENDING_STATUS).ToList();
+            result = PaginatedList<PaymentPackage>.CreateAsnyc(result.ToList(), page ?? 1, 10);
+            return View(result);
+        }
+
+        public IActionResult ApproveDetails(int id)
+        {
+            var pp = services.fineOne(id);
+            if (pp != null && pp.Status.Equals(PaymentPackage.PENDING_STATUS))
+            {
+                return View(pp);
+            }
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        public IActionResult SubmitApprove(string type, PaymentPackage paymentPackage)
+        {
+            try
+            {
+                var pp = services.fineOne(paymentPackage.Id);
+                if (pp == null) return NotFound();
+                if (type == "Approve")
+                {
+                    pp.Status = PaymentPackage.APPROVED_STATUS;
+                    services.updatePaymentPackage(pp);
+                    Message = "Approve Successfull";
+                }
+                if (type == "Reject")
+                {
+                    services.deletePaymentPackage(paymentPackage.Id);
+                    Message = "Delete successful";
+                }
+
+            }
+            catch (Exception e)
+            {
+                Message = e.Message;
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

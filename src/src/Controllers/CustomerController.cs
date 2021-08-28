@@ -313,7 +313,8 @@ namespace src.Controllers
                     Created_at = now,
                     Updated_at = now,
                     Transaction_id = $"{package.Name}{now:yyyyMMddHHmmssfff}",
-                    Status = PaymentPackage.APPROVED_STATUS
+                    Status = PaymentPackage.PENDING_STATUS,
+                    Qrcode = $"{cus.Email}-{package.Name}-{now:yyyyMMddHHmmssfff}"
                 };
                 _paymentPackageService.addPaymentPackage(newPayment);
                 Message = "Payment Successful!";

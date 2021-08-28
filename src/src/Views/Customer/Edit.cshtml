@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="aa-property-header-inner">
-                    <h2>Create Ads</h2>
+                    <h2>Details Ads</h2>
                     <ol class="breadcrumb">
                         <li><a href="#">HOME</a></li>
                         <li class="active">Customer</li>
@@ -23,28 +23,27 @@
 <!-- End Proerty header  -->
 <div class="clearfix"></div>
 <div style="margin-top: 20px">
-    
-
     <div class="container">
-        <div class="row">
+        <div class="row" style="text-align: center">
             @{
                 if (ViewBag.error != null)
                 {
                     <div class="error-blog">
-                        <h1>@ViewBag.error</h1>
+                        <h1 style="color: red">@ViewBag.error</h1>
                     </div>
                 }
                 if (TempData.Peek("Message") != null)
                 {
                     <div class="error-blog">
-                        <h3>Message: @TempData.Peek("Message")</h3>
+                        <h3 style="color: red">Message: @TempData.Peek("Message")</h3>
                     </div>
                 }
             }
-            
+        </div>
+        <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6 wrapper-custom">
-                
+
                 <br />
                 <form asp-action="Edit" asp-controller="Customer" enctype="multipart/form-data" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>

@@ -21,23 +21,25 @@
     </div>
 </section>
 <!-- End Proerty header  -->
-
-@{
-    if (ViewBag.error != null)
-    {
-        <div class="error-blog">
-            <h1>@ViewBag.error</h1>
-        </div>
-    }
-    if (TempData.Peek("Message") != null)
-    {
-        <div class="error-blog">
-            <h3>Message: @TempData.Peek("Message")</h3>
-        </div>
-    }
-}
+<div class="clearfix"></div>
 
 <div class="container">
+    <div class="row" style="text-align: center">
+        @{
+            if (ViewBag.error != null)
+            {
+                <div class="error-blog">
+                    <h1 style="color: red">@ViewBag.error</h1>
+                </div>
+            }
+            if (TempData.Peek("Message") != null)
+            {
+                <div class="error-blog">
+                    <h3 style="color: red">Message: @TempData.Peek("Message")</h3>
+                </div>
+            }
+        }
+    </div>
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6 wrapper-custom">
@@ -45,33 +47,33 @@
             <form asp-action="Register" asp-controller="Auth" enctype="multipart/form-data" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Name" class="control-label">Name/ Company</label>
+                    <label asp-for="Name" class="control-label">Name/ Company <span style="color:red">*</span></label>
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Email" class="control-label">Email</label>
+                    <label asp-for="Email" class="control-label">Email <span style="color:red">*</span></label>
                     <input asp-for="Email" class="form-control" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Contact" class="control-label">Contact</label>
+                    <label asp-for="Contact" class="control-label">Contact <span style="color:red">*</span></label>
                     <input asp-for="Contact" class="form-control" />
                     <span asp-validation-for="Contact" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Address" class="control-label">Address</label>
+                    <label asp-for="Address" class="control-label">Address <span style="color:red">*</span></label>
                     <input asp-for="Address" class="form-control" />
                     <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Username" class="control-label">Username</label>
+                    <label asp-for="Username" class="control-label">Username <span style="color:red">*</span></label>
                     <input asp-for="Username" class="form-control" />
                     <span asp-validation-for="Username" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Password" class="control-label">Password</label>
-                    <input asp-for="Password" class="form-control" />
+                    <label asp-for="Password" class="control-label">Password <span style="color:red">*</span></label>
+                    <input asp-for="Password" class="form-control" type="password"/>
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">

@@ -25,7 +25,7 @@ namespace src.Areas.Admin.Controllers
         {
             if (!CheckRoleUserFromSession())
             {
-                Message = "Invalid Role";
+                Message = "You are not superadmin";
                 return RedirectToAction("Index", "Reports");
             }
             var users = services.findAll().Where(a => a.Role != "superadmin").ToList();
@@ -37,7 +37,7 @@ namespace src.Areas.Admin.Controllers
         {
             if (!CheckRoleUserFromSession())
             {
-                Message = "Invalid Role";
+                Message = "You are not superadmin";
                 return RedirectToAction("Index", "Reports");
             }
             return View();
@@ -67,7 +67,7 @@ namespace src.Areas.Admin.Controllers
         {
             if (!CheckRoleUserFromSession())
             {
-                Message = "Invalid Role";
+                Message = "You are not superadmin";
                 return RedirectToAction("Index", "Reports");
             }
             Models.Admin admins = services.fineOne(id);

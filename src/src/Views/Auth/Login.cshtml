@@ -21,24 +21,25 @@
     </div>
 </section>
 <!-- End Proerty header  -->
-
-@{
-    if (ViewBag.error != null)
-    {
-        <div class="error-blog">
-            <h1>@ViewBag.error</h1>
-        </div>
-    }
-    if (TempData.Peek("Message") != null)
-    {   
-        <div class="error-blog">
-            <h3>Message: @TempData.Peek("Message")</h3>
-        </div>
-    }
-}
-
+<div class="clearfix"></div>
 
 <div class="container">
+    <div class="row" style="text-align: center">
+        @{
+            if (ViewBag.error != null)
+            {
+                <div class="error-blog">
+                    <h1 style="color: red">@ViewBag.error</h1>
+                </div>
+            }
+            if (TempData.Peek("Message") != null)
+            {
+                <div class="error-blog">
+                    <h3 style="color: red">Message: @TempData.Peek("Message")</h3>
+                </div>
+            }
+        }
+    </div>
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6 wrapper-custom">
@@ -52,7 +53,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Password" class="control-label">Password</label>
-                    <input asp-for="Password" name="password" class="form-control" />
+                    <input asp-for="Password" name="password" class="form-control" type="password"/>
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">

@@ -1,0 +1,90 @@
+﻿@model PaginatedList<src.Models.PaymentPackage>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Approve Payment";
+}
+
+@await Html.PartialAsync("_Banner")
+<!--content-->
+<div class="content-top">
+    <div class="col-md-12">
+        <div style="background: #fff">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Package
+                        </th>
+                        <th>
+                            Customer
+                        </th>
+                        <th>
+                            Price
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Created At
+                        </th>
+                        <th>
+                            Used ads
+                        </th>
+                        <th>
+                            Used featured ads
+                        </th>
+                        <th>
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.Package.Name
+                            </td>
+                            <td>
+                                @item.Customer.Email
+                            </td>
+                            <td>
+                                @item.Package.Price
+                            </td>
+                            <td>
+                                @if (item.Status == PaymentPackage.APPROVED_STATUS)
+                                {
+                                    <div>Approved</div>
+                                }
+                                @if (item.Status == PaymentPackage.EXPIRED_STATUS)
+                                {
+                                    <div>Expired</div>
+                                }
+                                @if (item.Status == PaymentPackage.PENDING_STATUS)
+                                {
+                                    <div>Pending</div>
+                                }
+                            </td>
+                            <td>
+                                @item.Created_at
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Used_ads)/@Html.DisplayFor(modelItem => item.Limit_ads)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Used_featured_ads)/@Html.DisplayFor(modelItem => item.Limit_featured_ads)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Details", "ApproveDetails", "Paymenttransactions", new { area = "Admin", id = item.Id }, new { @class = "btn btn-primary" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @await Html.PartialAsync("_PagingSection", Model)
+        </div>
+    </div>
+    <div class="clearfix"> </div>
+</div>
+<!---->

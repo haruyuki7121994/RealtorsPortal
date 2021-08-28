@@ -64,7 +64,8 @@ namespace src.Services
                        Created_at = pp.Created_at,
                        Package = p,
                        Customer = cus,
-                       Payment_price = pp.Payment_price
+                       Payment_price = pp.Payment_price,
+                       Qrcode = pp.Qrcode
                    }).OrderByDescending(x => x.Created_at).ToList();
         }
 
@@ -94,7 +95,8 @@ namespace src.Services
                             Payment_price = pp.Payment_price,
                             Transaction_id = pp.Transaction_id,
                             Created_at = pp.Created_at,
-                            Updated_at = pp.Updated_at
+                            Updated_at = pp.Updated_at,
+                            Qrcode = pp.Qrcode
                         }).SingleOrDefault();
             if (Payment_package != null)
             {
@@ -111,14 +113,10 @@ namespace src.Services
             PaymentPackage editPayment_package = context.PaymentPackage.SingleOrDefault(a => a.Id.Equals(payment_package.Id));
             if (editPayment_package != null)
             {
-                editPayment_package.Transaction_id = payment_package.Transaction_id;
-                editPayment_package.Payment_price = payment_package.Payment_price;
                 editPayment_package.Status = payment_package.Status;
-                editPayment_package.Customer_id = payment_package.Customer_id;
-                editPayment_package.Package_id = payment_package.Package_id;
                 editPayment_package.Used_ads = payment_package.Used_ads;
                 editPayment_package.Used_featured_ads = payment_package.Used_featured_ads;
-                editPayment_package.Updated_at = payment_package.Updated_at;
+                editPayment_package.Updated_at = DateTime.Now;
 
                 context.SaveChanges();
             }
@@ -142,7 +140,8 @@ namespace src.Services
                             PackageName = p.Name,
                             Status =  pp.Status,
                             Package_id = pp.Package_id,
-                            Created_at = pp.Created_at
+                            Created_at = pp.Created_at,
+                            Qrcode = pp.Qrcode
                         };
             return query.OrderByDescending(x => x.Created_at).ToList();
                    
@@ -168,7 +167,8 @@ namespace src.Services
                         Payment_price = pp.Payment_price,
                         Transaction_id = pp.Transaction_id,
                         Created_at = pp.Created_at,
-                        Updated_at = pp.Updated_at
+                        Updated_at = pp.Updated_at,
+                        Qrcode = pp.Qrcode
                     }).OrderByDescending(p => p.Created_at).ToList();
         }
 
@@ -246,7 +246,7 @@ namespace src.Services
                 
             }
 
-            return (count < limit) && (limit >= countProps);
+            return (count < limit) && (limit > countProps);
         }
 
         public bool UpdateUsedAdsForCustomer(int customerId, bool featuredAds = false)
@@ -272,7 +272,8 @@ namespace src.Services
                                 Package_id = p.Package_id,
                                 Created_at = p.Created_at,
                                 Payment_price = p.Payment_price,
-                                Transaction_id = p.Transaction_id
+                                Transaction_id = p.Transaction_id,
+                                Qrcode = p.Qrcode
                             }).OrderByDescending(p => p.Updated_at)
                             .FirstOrDefault();
             }
@@ -296,7 +297,8 @@ namespace src.Services
                                 Package_id = p.Package_id,
                                 Created_at = p.Created_at,
                                 Payment_price = p.Payment_price,
-                                Transaction_id = p.Transaction_id
+                                Transaction_id = p.Transaction_id,
+                                Qrcode = p.Qrcode
                             }).OrderByDescending(p => p.Updated_at)
                             .FirstOrDefault();
             }

@@ -24,38 +24,39 @@
 <div class="clearfix"></div>
 <div style="margin-top: 20px">
     <div class="container">
-        <div class="row">
+        <div class="row" style="text-align: center">
             @{
                 if (ViewBag.error != null)
                 {
                     <div class="error-blog">
-                        <h1>@ViewBag.error</h1>
+                        <h1 style="color: red">@ViewBag.error</h1>
                     </div>
                 }
                 if (TempData.Peek("Message") != null)
                 {
                     <div class="error-blog">
-                        <h3>Message: @TempData.Peek("Message")</h3>
+                        <h3 style="color: red">Message: @TempData.Peek("Message")</h3>
                     </div>
                 }
             }
-            
+        </div>
+        <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6 wrapper-custom">
-                
+
                 <br />
                 <form asp-action="CreateAds" asp-controller="Customer" enctype="multipart/form-data" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input asp-for="Is_featured" type="hidden" value="true" />
 
                     <div class="form-group">
-                        <label class="control-label">Category</label>
+                        <label class="control-label">Category <span style="color:red">*</span></label>
                         <select class="form-control" asp-for="Category_id" asp-items="ViewBag.Categories">
                         </select>
                         <span asp-validation-for="Category_id" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Type</label>
+                        <label class="control-label">Type <span style="color:red">*</span></label>
                         <select class="form-control" asp-for="Method">
                             <option value="sell">Sell</option>
                             <option value="buy">Buy</option>
@@ -64,22 +65,22 @@
                         <span asp-validation-for="Method" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Title" class="control-label">Title</label>
+                        <label asp-for="Title" class="control-label">Title <span style="color:red">*</span></label>
                         <input asp-for="Title" class="form-control" />
                         <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Introduction" class="control-label">Introduction</label>
+                        <label asp-for="Introduction" class="control-label">Introduction <span style="color:red">*</span></label>
                         <textarea asp-for="Introduction" class="form-control"></textarea>
                         <span asp-validation-for="Introduction" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Description" class="control-label">Description</label>
+                        <label asp-for="Description" class="control-label">Description <span style="color:red">*</span></label>
                         @Html.TextAreaFor(model => model.Description)
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Price" class="control-label">Price</label>
+                        <label asp-for="Price" class="control-label">Price <span style="color:red">*</span></label>
                         <input asp-for="Price" type="number" value="0" class="form-control" />
                         <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
@@ -112,7 +113,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Area</label>
+                        <label class="control-label">Area <span style="color:red">*</span></label>
                         <select class="form-control" asp-for="Area_id" id="AreaId">
                             <option value="">Select Area</option>
                         </select>
@@ -153,6 +154,7 @@
 @section scripts {
     <script>
         $(document).ready(function () {
+            let features = [];
             $(document).on('click', "#btn-delete-feature", function () {
                 const idx = $(this).data('id')
                 if (idx >= 0) {

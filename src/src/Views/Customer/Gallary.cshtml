@@ -24,37 +24,38 @@
 <div class="clearfix"></div>
 <div style="margin-top: 20px">
     <div class="container">
-        <div class="row">
+        <div class="row" style="text-align: center">
             @{
                 if (ViewBag.error != null)
                 {
                     <div class="error-blog">
-                        <h1>@ViewBag.error</h1>
+                        <h1 style="color: red">@ViewBag.error</h1>
                     </div>
                 }
                 if (TempData.Peek("Message") != null)
                 {
                     <div class="error-blog">
-                        <h3>Message: @TempData.Peek("Message")</h3>
+                        <h3 style="color: red">Message: @TempData.Peek("Message")</h3>
                     </div>
                 }
             }
-            
-        <div class="col-md-12">
-            
-            <form asp-action="Upload" asp-controller="Customer" enctype="multipart/form-data" method="post">
-                <input asp-for="Property_id" type="hidden" value="@ViewBag.prop.Id" />
-                <div class="form-group">
-                    <label class="control-label">Upload Image</label>
-                    <input name="file" type="file" class="form-control" />
-                    <span class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    @Html.ActionLink("Back", "Index", "Customer", null, new { @class = "btn btn-danger" })
-                    <input type="submit" value="Upload" class="btn btn-dark" />
-                </div>
-            </form>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <form asp-action="Upload" asp-controller="Customer" enctype="multipart/form-data" method="post">
+                    <input asp-for="Property_id" type="hidden" value="@ViewBag.prop.Id" />
+                    <div class="form-group">
+                        <label class="control-label">Upload Image <span style="color:red">*</span></label>
+                        <input name="file" type="file" class="form-control" />
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        @Html.ActionLink("Back", "Index", "Customer", null, new { @class = "btn btn-danger" })
+                        <input type="submit" value="Upload" class="btn btn-dark" />
+                    </div>
+                </form>
+            </div>
             <div class="col-md-12">
                 <div class="ads-gallary">
                     @foreach (var item in ViewBag.images)
