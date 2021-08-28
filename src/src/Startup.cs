@@ -33,13 +33,9 @@ namespace src
 
             services.AddOptions();
 
-            string uri = "server=DESKTOP-7UKA67O;database=RealtorsPortalDB;uid=sa;pwd=123456";
-            services.AddDbContext<RealtorContext>(options => options.UseSqlServer(uri));
-
-            //services.AddDbContext<RealtorContext>(options => {
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            //});
-
+            services.AddDbContext<RealtorContext>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             services.AddSession();
 

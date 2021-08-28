@@ -38,7 +38,7 @@ namespace src.Areas.Admin.Controllers
             ViewBag.Username = user.Username;
             if (!CheckRoleUserFromSession())
             {
-                Message = "Invalid Role";
+                Message = "You are not superadmin";
                 return RedirectToAction("Index", "Reports");
             }
             return View(await _configurationService.GetConfigurations());
@@ -56,7 +56,7 @@ namespace src.Areas.Admin.Controllers
             ViewBag.Username = user.Username;
             if (!CheckRoleUserFromSession())
             {
-                Message = "Invalid Role";
+                Message = "You are not superadmin";
                 return RedirectToAction("Index", "Reports");
             }
             var configuration = await _configurationService.GetConfigurationByObj(id);
